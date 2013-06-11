@@ -1,0 +1,17 @@
+#!/bin/bash
+
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+#---------- input --------------
+chr=19
+beginning=rs8109631
+ending=rs1529958
+
+#---------- script location --------------
+run_all_fam_script=$script_dir/091_run_all_fam
+
+#---------- run --------------
+$run_all_fam_script $chr $beginning $ending
+
+
+

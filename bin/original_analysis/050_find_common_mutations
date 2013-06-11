@@ -1,0 +1,55 @@
+#!/bin/bash
+
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+tmp_dir="$script_dir/tmp"
+tmp_member1="$tmp_dir/tmp_member1"
+tmp_member2="$tmp_dir/tmp_member2"
+tmp_member3="$tmp_dir/tmp_member3"
+tmp_common_mutations="$tmp_dir/tmp_common_mutations.csv"
+
+#---------- input --------------
+member1_annotation=$1
+member1_code=$2
+member2_annotation=$3
+member2_code=$4
+out=$5
+
+#cut -f1-29  $member1_annotation | awk -F'\t' '{print NF}' | head
+#head $member1_annotation
+#grep -v "^Func" $member1_annotation | awk -F'\t' '{ printf "%s\t%s|%s|%s\n", $0, $22, $23, $24 }' | sort -t$'\t' -k 28 > $tmp_member1
+
+#---------- prepare data --------------
+cut -f1-27  $member1_annotation | grep -v "^Func" | awk -F'\t' '{ printf "%s\t%s|%s|%s\n", $0, $22, $23, $24 }' | sort -t$'\t' -k 28 > $tmp_member1
+cut -f1-27  $member2_annotation | grep -v "^Func" | awk -F'\t' '{ printf "%s\t%s|%s|%s\n", $0, $22, $23, $24 }' | sort -t$'\t' -k 28 > $tmp_member2
+
+#---------- look for common mutations --------------
+join -t $'\t' -j 28 -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,1.12,1.13,1.14,1.15,1.16,1.17,1.18,1.19,1.20,1.21,1.22,1.23,1.24,1.25,1.26,1.27,1.28,2.27 $tmp_member1 $tmp_member2 > $tmp_common_mutations
+
+#---------- for the third members --------------
+if [ $# -eq 7 ]; then
+    member3_annotation=$5
+    member3_code=$6
+    out=$7
+    tmp_tmp_common_mutations="$tmp_dir/tmp_tmp_common_mutations.csv"
+
+    mv $tmp_common_mutations $tmp_tmp_common_mutations
+
+    #---------- prepare data --------------
+    cut -f1-27  $member3_annotation | grep -v "^Func" | awk -F'\t' '{ printf "%s\t%s|%s|%s\n", $0, $22, $23, $24 }' | sort -t$'\t' -k 28 > $tmp_member3
+
+    #---------- look for common mutations --------------
+    join -t $'\t' -j 28 -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,1.12,1.13,1.14,1.15,1.16,1.17,1.18,1.19,1.20,1.21,1.22,1.23,1.24,1.25,1.26,1.27,1.28,1.29,2.27 $tmp_tmp_common_mutations $tmp_member3 > $tmp_common_mutations
+fi
+
+
+
+#---------- create output --------------
+if [ $# -eq 5 ]; then
+    grep "^Func" $member1_annotation | cut -f27 --complement | awk -F'\t' -v a="$member1_code" '{ printf "%s\t%s\n", $0, a}' | awk -F'\t' -v b="$member2_code" '{ printf "%s\t%s\n", $0, b}' > $out
+else
+    grep "^Func" $member1_annotation | cut -f27 --complement | awk -F'\t' -v a="$member1_code" '{ printf "%s\t%s\n", $0, a}' | awk -F'\t' -v b="$member2_code" '{ printf "%s\t%s\n", $0, b}' | awk -F'\t' -v c="$member3_code" '{ printf "%s\t%s\n", $0, c}' > $out
+fi
+
+cut -f28 --complement $tmp_common_mutations | awk -F'\t' '$8>0 { print $0}' | sort -t$'\t' -k8 -r >> $out
+cut -f28 --complement $tmp_common_mutations | awk -F'\t' '$8<=0 { print $0}' | sort -t$'\t' -k27 >> $out

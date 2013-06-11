@@ -1,1 +1,3 @@
 *.pyc
+bin/tmp
+bin/test_bin_annovar_summarize

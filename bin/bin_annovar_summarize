@@ -1,0 +1,48 @@
+#!/bin/bash
+
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+tmp_dir="$script_dir/tmp"
+annovar_dir="/home/jessada/development/scilifelab/tools/annovar/"
+
+#---------- arguments --------------
+chr=$1
+beginning=$2
+ending=$3
+header_file=$4
+tabix_file=$5
+out=$6
+#---------- arguments --------------
+
+#---------- get region --------------
+lookup_data_dir="/home/jessada/development/scilifelab/tools/annovar/humandb"
+prefix_ref_db_file="$lookup_data_dir/hg19_snp137"
+
+begin_pos="$( grep -P "$beginning\t" $prefix_ref_db_file"_chr"$chr".txt" | awk -F'\t' '{printf "%s", $3}' )"
+end_pos="$( grep -P "$ending\t" $prefix_ref_db_file"_chr"$chr".txt" | awk -F'\t' '{printf "%s", $3}' )"
+#---------- get region --------------
+
+#---------- vcf2avdb --------------
+convert2annovar_script=$annovar_dir/convert2annovar.pl
+
+tmp_file_name=$(basename "$out")
+tmp_file_name="${tmp_file_name%.*}"
+tmp_file_name="${tmp_file_name%.*}"
+tmp_file_name="${tmp_file_name%.*}"
+
+tmp_avdb=$tmp_dir/"tmp_"$tmp_file_name"_avdb"
+avdb_out=$tmp_dir/$tmp_file_name".avdb"
+
+tabix $tabix_file $chr:$begin_pos-$end_pos | cut -f1-10 | awk -F'\t' '{printf "%s\t%s\t%s\t%s\t%s\t%s|%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, $4, $5, $6, $2, $7, $8, $9, $10}'> $tmp_avdb
+$convert2annovar_script -format vcf4 $tmp_avdb --comment > $avdb_out
+#---------- vcf2avdb --------------
+
+#---------- summarize --------------
+summarize_annovar_script=$annovar_dir/summarize_annovar.pl
+human_db_dir=$annovar_dir/humandb/
+
+$summarize_annovar_script -out $out -buildver hg19 -verdbsnp 137 -ver1000g 1000g2012apr -veresp 6500 -remove -alltranscript $avdb_out $human_db_dir
+#---------- summarize --------------
+
+
+
