@@ -1,0 +1,6 @@
+from linkana.app import list_POTEC_gene_from_one_member
+
+list_POTEC_gene_from_one_member()
+
+
+

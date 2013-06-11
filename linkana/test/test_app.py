@@ -16,8 +16,8 @@ class TestApp(SafeGeneralTester):
     def __create_app_instance(self):
         pass
 
-    def test_parse_dir_path(self):
-        self.init_test('test_parse_dir_path')
+    def test_list_POTEC_gene_from_one_member(self):
+        self.init_test('test_list_POTEC_gene_from_one_member')
         out_file = os.path.join(self.working_dir,
                                 'POTEC_out.txt')
         list_POTEC_gene_from_one_member(out_file)
