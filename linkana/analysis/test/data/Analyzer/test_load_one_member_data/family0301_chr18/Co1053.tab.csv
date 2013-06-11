@@ -1,6 +1,0 @@
-Func	Gene	ExonicFunc	AAChange	Conserved	SegDup	ESP6500_ALL	1000g2012apr_ALL	dbSNP137	AVSIFT	LJB_PhyloP	LJB_PhyloP_Pred	LJB_SIFT	LJB_SIFT_Pred	LJB_PolyPhen2	LJB_PolyPhen2_Pred	LJB_LRT	LJB_LRT_Pred	LJB_MutationTaster	LJB_MutationTaster_Pred	LJB_GERP++	Chr	Start	End	Ref	Obs	Otherinfo
-exonic	SEH1L	synonymous SNV	SEH1L:NM_001013437:exon5:c.C585T:p.A195A,SEH1L:NM_031216:exon5:c.C585T:p.A195A	622;Name=lod=448		0.004844	0.0014	rs142041554													18	12971215	12971215	C	T	Het
-exonic	CEP192	synonymous SNV	CEP192:NM_032142:exon4:c.A363G:p.L121L																		18	13008527	13008527	A	G	Het
-exonic	POTEC	nonsynonymous SNV	POTEC:NM_001137671:exon5:c.C1010G:p.S337C		0.98			rs199815986													18	14533105	14533105	G	C	Het
-exonic	POTEC	synonymous SNV	POTEC:NM_001137671:exon1:c.C237T:p.N79N		0.98			rs8040519													18	14542909	14542909	G	A	Het
-exonic	GREB1L	nonframeshift substitution	GREB1L:NM_001142966:exon32:c.5582_5582delinsATCT	680;Name=lod=771																	18	19100758	19100758	A	ATCT	Hom
