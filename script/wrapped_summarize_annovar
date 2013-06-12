@@ -2,16 +2,17 @@
 
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-tmp_dir="$script_dir/tmp"
 annovar_dir="/home/jessada/development/scilifelab/tools/annovar/"
 
 #---------- arguments --------------
 chr=$1
 beginning=$2
 ending=$3
-header_file=$4
-tabix_file=$5
-out=$6
+tabix_file=$4
+working_dir=$5
+out_prefix=$6
+
+out_file=$working_dir/$out_prefix".tab.csv"
 #---------- arguments --------------
 
 #---------- get region --------------
@@ -25,13 +26,8 @@ end_pos="$( grep -P "$ending\t" $prefix_ref_db_file"_chr"$chr".txt" | awk -F'\t'
 #---------- vcf2avdb --------------
 convert2annovar_script=$annovar_dir/convert2annovar.pl
 
-tmp_file_name=$(basename "$out")
-tmp_file_name="${tmp_file_name%.*}"
-tmp_file_name="${tmp_file_name%.*}"
-tmp_file_name="${tmp_file_name%.*}"
-
-tmp_avdb=$tmp_dir/"tmp_"$tmp_file_name"_avdb"
-avdb_out=$tmp_dir/$tmp_file_name".avdb"
+tmp_avdb=$working_dir/$out_prefix"_tmp_avdb"
+avdb_out=$working_dir/$out_prefix".avdb"
 
 tabix $tabix_file $chr:$begin_pos-$end_pos | cut -f1-10 | awk -F'\t' '{printf "%s\t%s\t%s\t%s\t%s\t%s|%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, $4, $5, $6, $2, $7, $8, $9, $10}'> $tmp_avdb
 $convert2annovar_script -format vcf4 $tmp_avdb --comment > $avdb_out
@@ -40,9 +36,14 @@ $convert2annovar_script -format vcf4 $tmp_avdb --comment > $avdb_out
 #---------- summarize --------------
 summarize_annovar_script=$annovar_dir/summarize_annovar.pl
 human_db_dir=$annovar_dir/humandb/
+summarize_out=$working_dir/$out_prefix
 
-$summarize_annovar_script -out $out -buildver hg19 -verdbsnp 137 -ver1000g 1000g2012apr -veresp 6500 -remove -alltranscript $avdb_out $human_db_dir
+$summarize_annovar_script -out $summarize_out -buildver hg19 -verdbsnp 137 -ver1000g 1000g2012apr -veresp 6500 -remove -alltranscript $avdb_out $human_db_dir
 #---------- summarize --------------
 
+#---------- comma2tab --------------
+csv_file=$summarize_out".genome_summary.csv"
+perl -pe 'while (s/(,"[^"]+),/\1<COMMA>/g) {1}; s/"//g; s/,/\t/g; s/<COMMA>/,/g' < $csv_file > $out_file
+#---------- comma2tab --------------
 
 

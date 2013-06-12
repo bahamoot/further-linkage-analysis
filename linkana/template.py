@@ -33,12 +33,6 @@ class LinkAnaBase(object):
     def throw(self, err_msg):
         raise Exception(err_msg)
 
-    def exec_sh(self, cmd):
-        p = subprocess.Popen(cmd, shell=True)
-        error = p.wait()
-        if error:
-            self.throw("Error found during execute command '%s' with error code %d" % (cmd, error))
-
 
 class Tester(unittest.TestCase, LinkAnaBase):
     """ general LinkAna template for testing """

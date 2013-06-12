@@ -1,3 +1,5 @@
 *.pyc
-bin/tmp
-bin/test_bin_annovar_summarize
+*.obsolete
+*tmp/
+script/test_bin_annovar_summarize
+
