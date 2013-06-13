@@ -1,5 +1,6 @@
 import os
 import filecmp
+import unittest
 import linkana.settings as lka_const
 from linkana.misc.test.template import SafeMiscTester
 from linkana.misc.script import summarize_annovar
@@ -16,8 +17,9 @@ class TestScript(SafeMiscTester):
     def __create_script_instance(self):
         pass
 
+    @unittest.skip("temporary disable due to long testing time")
     def test_summarize_annovar(self):
-        self.individual_debug = True
+#        self.individual_debug = True
         self.init_test('test_summarize_annovar')
         test_chrom = '18'
         test_begin_marker = 'rs146647843'
@@ -26,13 +28,13 @@ class TestScript(SafeMiscTester):
                                        'test_summarize_annovar.vcf.gz')
         test_working_dir = self.working_dir
         test_out_prefix = 'test_summarize_annovar_out'
-#        summarize_annovar(test_chrom,
-#                          test_begin_marker,
-#                          test_end_marker,
-#                          test_tabix_file,
-#                          test_working_dir,
-#                          test_out_prefix,
-#                          )
+        summarize_annovar(test_chrom,
+                          test_begin_marker,
+                          test_end_marker,
+                          test_tabix_file,
+                          test_working_dir,
+                          test_out_prefix,
+                          )
         expected_tmp_avdb_file = os.path.join(self.data_dir,
                                               'expected_tmp_avdb')
         tmp_avdb_file = os.path.join(test_working_dir,

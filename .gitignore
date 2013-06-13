@@ -2,4 +2,5 @@
 *.obsolete
 *tmp/
 script/test_bin_annovar_summarize
+*~
 

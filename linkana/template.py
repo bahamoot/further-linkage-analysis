@@ -3,6 +3,8 @@ import sys
 import os
 import shutil
 import subprocess
+import inspect
+import gc
 import combivep.settings as cbv_const
 
 
@@ -32,6 +34,22 @@ class LinkAnaBase(object):
 
     def throw(self, err_msg):
         raise Exception(err_msg)
+
+    @property
+    def current_func_name(self):
+        frame = inspect.currentframe(1)
+        code  = frame.f_code
+        globs = frame.f_globals
+        functype = type(lambda: 0)
+        funcs = []
+        for func in gc.get_referrers(code):
+            if type(func) is functype:
+                if getattr(func, "func_code", None) is code:
+                    if getattr(func, "func_globals", None) is globs:
+                        funcs.append(func)
+                        if len(funcs) > 1:
+                            return None
+        return funcs[0].__name__ if funcs else None
 
 
 class Tester(unittest.TestCase, LinkAnaBase):
