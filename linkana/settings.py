@@ -11,6 +11,7 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
 
 SCRIPT_DIR = os.path.join(PROJECT_ROOT, 'script')
 WRAPPED_SUMMARIZE_ANNOVAR = os.path.join(SCRIPT_DIR, 'wrapped_summarize_annovar')
+PREPARE_VCF_DB = os.path.join(SCRIPT_DIR, 'prepare_vcf_db')
 
 
 

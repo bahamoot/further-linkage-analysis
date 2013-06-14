@@ -3,6 +3,7 @@ import csv
 import linkana.settings as lka_const
 from linkana.db.test.template import SafeDBTester
 from linkana.db.connectors import SummarizeAnnovarDB
+from linkana.db.connectors import VcfDB
 
 
 class TestSummarizeAnnovarDB(SafeDBTester):
@@ -28,85 +29,85 @@ class TestSummarizeAnnovarDB(SafeDBTester):
         header = db.header
         self.assertEqual(header.key,
                          None,
-                         'Incorrect header key? Header shouldn')
+                         'Incorrect Annovar header key? Header shouldn')
         self.assertEqual(header.func,
                          'Func',
-                         'Incorrect header at "Func" column')
+                         'Incorrect Annovar header at "Func" column')
         self.assertEqual(header.gene,
                          'Gene',
-                         'Incorrect header at "Gene" column')
+                         'Incorrect Annovar header at "Gene" column')
         self.assertEqual(header.exonic_func,
                          'ExonicFunc',
-                         'Incorrect header at "ExonicFunc" column')
+                         'Incorrect Annovar header at "ExonicFunc" column')
         self.assertEqual(header.aa_change,
                          'AAChange',
-                         'Incorrect header at "AAChange" column')
+                         'Incorrect Annovar header at "AAChange" column')
         self.assertEqual(header.conserved,
                          'Conserved',
-                         'Incorrect header at "Conserved" column')
+                         'Incorrect Annovar header at "Conserved" column')
         self.assertEqual(header.seg_dup,
                          'SegDup',
-                         'Incorrect header at "SegDup" column')
+                         'Incorrect Annovar header at "SegDup" column')
         self.assertEqual(header.esp6500_all,
                          'ESP6500_ALL',
-                         'Incorrect header at "ESP6500_ALL" column')
+                         'Incorrect Annovar header at "ESP6500_ALL" column')
         self.assertEqual(header.maf,
                          '1000g2012apr_ALL',
-                         'Incorrect header at "1000g2012apr_ALL" column')
+                         'Incorrect Annovar header at "1000g2012apr_ALL" column')
         self.assertEqual(header.dbsnp137,
                          'dbSNP137',
-                         'Incorrect header at "dbSNP137" column')
+                         'Incorrect Annovar header at "dbSNP137" column')
         self.assertEqual(header.avsift,
                          'AVSIFT',
-                         'Incorrect header at "AVSIFT" column')
+                         'Incorrect Annovar header at "AVSIFT" column')
         self.assertEqual(header.ljb_phylop,
                          'LJB_PhyloP',
-                         'Incorrect header at "LJB_PhyloP" column')
+                         'Incorrect Annovar header at "LJB_PhyloP" column')
         self.assertEqual(header.ljb_phylop_pred,
                          'LJB_PhyloP_Pred',
-                         'Incorrect header at "LJB_PhyloP_Pred" column')
+                         'Incorrect Annovar header at "LJB_PhyloP_Pred" column')
         self.assertEqual(header.ljb_sift,
                          'LJB_SIFT',
-                         'Incorrect header at "LJB_SIFT" column')
+                         'Incorrect Annovar header at "LJB_SIFT" column')
         self.assertEqual(header.ljb_sift_pred,
                          'LJB_SIFT_Pred',
-                         'Incorrect header at "LJB_SIFT_Pred" column')
+                         'Incorrect Annovar header at "LJB_SIFT_Pred" column')
         self.assertEqual(header.ljb_polyphen2,
                          'LJB_PolyPhen2',
-                         'Incorrect header at "LJB_PolyPhen2" column')
+                         'Incorrect Annovar header at "LJB_PolyPhen2" column')
         self.assertEqual(header.ljb_polyphen2_pred,
                          'LJB_PolyPhen2_Pred',
-                         'Incorrect header at "LJB_PolyPhen2_Pred" column')
+                         'Incorrect Annovar header at "LJB_PolyPhen2_Pred" column')
         self.assertEqual(header.ljb_lrt,
                          'LJB_LRT',
-                         'Incorrect header at "LJB_LRT" column')
+                         'Incorrect Annovar header at "LJB_LRT" column')
         self.assertEqual(header.ljb_lrt_pred,
                          'LJB_LRT_Pred',
-                         'Incorrect header at "LJB_LRT_Pred" column')
+                         'Incorrect Annovar header at "LJB_LRT_Pred" column')
         self.assertEqual(header.ljb_mt,
                          'LJB_MutationTaster',
-                         'Incorrect header at "LJB_MutationTaster" column')
+                         'Incorrect Annovar header at "LJB_MutationTaster" column')
         self.assertEqual(header.ljb_mt_pred,
                          'LJB_MutationTaster_Pred',
-                         'Incorrect header at "LJB_MutationTaster_Pred" column')
+                         'Incorrect Annovar header at "LJB_MutationTaster_Pred" column')
         self.assertEqual(header.ljb_gerp,
                          'LJB_GERP++',
-                         'Incorrect header at "LJB_GERP++" column')
+                         'Incorrect Annovar header at "LJB_GERP++" column')
         self.assertEqual(header.chrom,
                          'Chr',
-                         'Incorrect header at "Chr" column')
+                         'Incorrect Annovar header at "Chr" column')
         self.assertEqual(header.start_pos,
                          'Start',
-                         'Incorrect header at "Start" column')
+                         'Incorrect Annovar header at "Start" column')
         self.assertEqual(header.end_pos,
                          'End',
-                         'Incorrect header at "End" column')
+                         'Incorrect Annovar header at "End" column')
         self.assertEqual(header.ref,
                          'Ref',
-                         'Incorrect header at "Ref" column')
+                         'Incorrect Annovar header at "Ref" column')
         self.assertEqual(header.obs,
                          'Obs',
-                         'Incorrect header at "Obs" column')
+                         'Incorrect Annovar header at "Obs" column')
 
     def test_records_count(self):
         """ to check if all records are read """
@@ -136,80 +137,207 @@ class TestSummarizeAnnovarDB(SafeDBTester):
                          'Incorrect record key')
         self.assertEqual(record.func,
                          'exonic',
-                         'Incorrect content at "Func" column')
+                         'Incorrect Annovar content at "Func" column')
         self.assertEqual(record.gene,
                          'CEP76',
-                         'Incorrect content at "Gene" column')
+                         'Incorrect Annovar content at "Gene" column')
         self.assertEqual(record.exonic_func,
                          'synonymous SNV',
-                         'Incorrect content at "ExonicFunc" column')
+                         'Incorrect Annovar content at "ExonicFunc" column')
         self.assertEqual(record.aa_change,
                          'CEP76:NM_001271989:exon4:c.A405C:p.S135S,CEP76:NM_024899:exon5:c.A630C:p.S210S',
-                         'Incorrect content at "AAChange" column')
+                         'Incorrect Annovar content at "AAChange" column')
         self.assertEqual(record.conserved,
                          '671;Name=lod=713',
-                         'Incorrect content at "Conserved" column')
+                         'Incorrect Annovar content at "Conserved" column')
         self.assertEqual(record.seg_dup,
                          '',
-                         'Incorrect content at "SegDup" column')
+                         'Incorrect Annovar content at "SegDup" column')
         self.assertEqual(record.esp6500_all,
                          '0.000308',
-                         'Incorrect content at "ESP6500_ALL" column')
+                         'Incorrect Annovar content at "ESP6500_ALL" column')
         self.assertEqual(record.maf,
                          '0.0014',
-                         'Incorrect content at "1000g2012apr_ALL" column')
+                         'Incorrect Annovar content at "1000g2012apr_ALL" column')
         self.assertEqual(record.dbsnp137,
                          'rs146647843',
-                         'Incorrect content at "dbSNP137" column')
+                         'Incorrect Annovar content at "dbSNP137" column')
         self.assertEqual(record.avsift,
                          '0.45',
-                         'Incorrect content at "AVSIFT" column')
+                         'Incorrect Annovar content at "AVSIFT" column')
         self.assertEqual(record.ljb_phylop,
                          '0.994193',
-                         'Incorrect content at "LJB_PhyloP" column')
+                         'Incorrect Annovar content at "LJB_PhyloP" column')
         self.assertEqual(record.ljb_phylop_pred,
                          'C',
-                         'Incorrect content at "LJB_PhyloP_Pred" column')
+                         'Incorrect Annovar content at "LJB_PhyloP_Pred" column')
         self.assertEqual(record.ljb_sift,
                          '0',
-                         'Incorrect content at "LJB_SIFT" column')
+                         'Incorrect Annovar content at "LJB_SIFT" column')
         self.assertEqual(record.ljb_sift_pred,
                          'D',
-                         'Incorrect content at "LJB_SIFT_Pred" column')
+                         'Incorrect Annovar content at "LJB_SIFT_Pred" column')
         self.assertEqual(record.ljb_polyphen2,
                          '0.966',
-                         'Incorrect content at "LJB_PolyPhen2" column')
+                         'Incorrect Annovar content at "LJB_PolyPhen2" column')
         self.assertEqual(record.ljb_polyphen2_pred,
                          'B',
-                         'Incorrect content at "LJB_PolyPhen2_Pred" column')
+                         'Incorrect Annovar content at "LJB_PolyPhen2_Pred" column')
         self.assertEqual(record.ljb_lrt,
                          '1',
-                         'Incorrect content at "LJB_LRT" column')
+                         'Incorrect Annovar content at "LJB_LRT" column')
         self.assertEqual(record.ljb_lrt_pred,
                          'D',
-                         'Incorrect content at "LJB_LRT_Pred" column')
+                         'Incorrect Annovar content at "LJB_LRT_Pred" column')
         self.assertEqual(record.ljb_mt,
                          '0.999744',
-                         'Incorrect content at "LJB_MutationTaster" column')
+                         'Incorrect Annovar content at "LJB_MutationTaster" column')
         self.assertEqual(record.ljb_mt_pred,
                          'D',
-                         'Incorrect content at "LJB_MutationTaster_Pred" column')
+                         'Incorrect Annovar content at "LJB_MutationTaster_Pred" column')
         self.assertEqual(record.ljb_gerp,
                          '4.62',
-                         'Incorrect content at "LJB_GERP++" column')
+                         'Incorrect Annovar content at "LJB_GERP++" column')
         self.assertEqual(record.chrom,
                          '18',
-                         'Incorrect content at "Chr" column')
+                         'Incorrect Annovar content at "Chr" column')
         self.assertEqual(record.start_pos,
                          '12697298',
-                         'Incorrect content at "Start" column')
+                         'Incorrect Annovar content at "Start" column')
         self.assertEqual(record.end_pos,
                          '12697298',
-                         'Incorrect content at "End" column')
+                         'Incorrect Annovar content at "End" column')
         self.assertEqual(record.ref,
                          'T',
-                         'Incorrect content at "Ref" column')
+                         'Incorrect Annovar content at "Ref" column')
         self.assertEqual(record.obs,
                          'G',
-                         'Incorrect content at "Obs" column')
+                         'Incorrect Annovar content at "Obs" column')
+
+
+class TestVcfDB(SafeDBTester):
+
+    def __init__(self, test_name):
+        SafeDBTester.__init__(self, test_name)
+
+    def setUp(self):
+        self.test_class = 'VcfDB'
+
+    def __create_db_instance(self):
+        db = VcfDB()
+        return db
+
+    def test_header(self):
+        """ to see if VcfDB can correctly retrieve and translate VCF header """
+
+        self.init_test(self.current_func_name)
+        db = self.__create_db_instance()
+        test_file = os.path.join(self.data_dir,
+                                 self.current_func_name + '.vcf.gz')
+        test_chrom = 18
+        test_begin_pos = 12702537
+        test_end_pos = '12703020'
+        db.open_db(test_file, test_chrom, test_begin_pos, test_end_pos)
+        header = db.header
+        self.assertEqual(header.chrom,
+                         'CHROM',
+                         'Incorrect Vcf header at "CHROM" column')
+        self.assertEqual(header.pos,
+                         'POS',
+                         'Incorrect Vcf header at "POS" column')
+        self.assertEqual(header.vcf_id,
+                         'ID',
+                         'Incorrect Vcf header at "ID" column')
+        self.assertEqual(header.ref,
+                         'REF',
+                         'Incorrect Vcf header at "REF" column')
+        self.assertEqual(header.alt,
+                         'ALT',
+                         'Incorrect Vcf header at "ALT" column')
+        self.assertEqual(header.qual,
+                         'QUAL',
+                         'Incorrect Vcf header at "QUAL" column')
+        self.assertEqual(header.vcf_filter,
+                         'FILTER',
+                         'Incorrect Vcf header at "FILTER" column')
+        self.assertEqual(header.info,
+                         'INFO',
+                         'Incorrect Vcf header at "INFO" column')
+        self.assertEqual(header.vcf_format,
+                         'FORMAT',
+                         'Incorrect Vcf header at "FORMAT" column')
+        patient_codes = header.patient_codes
+        self.assertEqual(len(patient_codes),
+                         77,
+                         'Incorrect number of patient codes being read')
+        self.assertEqual(patient_codes[2],
+                         '134/06',
+                         'Incorrect patient code')
+        self.assertEqual(patient_codes[10],
+                         '602-05o',
+                         'Incorrect patient code')
+        self.assertEqual(patient_codes[74],
+                         'co1053',
+                         'Incorrect patient code')
+
+    def test_records(self):
+        """ to see if VcfDB can correctly retrieve VCF contents """
+
+        self.init_test(self.current_func_name)
+        db = self.__create_db_instance()
+        test_file = os.path.join(self.data_dir,
+                                 self.current_func_name + '.vcf.gz')
+        test_chrom = 18
+        test_begin_pos = 12702537
+        test_end_pos = '12703020'
+        db.open_db(test_file, test_chrom, test_begin_pos, test_end_pos)
+        records = list(db.records)
+        self.assertEqual(len(records),
+                         6,
+                         'Incorrect number of records retrieved by VcfDB')
+        test_record = records[1]
+        self.assertEqual(test_record.key,
+                         '18|12702610',
+                         'Incorrect record key')
+        self.assertEqual(test_record.chrom,
+                         '18',
+                         'Incorrect Vcf content at "CHROM" column')
+        self.assertEqual(test_record.pos,
+                         '12702610',
+                         'Incorrect Vcf content at "POS" column')
+        self.assertEqual(test_record.vcf_id,
+                         'rs4797701',
+                         'Incorrect Vcf content at "ID" column')
+        self.assertEqual(test_record.ref,
+                         'G',
+                         'Incorrect Vcf content at "REF" column')
+        self.assertEqual(test_record.alt,
+                         'A',
+                         'Incorrect Vcf content at "ALT" column')
+        self.assertEqual(test_record.qual,
+                         '1945.51',
+                         'Incorrect Vcf content at "QUAL" column')
+        self.assertEqual(test_record.vcf_filter,
+                         'PASS',
+                         'Incorrect Vcf content at "FILTER" column')
+        self.assertEqual(test_record.info,
+                         'AC=29;AF=0.322;AN=90;DB;DP=1635;Dels=0.00;HRun=0;MQ0=0;VQSLOD=5.1293;culprit=QD;set=Intersection',
+                         'Incorrect Vcf content at "INFO" column')
+        self.assertEqual(test_record.vcf_format,
+                         'GT:AD:DP:GQ:PL',
+                         'Incorrect Vcf content at "FORMAT" column')
+        patient_contents = test_record.patient_contents
+        self.assertEqual(len(patient_contents),
+                         77,
+                         'Incorrect number of patient contents being read')
+        self.assertEqual(patient_contents[2],
+                         '0/0:16,0:16:42.10:0,42,475',
+                         'Incorrect patient content')
+        self.assertEqual(patient_contents[10],
+                         '0/1:13,31:43:99:695,0,138',
+                         'Incorrect patient content')
+        self.assertEqual(patient_contents[74],
+                         '0/1:23,21:44:99:360,0,571',
+                         'Incorrect patient content')
+
 

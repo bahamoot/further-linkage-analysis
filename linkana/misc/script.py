@@ -3,39 +3,45 @@ import sys
 import subprocess
 import linkana.settings as lka_const
 
-def exec_sh(cmd):
-    p = subprocess.Popen(cmd, shell=True)
-    error = p.wait()
-    if error:
-        raise Exception("Error found during execute command '%s' with error code %d" % (cmd, error))
+REF_DB_PREFIX = "/home/jessada/development/scilifelab/tools/annovar/humandb/hg19_snp137"
 
-def summarize_annovar(chrom, begin_marker, end_marker, tabix_file, working_dir, out_prefix):
+def check_output(cmd):
+    p = subprocess.check_output(cmd, shell=True)
+    if p == 1:
+        raise Exception("Error found during execute command '%s' with error code %d" % (cmd, error))
+    return p
+
+def exec_sh(cmd):
+    p = subprocess.call(cmd, shell=True)
+    if p == 1:
+        raise Exception("Error found during execute command '%s' with error code %d" % (cmd, p))
+    return p
+
+def summarize_annovar(chrom, begin_pos, end_pos, tabix_file, working_dir, out_prefix):
     cmd = []
     cmd.append(lka_const.WRAPPED_SUMMARIZE_ANNOVAR)
     cmd.append(chrom)
-    cmd.append(begin_marker)
-    cmd.append(end_marker)
+    cmd.append(begin_pos)
+    cmd.append(end_pos)
     cmd.append(tabix_file)
     cmd.append(working_dir)
     cmd.append(out_prefix)
     return exec_sh(' '.join(cmd))
 
-#def list_POTEC_gene_from_one_member(output_file=None):
-#    if output_file is not None:
-#        sys.stdout = open(output_file, 'w')
-#
-#    out_fmt = '{gene}\t{chrom}\t{pos}\t{key}'
-#    analyzer = Analyzer()
-#    data_root = os.path.join(lka_const.PROJECT_ROOT,
-#                             'data')
-#    analyzer.load_one_member_data(data_root)
-#    snp_mgr = analyzer.db_mgr.snp_mgr
-#    for key in snp_mgr.keys():
-#        if snp_mgr[key].info.gene == 'POTEC':
-#            if snp_mgr[key].info.exonic_func != 'synonymous SNV':
-#                print out_fmt.format(gene=snp_mgr[key].info.gene,
-#                                     chrom=snp_mgr[key].info.chrom,
-#                                     pos=snp_mgr[key].info.start_pos,
-#                                     key=snp_mgr[key].pkey,
-#                                     )
-#    sys.stdout = sys.__stdout__
+def get_pos(marker, ref_db_file):
+    cmd = 'grep -P "' + marker + '\t" ' + ref_db_file
+    record = check_output(cmd)
+    return record.split('\t')[2]
+
+def get_region(begin_marker, end_marker, ref_db_file):
+    begin_pos = get_pos(begin_marker, ref_db_file)
+    end_pos = get_pos(end_marker, ref_db_file)
+    return begin_pos, end_pos
+
+def get_region_chrom(chrom, begin_marker, end_marker, ref_db_prefix):
+    return get_region(begin_marker, end_marker, ref_db_prefix+"_chr"+chrom+".txt")
+
+def get_raw_vcf_gz_header(vcf_gz_file):
+    cmd = 'zcat ' + vcf_gz_file + ' | grep "^#C"'
+    return check_output(cmd)
+

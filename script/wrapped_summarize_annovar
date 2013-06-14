@@ -6,22 +6,14 @@ annovar_dir="/home/jessada/development/scilifelab/tools/annovar/"
 
 #---------- arguments --------------
 chr=$1
-beginning=$2
-ending=$3
+begin_pos=$2
+end_pos=$3
 tabix_file=$4
 working_dir=$5
 out_prefix=$6
 
 out_file=$working_dir/$out_prefix".tab.csv"
 #---------- arguments --------------
-
-#---------- get region --------------
-lookup_data_dir="/home/jessada/development/scilifelab/tools/annovar/humandb"
-prefix_ref_db_file="$lookup_data_dir/hg19_snp137"
-
-begin_pos="$( grep -P "$beginning\t" $prefix_ref_db_file"_chr"$chr".txt" | awk -F'\t' '{printf "%s", $3}' )"
-end_pos="$( grep -P "$ending\t" $prefix_ref_db_file"_chr"$chr".txt" | awk -F'\t' '{printf "%s", $3}' )"
-#---------- get region --------------
 
 #---------- vcf2avdb --------------
 convert2annovar_script=$annovar_dir/convert2annovar.pl
