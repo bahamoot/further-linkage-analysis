@@ -4,6 +4,7 @@ import linkana.settings as lka_const
 from linkana.db.test.template import SafeDBTester
 from linkana.db.connectors import SummarizeAnnovarDB
 from linkana.db.connectors import VcfDB
+from linkana.db.connectors import FamilyDB
 
 
 class TestSummarizeAnnovarDB(SafeDBTester):
@@ -341,3 +342,41 @@ class TestVcfDB(SafeDBTester):
                          'Incorrect patient content')
 
 
+class TestFamilyDB(SafeDBTester):
+
+    def __init__(self, test_name):
+        SafeDBTester.__init__(self, test_name)
+
+    def setUp(self):
+        self.test_class = 'FamilyDB'
+
+    def __create_db_instance(self):
+        db = FamilyDB()
+        return db
+
+    def test_records(self):
+        """ to see if FamilyDB can correctly retrieve family informaiton """
+
+        self.init_test(self.current_func_name)
+        db = self.__create_db_instance()
+        test_file = os.path.join(self.data_dir,
+                                 self.current_func_name + '.txt')
+        db.open_db(test_file)
+        records = list(db.records)
+        self.assertEqual(len(records),
+                         6,
+                         'Incorrect number of records retrieved by FamilyDB')
+        test_record = records[2]
+        self.assertEqual(test_record.family_code,
+                         '348',
+                         'Incorrect family code')
+        patient_codes = test_record.patient_codes
+        self.assertEqual(len(patient_codes),
+                         2,
+                         'Incorrect number of patient codes being read')
+        self.assertEqual(patient_codes[0],
+                         'Co846',
+                         'Incorrect patient code')
+        self.assertEqual(patient_codes[1],
+                         'Co857',
+                         'Incorrect patient code')
