@@ -67,9 +67,12 @@ class AbstractVcfDB(LinkAnaBase):
                 mutations[record.key] = record
         return mutations
 
-    @property
-    def patient_contents(self, patient_code):
-        return 'Not yet implementedi, interface should be revised'
+    def get_patient_contents(self, patient_code):
+        for connector in self.__connectors:
+            header = connector.header
+            patient_idx = header.patient_codes.index(patient_code)
+            for record in connector.records:
+                yield record.patient_contents[patient_idx]
 
 
 class DBManager(LinkAnaBase):
