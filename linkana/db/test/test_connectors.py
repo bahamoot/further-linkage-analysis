@@ -459,6 +459,15 @@ class TestVcfDB(SafeDBTester):
                          'None',
                          'Incorrect zygosity')
         test_record = records.next()
+        self.assertEqual(test_record.allele_count,
+                         [34, 31],
+                         'Incorrect allele count')
+        self.assertEqual(test_record.patient_count,
+                         [23, 23],
+                         'Incorrect patient count')
+        self.assertEqual(test_record.genotype_count,
+                         114,
+                         'Incorrect genotype count')
         self.assertEqual(test_record.patient_contents[62].raw_gt,
                          '1/2',
                          'Incorrect patient raw genotype')
@@ -471,9 +480,30 @@ class TestVcfDB(SafeDBTester):
         self.assertEqual(test_record.patient_contents[62].zygosity,
                          'het',
                          'Incorrect zygosity')
-        records.next()
+        test_record = records.next()
+        self.assertEqual(test_record.allele_count,
+                         [16],
+                         'Incorrect allele count')
+        self.assertEqual(test_record.patient_count,
+                         [14],
+                         'Incorrect patient count')
+        self.assertEqual(test_record.genotype_count,
+                         78,
+                         'Incorrect genotype count')
+        self.assertEqual(test_record.key,
+                         '18|14513526',
+                         'Incorrect record key')
         records.next()
         test_record = records.next()
+        self.assertEqual(test_record.allele_count,
+                         [18, 27, 16],
+                         'Incorrect allele count')
+        self.assertEqual(test_record.patient_count,
+                         [11, 21, 10],
+                         'Incorrect patient count')
+        self.assertEqual(test_record.genotype_count,
+                         86,
+                         'Incorrect genotype count')
         self.assertEqual(test_record.patient_contents[6].raw_gt,
                          '0/2',
                          'Incorrect patient raw genotype')
