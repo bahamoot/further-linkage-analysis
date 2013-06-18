@@ -70,12 +70,12 @@ class Tester(unittest.TestCase, LinkAnaBase):
         LinkAnaBase.create_dir(self, dir_name)
 
     def empty_working_dir(self):
-        if (not cbv_const.DEBUG_MODE) and (not self.individual_debug):
+        if not self.individual_debug:
             self.remove_dir(self.working_dir)
         self.create_dir(self.working_dir)
 
     def remove_working_dir(self):
-        if (not cbv_const.DEBUG_MODE) and (not self.individual_debug):
+        if not self.individual_debug:
             self.remove_dir(self.working_dir)
 
     def set_dir(self):
@@ -91,6 +91,9 @@ class Tester(unittest.TestCase, LinkAnaBase):
         self.test_function = test_function
         self.set_dir()
         self.empty_working_dir()
+
+    def tearDown(self):
+        self.remove_working_dir()
 
 
 class SafeTester(Tester):

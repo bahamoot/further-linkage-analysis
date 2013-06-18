@@ -132,86 +132,86 @@ class TestSummarizeAnnovarDB(SafeDBTester):
         db.open_db(test_file)
         records = db.records
         records.next()
-        record = records.next()
-        self.assertEqual(record.key,
+        test_record = records.next()
+        self.assertEqual(test_record.key,
                          '18|12702537',
                          'Incorrect record key')
-        self.assertEqual(record.func,
+        self.assertEqual(test_record.func,
                          'exonic',
                          'Incorrect Annovar content at "Func" column')
-        self.assertEqual(record.gene,
+        self.assertEqual(test_record.gene,
                          'CEP76',
                          'Incorrect Annovar content at "Gene" column')
-        self.assertEqual(record.exonic_func,
+        self.assertEqual(test_record.exonic_func,
                          'synonymous SNV',
                          'Incorrect Annovar content at "ExonicFunc" column')
-        self.assertEqual(record.aa_change,
+        self.assertEqual(test_record.aa_change,
                          'CEP76:NM_001271989:exon4:c.A405C:p.S135S,CEP76:NM_024899:exon5:c.A630C:p.S210S',
                          'Incorrect Annovar content at "AAChange" column')
-        self.assertEqual(record.conserved,
+        self.assertEqual(test_record.conserved,
                          '671;Name=lod=713',
                          'Incorrect Annovar content at "Conserved" column')
-        self.assertEqual(record.seg_dup,
+        self.assertEqual(test_record.seg_dup,
                          '',
                          'Incorrect Annovar content at "SegDup" column')
-        self.assertEqual(record.esp6500_all,
+        self.assertEqual(test_record.esp6500_all,
                          '0.000308',
                          'Incorrect Annovar content at "ESP6500_ALL" column')
-        self.assertEqual(record.maf,
+        self.assertEqual(test_record.maf,
                          '0.0014',
                          'Incorrect Annovar content at "1000g2012apr_ALL" column')
-        self.assertEqual(record.dbsnp137,
+        self.assertEqual(test_record.dbsnp137,
                          'rs146647843',
                          'Incorrect Annovar content at "dbSNP137" column')
-        self.assertEqual(record.avsift,
+        self.assertEqual(test_record.avsift,
                          '0.45',
                          'Incorrect Annovar content at "AVSIFT" column')
-        self.assertEqual(record.ljb_phylop,
+        self.assertEqual(test_record.ljb_phylop,
                          '0.994193',
                          'Incorrect Annovar content at "LJB_PhyloP" column')
-        self.assertEqual(record.ljb_phylop_pred,
+        self.assertEqual(test_record.ljb_phylop_pred,
                          'C',
                          'Incorrect Annovar content at "LJB_PhyloP_Pred" column')
-        self.assertEqual(record.ljb_sift,
+        self.assertEqual(test_record.ljb_sift,
                          '0',
                          'Incorrect Annovar content at "LJB_SIFT" column')
-        self.assertEqual(record.ljb_sift_pred,
+        self.assertEqual(test_record.ljb_sift_pred,
                          'D',
                          'Incorrect Annovar content at "LJB_SIFT_Pred" column')
-        self.assertEqual(record.ljb_polyphen2,
+        self.assertEqual(test_record.ljb_polyphen2,
                          '0.966',
                          'Incorrect Annovar content at "LJB_PolyPhen2" column')
-        self.assertEqual(record.ljb_polyphen2_pred,
+        self.assertEqual(test_record.ljb_polyphen2_pred,
                          'B',
                          'Incorrect Annovar content at "LJB_PolyPhen2_Pred" column')
-        self.assertEqual(record.ljb_lrt,
+        self.assertEqual(test_record.ljb_lrt,
                          '1',
                          'Incorrect Annovar content at "LJB_LRT" column')
-        self.assertEqual(record.ljb_lrt_pred,
+        self.assertEqual(test_record.ljb_lrt_pred,
                          'D',
                          'Incorrect Annovar content at "LJB_LRT_Pred" column')
-        self.assertEqual(record.ljb_mt,
+        self.assertEqual(test_record.ljb_mt,
                          '0.999744',
                          'Incorrect Annovar content at "LJB_MutationTaster" column')
-        self.assertEqual(record.ljb_mt_pred,
+        self.assertEqual(test_record.ljb_mt_pred,
                          'D',
                          'Incorrect Annovar content at "LJB_MutationTaster_Pred" column')
-        self.assertEqual(record.ljb_gerp,
+        self.assertEqual(test_record.ljb_gerp,
                          '4.62',
                          'Incorrect Annovar content at "LJB_GERP++" column')
-        self.assertEqual(record.chrom,
+        self.assertEqual(test_record.chrom,
                          '18',
                          'Incorrect Annovar content at "Chr" column')
-        self.assertEqual(record.start_pos,
+        self.assertEqual(test_record.start_pos,
                          '12697298',
                          'Incorrect Annovar content at "Start" column')
-        self.assertEqual(record.end_pos,
+        self.assertEqual(test_record.end_pos,
                          '12697298',
                          'Incorrect Annovar content at "End" column')
-        self.assertEqual(record.ref,
+        self.assertEqual(test_record.ref,
                          'T',
                          'Incorrect Annovar content at "Ref" column')
-        self.assertEqual(record.obs,
+        self.assertEqual(test_record.obs,
                          'G',
                          'Incorrect Annovar content at "Obs" column')
 
@@ -281,8 +281,8 @@ class TestVcfDB(SafeDBTester):
                          'co1053',
                          'Incorrect patient code')
 
-    def test_records(self):
-        """ to see if VcfDB can correctly retrieve VCF contents """
+    def test_records_count(self):
+        """ to check if all records are read """
 
         self.init_test(self.current_func_name)
         db = self.__create_db_instance()
@@ -292,11 +292,24 @@ class TestVcfDB(SafeDBTester):
         test_begin_pos = 12702537
         test_end_pos = '12703020'
         db.open_db(test_file, test_chrom, test_begin_pos, test_end_pos)
-        records = list(db.records)
-        self.assertEqual(len(records),
+        self.assertEqual(len(list(db.records)),
                          6,
                          'Incorrect number of records retrieved by VcfDB')
-        test_record = records[1]
+
+    def test_record_content1(self):
+        """ to see if VcfDB can correctly retrieve raw VCF contents """
+
+        self.init_test(self.current_func_name)
+        db = self.__create_db_instance()
+        test_file = os.path.join(self.data_dir,
+                                 self.current_func_name + '.vcf.gz')
+        test_chrom = 18
+        test_begin_pos = 12702537
+        test_end_pos = '12703020'
+        db.open_db(test_file, test_chrom, test_begin_pos, test_end_pos)
+        records = db.records
+        records.next()
+        test_record = records.next()
         self.assertEqual(test_record.key,
                          '18|12702610',
                          'Incorrect record key')
@@ -331,15 +344,160 @@ class TestVcfDB(SafeDBTester):
         self.assertEqual(len(patient_contents),
                          77,
                          'Incorrect number of patient contents being read')
-        self.assertEqual(patient_contents[2],
+        self.assertEqual(patient_contents[2].raw_content,
                          '0/0:16,0:16:42.10:0,42,475',
-                         'Incorrect patient content')
-        self.assertEqual(patient_contents[10],
+                         'Incorrect patient raw content')
+        self.assertEqual(patient_contents[10].raw_content,
                          '0/1:13,31:43:99:695,0,138',
-                         'Incorrect patient content')
-        self.assertEqual(patient_contents[74],
+                         'Incorrect patient raw content')
+        self.assertEqual(patient_contents[74].raw_content,
                          '0/1:23,21:44:99:360,0,571',
-                         'Incorrect patient content')
+                         'Incorrect patient raw content')
+
+    def test_record_content2(self):
+        """ to see if VcfDB can correctly parse VCF contents """
+
+        self.init_test(self.current_func_name)
+        db = self.__create_db_instance()
+        test_file = os.path.join(self.data_dir,
+                                 self.current_func_name + '.vcf.gz')
+        test_chrom = 18
+        test_begin_pos = 12512309
+        test_end_pos = 14513570
+        db.open_db(test_file, test_chrom, test_begin_pos, test_end_pos)
+        records = db.records
+        records.next()
+        test_record = records.next()
+        self.assertEqual(test_record.key,
+                         '18|12512370',
+                         'Incorrect record key')
+        self.assertEqual(test_record.patient_contents[1].raw_content,
+                         '0/1:1,0:1:1.76',
+                         'Incorrect patient raw content')
+        self.assertEqual(test_record.patient_contents[1].raw_gt,
+                         '0/1',
+                         'Incorrect patient raw genotype')
+        self.assertEqual(test_record.patient_contents[1].vcf_mutations,
+                         [{'ref': 'TACA', 'alt': 'TACT'}],
+                         'Incorrect vcf mutations')
+        self.assertEqual(test_record.patient_contents[1].annovar_mutations,
+                         [{'ref': 'TACA', 'alt': 'TACT'}],
+                         'Incorrect annovar mutations')
+        self.assertEqual(test_record.patient_contents[1].zygosity,
+                         'het',
+                         'Incorrect zygosity')
+        self.assertEqual(test_record.patient_contents[2].raw_gt,
+                         '2/2',
+                         'Incorrect patient raw genotype')
+        self.assertEqual(test_record.patient_contents[2].vcf_mutations,
+                         [{'ref': 'TACA', 'alt': 'TATAC'}],
+                         'Incorrect vcf mutations')
+        self.assertEqual(test_record.patient_contents[2].annovar_mutations,
+                         [{'ref': 'TACA', 'alt': 'TATAC'}],
+                         'Incorrect annovar mutations')
+        self.assertEqual(test_record.patient_contents[2].zygosity,
+                         'hom',
+                         'Incorrect zygosity')
+        self.assertEqual(test_record.patient_contents[3].raw_gt,
+                         '0/2',
+                         'Incorrect patient raw genotype')
+        self.assertEqual(test_record.patient_contents[3].vcf_mutations,
+                         [{'ref': 'TACA', 'alt': 'TATAC'}],
+                         'Incorrect vcf mutations')
+        self.assertEqual(test_record.patient_contents[3].annovar_mutations,
+                         [{'ref': 'TACA', 'alt': 'TATAC'}],
+                         'Incorrect annovar mutations')
+        self.assertEqual(test_record.patient_contents[3].zygosity,
+                         'het',
+                         'Incorrect zygosity')
+        self.assertEqual(test_record.patient_contents[5].raw_gt,
+                         './.',
+                         'Incorrect patient raw genotype')
+        self.assertEqual(test_record.patient_contents[5].vcf_mutations,
+                         'Unknown',
+                         'Incorrect vcf mutations')
+        self.assertEqual(test_record.patient_contents[5].annovar_mutations,
+                         'Unknown',
+                         'Incorrect annovar mutations')
+        self.assertEqual(test_record.patient_contents[5].zygosity,
+                         'Unknown',
+                         'Incorrect zygosity')
+        self.assertEqual(test_record.patient_contents[10].raw_gt,
+                         '.',
+                         'Incorrect patient raw genotype')
+        self.assertEqual(test_record.patient_contents[10].vcf_mutations,
+                         'Unknown',
+                         'Incorrect vcf mutations')
+        self.assertEqual(test_record.patient_contents[10].annovar_mutations,
+                         'Unknown',
+                         'Incorrect annovar mutations')
+        self.assertEqual(test_record.patient_contents[10].zygosity,
+                         'Unknown',
+                         'Incorrect zygosity')
+        self.assertEqual(test_record.patient_contents[12].raw_gt,
+                         '0/3',
+                         'Incorrect patient raw genotype')
+        self.assertEqual(test_record.patient_contents[12].vcf_mutations,
+                         [{'ref': 'TACA', 'alt': 'TC'}],
+                         'Incorrect vcf mutations')
+        self.assertEqual(test_record.patient_contents[12].annovar_mutations,
+                         [{'ref': 'TACA', 'alt': 'TC'}],
+                         'Incorrect annovar mutations')
+        self.assertEqual(test_record.patient_contents[12].zygosity,
+                         'het',
+                         'Incorrect zygosity')
+        self.assertEqual(test_record.patient_contents[15].raw_gt,
+                         '0/0',
+                         'Incorrect patient raw genotype')
+        self.assertEqual(test_record.patient_contents[15].vcf_mutations,
+                         'None',
+                         'Incorrect vcf mutations')
+        self.assertEqual(test_record.patient_contents[15].annovar_mutations,
+                         'None',
+                         'Incorrect annovar mutations')
+        self.assertEqual(test_record.patient_contents[15].zygosity,
+                         'None',
+                         'Incorrect zygosity')
+        test_record = records.next()
+        self.assertEqual(test_record.patient_contents[62].raw_gt,
+                         '1/2',
+                         'Incorrect patient raw genotype')
+        self.assertEqual(test_record.patient_contents[62].vcf_mutations,
+                         [{'ref': 'CAA', 'alt': 'C'}, {'ref': 'CAA', 'alt': 'CA'}],
+                         'Incorrect vcf mutations')
+        self.assertEqual(test_record.patient_contents[62].annovar_mutations,
+                         [{'ref': 'AA', 'alt': '-'}, {'ref': 'A', 'alt': '-'}],
+                         'Incorrect annovar mutations')
+        self.assertEqual(test_record.patient_contents[62].zygosity,
+                         'het',
+                         'Incorrect zygosity')
+        records.next()
+        records.next()
+        test_record = records.next()
+        self.assertEqual(test_record.patient_contents[6].raw_gt,
+                         '0/2',
+                         'Incorrect patient raw genotype')
+        self.assertEqual(test_record.patient_contents[6].vcf_mutations,
+                         [{'ref': 'T', 'alt': 'TATAC'}],
+                         'Incorrect vcf mutations')
+        self.assertEqual(test_record.patient_contents[6].annovar_mutations,
+                         [{'ref': '-', 'alt': 'ATAC'}],
+                         'Incorrect annovar mutations')
+        self.assertEqual(test_record.patient_contents[6].zygosity,
+                         'het',
+                         'Incorrect zygosity')
+        self.assertEqual(test_record.patient_contents[9].raw_gt,
+                         '3/3',
+                         'Incorrect patient raw genotype')
+        self.assertEqual(test_record.patient_contents[9].vcf_mutations,
+                         [{'ref': 'T', 'alt': 'TAC'}],
+                         'Incorrect vcf mutations')
+        self.assertEqual(test_record.patient_contents[9].annovar_mutations,
+                         [{'ref': '-', 'alt': 'AC'}],
+                         'Incorrect annovar mutations')
+        self.assertEqual(test_record.patient_contents[9].zygosity,
+                         'hom',
+                         'Incorrect zygosity')
 
 
 class TestFamilyDB(SafeDBTester):
@@ -354,6 +512,18 @@ class TestFamilyDB(SafeDBTester):
         db = FamilyDB()
         return db
 
+    def test_records_count(self):
+        """ to check if all records are read """
+
+        self.init_test(self.current_func_name)
+        db = self.__create_db_instance()
+        test_file = os.path.join(self.data_dir,
+                                 self.current_func_name + '.txt')
+        db.open_db(test_file)
+        self.assertEqual(len(list(db.records)),
+                         6,
+                         'Incorrect number of records retrieved by FamilyDB')
+
     def test_records(self):
         """ to see if FamilyDB can correctly retrieve family informaiton """
 
@@ -362,11 +532,10 @@ class TestFamilyDB(SafeDBTester):
         test_file = os.path.join(self.data_dir,
                                  self.current_func_name + '.txt')
         db.open_db(test_file)
-        records = list(db.records)
-        self.assertEqual(len(records),
-                         6,
-                         'Incorrect number of records retrieved by FamilyDB')
-        test_record = records[2]
+        records = db.records
+        records.next()
+        records.next()
+        test_record = records.next()
         self.assertEqual(test_record.family_code,
                          '348',
                          'Incorrect family code')
@@ -380,3 +549,4 @@ class TestFamilyDB(SafeDBTester):
         self.assertEqual(patient_codes[1],
                          'Co857',
                          'Incorrect patient code')
+
