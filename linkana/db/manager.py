@@ -23,12 +23,7 @@ class PatientRecord(object):
 
     def get_raw_repr(self):
         return "Patient record"
-#        return {'raw content': self.raw_content,
-#                'raw genotype': self.raw_gt,
-#                'vcf mutations': self.vcf_mutations,
-#                'annovar mutations': self.annovar_mutations,
-#                'zygosity': self.zygosity,
-#                }
+
 
 class AbstractVcfDB(LinkAnaBase):
     """
@@ -96,17 +91,6 @@ class AbstractVcfDB(LinkAnaBase):
                 self.__mutations[record.key] = record
         self.__need_update = False
 
-#    @property
-#    def mutation_keys(self):
-#        for connector in self.__connectors:
-#            for record in connector.records:
-#                yield record.key
-#
-#    @property
-#    def patient_codes(self):
-#        """ assume that all VcfDB are from the same set of patients """
-#        return self.__connectors[0].header.patient_codes
-#
     @property
     def patients(self):
         if self.__need_update:
@@ -120,15 +104,6 @@ class AbstractVcfDB(LinkAnaBase):
             self.__update_mutaitions_table()
 
         return self.__mutations
-
-#    def get_patients(self, patient_code):
-#        if self.__need_update:
-#            self.__update_mutaitions_table()
-#        for connector in self.__connectors:
-#            header = connector.header
-#            patient_idx = header.patient_codes.index(patient_code)
-#            for record in connector.records:
-#                yield record.genotype_fields[patient_idx]
 
 
 class DBManager(LinkAnaBase):
