@@ -340,17 +340,17 @@ class TestVcfDB(SafeDBTester):
         self.assertEqual(test_record.vcf_format,
                          'GT:AD:DP:GQ:PL',
                          'Incorrect Vcf content at "FORMAT" column')
-        patient_contents = test_record.patient_contents
-        self.assertEqual(len(patient_contents),
+        genotype_fields = test_record.genotype_fields
+        self.assertEqual(len(genotype_fields),
                          77,
                          'Incorrect number of patient contents being read')
-        self.assertEqual(patient_contents[2].raw_content,
+        self.assertEqual(genotype_fields[2].raw_content,
                          '0/0:16,0:16:42.10:0,42,475',
                          'Incorrect patient raw content')
-        self.assertEqual(patient_contents[10].raw_content,
+        self.assertEqual(genotype_fields[10].raw_content,
                          '0/1:13,31:43:99:695,0,138',
                          'Incorrect patient raw content')
-        self.assertEqual(patient_contents[74].raw_content,
+        self.assertEqual(genotype_fields[74].raw_content,
                          '0/1:23,21:44:99:360,0,571',
                          'Incorrect patient raw content')
 
@@ -371,91 +371,91 @@ class TestVcfDB(SafeDBTester):
         self.assertEqual(test_record.key,
                          '18|12512370',
                          'Incorrect record key')
-        self.assertEqual(test_record.patient_contents[1].raw_content,
+        self.assertEqual(test_record.genotype_fields[1].raw_content,
                          '0/1:1,0:1:1.76',
                          'Incorrect patient raw content')
-        self.assertEqual(test_record.patient_contents[1].raw_gt,
+        self.assertEqual(test_record.genotype_fields[1].raw_gt,
                          '0/1',
                          'Incorrect patient raw genotype')
-        self.assertEqual(test_record.patient_contents[1].vcf_mutations,
+        self.assertEqual(test_record.genotype_fields[1].vcf_mutations,
                          [{'ref': 'TACA', 'alt': 'TACT'}],
                          'Incorrect vcf mutations')
-        self.assertEqual(test_record.patient_contents[1].annovar_mutations,
+        self.assertEqual(test_record.genotype_fields[1].annovar_mutations,
                          [{'ref': 'TACA', 'alt': 'TACT'}],
                          'Incorrect annovar mutations')
-        self.assertEqual(test_record.patient_contents[1].zygosity,
+        self.assertEqual(test_record.genotype_fields[1].zygosity,
                          'het',
                          'Incorrect zygosity')
-        self.assertEqual(test_record.patient_contents[2].raw_gt,
+        self.assertEqual(test_record.genotype_fields[2].raw_gt,
                          '2/2',
                          'Incorrect patient raw genotype')
-        self.assertEqual(test_record.patient_contents[2].vcf_mutations,
+        self.assertEqual(test_record.genotype_fields[2].vcf_mutations,
                          [{'ref': 'TACA', 'alt': 'TATAC'}],
                          'Incorrect vcf mutations')
-        self.assertEqual(test_record.patient_contents[2].annovar_mutations,
+        self.assertEqual(test_record.genotype_fields[2].annovar_mutations,
                          [{'ref': 'TACA', 'alt': 'TATAC'}],
                          'Incorrect annovar mutations')
-        self.assertEqual(test_record.patient_contents[2].zygosity,
+        self.assertEqual(test_record.genotype_fields[2].zygosity,
                          'hom',
                          'Incorrect zygosity')
-        self.assertEqual(test_record.patient_contents[3].raw_gt,
+        self.assertEqual(test_record.genotype_fields[3].raw_gt,
                          '0/2',
                          'Incorrect patient raw genotype')
-        self.assertEqual(test_record.patient_contents[3].vcf_mutations,
+        self.assertEqual(test_record.genotype_fields[3].vcf_mutations,
                          [{'ref': 'TACA', 'alt': 'TATAC'}],
                          'Incorrect vcf mutations')
-        self.assertEqual(test_record.patient_contents[3].annovar_mutations,
+        self.assertEqual(test_record.genotype_fields[3].annovar_mutations,
                          [{'ref': 'TACA', 'alt': 'TATAC'}],
                          'Incorrect annovar mutations')
-        self.assertEqual(test_record.patient_contents[3].zygosity,
+        self.assertEqual(test_record.genotype_fields[3].zygosity,
                          'het',
                          'Incorrect zygosity')
-        self.assertEqual(test_record.patient_contents[5].raw_gt,
+        self.assertEqual(test_record.genotype_fields[5].raw_gt,
                          './.',
                          'Incorrect patient raw genotype')
-        self.assertEqual(test_record.patient_contents[5].vcf_mutations,
+        self.assertEqual(test_record.genotype_fields[5].vcf_mutations,
                          'Unknown',
                          'Incorrect vcf mutations')
-        self.assertEqual(test_record.patient_contents[5].annovar_mutations,
+        self.assertEqual(test_record.genotype_fields[5].annovar_mutations,
                          'Unknown',
                          'Incorrect annovar mutations')
-        self.assertEqual(test_record.patient_contents[5].zygosity,
+        self.assertEqual(test_record.genotype_fields[5].zygosity,
                          'Unknown',
                          'Incorrect zygosity')
-        self.assertEqual(test_record.patient_contents[10].raw_gt,
+        self.assertEqual(test_record.genotype_fields[10].raw_gt,
                          '.',
                          'Incorrect patient raw genotype')
-        self.assertEqual(test_record.patient_contents[10].vcf_mutations,
+        self.assertEqual(test_record.genotype_fields[10].vcf_mutations,
                          'Unknown',
                          'Incorrect vcf mutations')
-        self.assertEqual(test_record.patient_contents[10].annovar_mutations,
+        self.assertEqual(test_record.genotype_fields[10].annovar_mutations,
                          'Unknown',
                          'Incorrect annovar mutations')
-        self.assertEqual(test_record.patient_contents[10].zygosity,
+        self.assertEqual(test_record.genotype_fields[10].zygosity,
                          'Unknown',
                          'Incorrect zygosity')
-        self.assertEqual(test_record.patient_contents[12].raw_gt,
+        self.assertEqual(test_record.genotype_fields[12].raw_gt,
                          '0/3',
                          'Incorrect patient raw genotype')
-        self.assertEqual(test_record.patient_contents[12].vcf_mutations,
+        self.assertEqual(test_record.genotype_fields[12].vcf_mutations,
                          [{'ref': 'TACA', 'alt': 'TC'}],
                          'Incorrect vcf mutations')
-        self.assertEqual(test_record.patient_contents[12].annovar_mutations,
+        self.assertEqual(test_record.genotype_fields[12].annovar_mutations,
                          [{'ref': 'TACA', 'alt': 'TC'}],
                          'Incorrect annovar mutations')
-        self.assertEqual(test_record.patient_contents[12].zygosity,
+        self.assertEqual(test_record.genotype_fields[12].zygosity,
                          'het',
                          'Incorrect zygosity')
-        self.assertEqual(test_record.patient_contents[15].raw_gt,
+        self.assertEqual(test_record.genotype_fields[15].raw_gt,
                          '0/0',
                          'Incorrect patient raw genotype')
-        self.assertEqual(test_record.patient_contents[15].vcf_mutations,
+        self.assertEqual(test_record.genotype_fields[15].vcf_mutations,
                          'None',
                          'Incorrect vcf mutations')
-        self.assertEqual(test_record.patient_contents[15].annovar_mutations,
+        self.assertEqual(test_record.genotype_fields[15].annovar_mutations,
                          'None',
                          'Incorrect annovar mutations')
-        self.assertEqual(test_record.patient_contents[15].zygosity,
+        self.assertEqual(test_record.genotype_fields[15].zygosity,
                          'None',
                          'Incorrect zygosity')
         test_record = records.next()
@@ -468,16 +468,16 @@ class TestVcfDB(SafeDBTester):
         self.assertEqual(test_record.genotype_count,
                          114,
                          'Incorrect genotype count')
-        self.assertEqual(test_record.patient_contents[62].raw_gt,
+        self.assertEqual(test_record.genotype_fields[62].raw_gt,
                          '1/2',
                          'Incorrect patient raw genotype')
-        self.assertEqual(test_record.patient_contents[62].vcf_mutations,
+        self.assertEqual(test_record.genotype_fields[62].vcf_mutations,
                          [{'ref': 'CAA', 'alt': 'C'}, {'ref': 'CAA', 'alt': 'CA'}],
                          'Incorrect vcf mutations')
-        self.assertEqual(test_record.patient_contents[62].annovar_mutations,
+        self.assertEqual(test_record.genotype_fields[62].annovar_mutations,
                          [{'ref': 'AA', 'alt': '-'}, {'ref': 'A', 'alt': '-'}],
                          'Incorrect annovar mutations')
-        self.assertEqual(test_record.patient_contents[62].zygosity,
+        self.assertEqual(test_record.genotype_fields[62].zygosity,
                          'het',
                          'Incorrect zygosity')
         test_record = records.next()
@@ -504,28 +504,28 @@ class TestVcfDB(SafeDBTester):
         self.assertEqual(test_record.genotype_count,
                          86,
                          'Incorrect genotype count')
-        self.assertEqual(test_record.patient_contents[6].raw_gt,
+        self.assertEqual(test_record.genotype_fields[6].raw_gt,
                          '0/2',
                          'Incorrect patient raw genotype')
-        self.assertEqual(test_record.patient_contents[6].vcf_mutations,
+        self.assertEqual(test_record.genotype_fields[6].vcf_mutations,
                          [{'ref': 'T', 'alt': 'TATAC'}],
                          'Incorrect vcf mutations')
-        self.assertEqual(test_record.patient_contents[6].annovar_mutations,
+        self.assertEqual(test_record.genotype_fields[6].annovar_mutations,
                          [{'ref': '-', 'alt': 'ATAC'}],
                          'Incorrect annovar mutations')
-        self.assertEqual(test_record.patient_contents[6].zygosity,
+        self.assertEqual(test_record.genotype_fields[6].zygosity,
                          'het',
                          'Incorrect zygosity')
-        self.assertEqual(test_record.patient_contents[9].raw_gt,
+        self.assertEqual(test_record.genotype_fields[9].raw_gt,
                          '3/3',
                          'Incorrect patient raw genotype')
-        self.assertEqual(test_record.patient_contents[9].vcf_mutations,
+        self.assertEqual(test_record.genotype_fields[9].vcf_mutations,
                          [{'ref': 'T', 'alt': 'TAC'}],
                          'Incorrect vcf mutations')
-        self.assertEqual(test_record.patient_contents[9].annovar_mutations,
+        self.assertEqual(test_record.genotype_fields[9].annovar_mutations,
                          [{'ref': '-', 'alt': 'AC'}],
                          'Incorrect annovar mutations')
-        self.assertEqual(test_record.patient_contents[9].zygosity,
+        self.assertEqual(test_record.genotype_fields[9].zygosity,
                          'hom',
                          'Incorrect zygosity')
 

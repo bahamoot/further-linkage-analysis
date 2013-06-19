@@ -37,7 +37,7 @@ class TestAbstractVcfDB(SafeDBTester):
         vcf_db2 = VcfDB()
         vcf_db2.open_db(test_file, test_chrom2, test_begin_pos2, test_end_pos2)
         abs_db.add_connector(vcf_db2)
-        mutations = abs_db.get_mutations()
+        mutations = abs_db.mutations
         # *************** test keys ******************
         self.assertEqual(len(mutations.keys()),
                          10,
@@ -58,18 +58,23 @@ class TestAbstractVcfDB(SafeDBTester):
         self.assertEqual(mutations['18|12702610'].vcf_id,
                          'rs4797701',
                          'Incorrect mutation content')
-        self.assertEqual(mutations['18|12884105'].patient_contents['354/06'].raw_content,
+        self.assertEqual(mutations['18|12884105'].genotype_fields['354/06'].raw_content,
                          '0/0:12,0:12:30.09:0,30,377',
-                         'Incorrect patient content')
-        self.assertEqual(mutations['18|12884105'].patient_contents['398-05o'].raw_content,
+                         'Invalid data in genotype field')
+        self.assertEqual(mutations['18|12884105'].genotype_fields['398-05o'].raw_content,
                          './.',
-                         'Incorrect patient content')
-        self.assertEqual(mutations['18|12884105'].patient_contents['Co866'].raw_content,
+                         'Invalid data in genotype field')
+        self.assertEqual(mutations['18|12884105'].genotype_fields['Co866'].raw_content,
                          '0/0:14,0:14:33.10:0,33,394',
-                         'Incorrect patient content')
+                         'Invalid data in genotype field')
+        # *************** test global access within mutations table ******************
+        test_genotype_field = mutations['18|12884105'].genotype_fields['co1053']
+        self.assertEqual(test_genotype_field.patient.genotype_fields['18|12702705'].raw_content,
+                         '0/1:7,6:13:99:168,0,232',
+                         'Incorrect mutations table access')
 
-    def test_patient_codes(self):
-        """ to check if patient codes are correctly retrieved """
+    def test_patients(self):
+        """ to check if patients are correctly retrieved """
 
         self.init_test(self.current_func_name)
         abs_db = self.__create_db_instance()
@@ -87,54 +92,44 @@ class TestAbstractVcfDB(SafeDBTester):
         vcf_db2 = VcfDB()
         vcf_db2.open_db(test_file, test_chrom2, test_begin_pos2, test_end_pos2)
         abs_db.add_connector(vcf_db2)
-        patient_codes = abs_db.patient_codes
-        self.assertEqual(len(abs_db.patient_codes),
+        patients = abs_db.patients
+        # *************** test keys ******************
+        self.assertEqual(len(patients),
                          77,
                          'Incorrect number of patients')
-        self.assertEqual(patient_codes[0],
-                         '1052/05',
+        self.assertTrue('1052/05' in patients.keys(),
                          'Incorrect patient code')
-        self.assertEqual(patient_codes[5],
-                         '398-05o',
+        self.assertTrue('398-05o' in patients.keys(),
                          'Incorrect patient code')
-        self.assertEqual(patient_codes[69],
-                         'Co866',
+        self.assertTrue('Co866' in patients.keys(),
                          'Incorrect patient code')
-        self.assertEqual(patient_codes[76],
-                         'co131',
+        self.assertTrue('co131' in patients.keys(),
                          'Incorrect patient code')
-
-    def test_patient_contents(self):
-        """ to check if patient codes are correctly retrieved """
-
-        self.init_test(self.current_func_name)
-        abs_db = self.__create_db_instance()
-        test_file = os.path.join(self.data_dir,
-                                 self.current_func_name + '.vcf.gz')
-        test_chrom = 18
-        test_begin_pos = 12702537
-        test_end_pos = '12703020'
-        vcf_db = VcfDB()
-        vcf_db.open_db(test_file, test_chrom, test_begin_pos, test_end_pos)
-        abs_db.add_connector(vcf_db)
-        patient_contents = abs_db.get_patient_contents('co1053')
-        test_content = patient_contents.next()
-        self.assertEqual(test_content.vcf_mutations,
+        # *************** test contents ******************
+        genotype_fields = abs_db.patients['co1053'].genotype_fields
+        test_genotype_field = genotype_fields['18|12702537']
+        self.assertEqual(test_genotype_field.vcf_mutations,
                          'Unknown',
-                         'Incorrect patient content')
-        test_content = patient_contents.next()
-        self.assertEqual(test_content.vcf_mutations,
+                         'Invalid data in genotype field')
+        test_genotype_field = genotype_fields['18|12702610']
+        self.assertEqual(test_genotype_field.vcf_mutations,
                          [{'ref': 'G', 'alt': 'A'}],
-                         'Incorrect patient content')
-        test_content = patient_contents.next()
-        self.assertEqual(test_content.vcf_mutations,
+                         'Invalid data in genotype field')
+        test_genotype_field = genotype_fields['18|12702705']
+        self.assertEqual(test_genotype_field.vcf_mutations,
                          [{'ref': 'G', 'alt': 'C'}],
-                         'Incorrect patient content')
-        test_content = patient_contents.next()
-        self.assertEqual(test_content.vcf_mutations,
+                         'Invalid data in genotype field')
+        test_genotype_field = genotype_fields['18|12702730']
+        self.assertEqual(test_genotype_field.vcf_mutations,
                          'Unknown',
-                         'Incorrect patient content')
-        test_content = patient_contents.next()
-        self.assertEqual(test_content.vcf_mutations,
+                         'Invalid data in genotype field')
+        test_genotype_field = genotype_fields['18|12703020']
+        self.assertEqual(test_genotype_field.vcf_mutations,
                          'Unknown',
-                         'Incorrect patient content')
+                         'Invalid data in genotype field')
+        # *************** test global access within mutations table ******************
+        test_genotype_field = abs_db.patients['co131'].genotype_fields['18|12884105']
+        self.assertEqual(test_genotype_field.mutation.genotype_fields['Co866'].raw_content,
+                         '0/0:14,0:14:33.10:0,33,394',
+                         'Incorrect mutations table access')
+

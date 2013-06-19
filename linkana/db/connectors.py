@@ -46,7 +46,7 @@ VCF_DB_0_IDX_OTHERS = 9
 FAMILY_DB_0_IDX_FAMILY_CODE = 0
 FAMILY_DB_0_IDX_PATIENT_CODES = 1
 
-VCF_PATIENT_CONTENT_0_IDX_GT = 0
+VCF_GENOTYPE_FIELD_0_IDX_GT = 0
 
 VCF_MUTATION_UNKNOWN = 'Unknown'
 VCF_MUTATION_NONE = 'None'
@@ -402,7 +402,7 @@ class VcfDBHeaderRecord(VcfDBRecord):
         return self.others
 
 
-class PatientContentRecord(object):
+class GenotypeFieldRecord(object):
     """ to automatically parse VCF data"""
 
     def __init__(self, rec, ref, alt):
@@ -445,7 +445,7 @@ class PatientContentRecord(object):
     @property
     def raw_gt(self):
         """ raw genotype """
-        return self.__rec[VCF_PATIENT_CONTENT_0_IDX_GT]
+        return self.__rec[VCF_GENOTYPE_FIELD_0_IDX_GT]
 
     @property
     def vcf_mutations(self):
@@ -497,13 +497,13 @@ class VcfDBContentRecord(VcfDBRecord):
 
     def __init__(self, rec):
         VcfDBRecord.__init__(self, rec)
-        self.__patient_contents = None
+        self.__genotype_fields = None
         self.__stat = None
 
     def get_raw_repr(self):
         new_raw_repr = VcfDBRecord.get_raw_repr(self)
         del new_raw_repr['OTHERS']
-        new_raw_repr['PATIENT_CONTENTS'] = self.patient_contents
+        new_raw_repr['GENOTYPE_FIELDS'] = self.genotype_fields
         new_raw_repr['Key'] = self.key
         return new_raw_repr
 
@@ -514,8 +514,8 @@ class VcfDBContentRecord(VcfDBRecord):
         self.__stat['patient_count'] = [0 for i in range(len(self.alt.split(',')))]
         self.__stat['genotype_count'] = 0
         #count
-        for patient_content in self.patient_contents:
-            raw_gt = patient_content.raw_gt
+        for genotype_field in self.genotype_fields:
+            raw_gt = genotype_field.raw_gt
             if raw_gt == './.':
                 continue
             if raw_gt == '.':
@@ -558,16 +558,16 @@ class VcfDBContentRecord(VcfDBRecord):
                               pos=self.pos)
 
     @property
-    def patient_contents(self):
-        if self.__patient_contents is not None:
-            return self.__patient_contents
+    def genotype_fields(self):
+        if self.__genotype_fields is not None:
+            return self.__genotype_fields
         else:
-            return map(lambda x: PatientContentRecord(x, self.ref, self.alt),
+            return map(lambda x: GenotypeFieldRecord(x, self.ref, self.alt),
                        self.others)
 
-    @patient_contents.setter
-    def patient_contents(self, value):
-        self.__patient_contents = value
+    @genotype_fields.setter
+    def genotype_fields(self, value):
+        self.__genotype_fields = value
 
     @property
     def allele_count(self):
