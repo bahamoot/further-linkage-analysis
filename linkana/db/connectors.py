@@ -513,34 +513,37 @@ class VcfDBContentRecord(VcfDBRecord):
         new_raw_repr['Key'] = self.key
         return new_raw_repr
 
-    def calculate_stat(self):
+    def calculate_stat(self, genotype_fields=None):
+        if genotype_fields is None:
+            genotype_fields = self.genotype_fields
         #init
-        self.__stat = {}
-        self.__stat['allele_count'] = [0 for i in range(len(self.alt.split(',')))]
-        self.__stat['patient_count'] = [0 for i in range(len(self.alt.split(',')))]
-        self.__stat['genotype_count'] = 0
+        stat = {}
+        stat['allele_count'] = [0 for i in range(len(self.alt.split(',')))]
+        stat['patient_count'] = [0 for i in range(len(self.alt.split(',')))]
+        stat['genotype_count'] = 0
         #count
-        for genotype_field in self.genotype_fields:
+        for genotype_field in genotype_fields:
             raw_gt = genotype_field.raw_gt
             if raw_gt == './.':
                 continue
             if raw_gt == '.':
                 continue
             #genotype_count
-            self.__stat['genotype_count'] += 2
+            stat['genotype_count'] += 2
             if raw_gt == '0/0':
                 continue
             gt = raw_gt.split('/')
             #allele_count
             if gt[0] != '0':
-                self.__stat['allele_count'][int(gt[0])-1] += 1
+                stat['allele_count'][int(gt[0])-1] += 1
             if gt[1] != '0':
-                self.__stat['allele_count'][int(gt[1])-1] += 1
+                stat['allele_count'][int(gt[1])-1] += 1
             #patient_count
             if gt[0] != '0':
-                self.__stat['patient_count'][int(gt[0])-1] += 1
+                stat['patient_count'][int(gt[0])-1] += 1
             if (gt[1] != '0') and (gt[0] != gt[1]):
-                self.__stat['patient_count'][int(gt[1])-1] += 1
+                stat['patient_count'][int(gt[1])-1] += 1
+        return stat
 
     def validate_stat(self):
         #parse info field
@@ -578,21 +581,21 @@ class VcfDBContentRecord(VcfDBRecord):
     @property
     def allele_count(self):
         if self.__stat is None:
-            self.calculate_stat()
+            self.__stat = self.calculate_stat()
             self.validate_stat()
         return self.__stat['allele_count']
 
     @property
     def patient_count(self):
         if self.__stat is None:
-            self.calculate_stat()
+            self.__stat = self.calculate_stat()
             self.validate_stat()
         return self.__stat['patient_count']
 
     @property
     def genotype_count(self):
         if self.__stat is None:
-            self.calculate_stat()
+            self.__stat = self.calculate_stat()
             self.validate_stat()
         return self.__stat['genotype_count']
 

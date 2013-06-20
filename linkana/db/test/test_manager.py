@@ -2,10 +2,12 @@ import os
 import csv
 import linkana.settings as lka_const
 from linkana.db.test.template import SafeDBTester
-from linkana.db.connectors import VcfDB
 from linkana.db.connectors import SummarizeAnnovarDB
-from linkana.db.manager import AbstractVcfDB
+from linkana.db.connectors import VcfDB
+from linkana.db.connectors import FamilyDB
 from linkana.db.manager import AbstractSummarizeAnnovarDB
+from linkana.db.manager import AbstractVcfDB
+from linkana.db.manager import AbstractFamilyDB
 
 
 class TestAbstractSummarizeAnnovarDB(SafeDBTester):
@@ -342,5 +344,61 @@ class TestAbstractVcfDB(SafeDBTester):
                          'Incorrect common mutation key')
         self.assertTrue('18|14513570' not in common_mutations,
                          'Incorrect common mutation key')
+
+class TestAbstractFamilyDB(SafeDBTester):
+
+    def __init__(self, test_name):
+        SafeDBTester.__init__(self, test_name)
+
+    def setUp(self):
+        self.test_class = 'AbstractFamilyDB'
+
+    def __create_db_instance(self):
+        abs_fam_db = AbstractFamilyDB()
+        return abs_fam_db
+
+    def test_families(self):
+        """ to check if mutations are correctly retrieved """
+
+        self.init_test(self.current_func_name)
+        abs_fam_db = self.__create_db_instance()
+        test_file = os.path.join(self.data_dir,
+                                 self.current_func_name + '.txt')
+        fam_db = FamilyDB()
+        fam_db.open_db(test_file)
+        abs_fam_db.add_connector(fam_db)
+        families = abs_fam_db.families
+        # *************** test keys ******************
+        self.assertEqual(len(families.keys()),
+                         6,
+                         'Incorrect number of families keys')
+        self.assertTrue('8' in families,
+                         'Incorrect families key')
+        self.assertTrue('231' in families,
+                         'Incorrect families key')
+        self.assertTrue('347' not in families,
+                         'Incorrect families key')
+        # *************** test contents ******************
+        test_family = families['425']
+        self.assertEqual(len(test_family.patient_codes),
+                         3,
+                         'Incorrect number of members')
+        self.assertEqual(test_family.type3,
+                         'CAFAM',
+                         'Incorrect family type3')
+        patient_codes = test_family.patient_codes
+        self.assertEqual(len(patient_codes),
+                         3,
+                         'Incorrect number of patient codes being read')
+        self.assertEqual(patient_codes[0],
+                         'Co1458',
+                         'Incorrect patient code')
+        self.assertEqual(patient_codes[1],
+                         'Co1595',
+                         'Incorrect patient code')
+        self.assertEqual(patient_codes[2],
+                         'Co866',
+                         'Incorrect patient code')
+
 
 

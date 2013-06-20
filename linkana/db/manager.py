@@ -45,24 +45,17 @@ class AbstractSummarizeAnnovarDB(LinkAnaBase):
         return self.__repr__()
 
     def __repr__(self):
-        return str({'Connectors': self.__get_connectors(),
+        return str({'Connector': self.__get_connector(),
                     })
 
-    def __get_connectors(self):
-        return self.__connectors
+    def __get_connector(self):
+        return self.__connector
 
     def add_connector(self, summarize_annovar_db_connector):
         self.__connector = summarize_annovar_db_connector
         self.__need_update = True
 
     def __update_mutaitions_table(self):
-        """
-
-        assume that all overlapped records from different SummarizeAnnovarDBs
-        have the same content
-
-        """
-
         self.__mutations = {}
         #create table
         for record in self.__connector.records:
@@ -73,7 +66,6 @@ class AbstractSummarizeAnnovarDB(LinkAnaBase):
     def mutations(self):
         if self.__need_update:
             self.__update_mutaitions_table()
-
         return self.__mutations
 
 
@@ -181,6 +173,48 @@ class AbstractVcfDB(LinkAnaBase):
         if self.__need_update:
             self.__update_mutaitions_table()
         return self.__mutations
+
+
+class AbstractFamilyDB(LinkAnaBase):
+    """
+
+    #1. an abstract connection to Family databases(not yet implemented)
+    #2. able to handle many FamilyDB connectors(not yet implemented)
+    3. a family (members) record can be accessed by family code
+
+    """
+
+    def __init__(self):
+        LinkAnaBase.__init__(self)
+        self.__connector = None
+        self.__families = {}
+
+    def __str__(self):
+        return self.__repr__()
+
+    def __repr__(self):
+        return str({'Connectors': self.__get_connector(),
+                    })
+
+    def __get_connector(self):
+        return self.__connector
+
+    def add_connector(self, family_db_connector):
+        self.__connector = family_db_connector
+        self.__need_update = True
+
+    def __update_families_table(self):
+        self.__families = {}
+        #create table
+        for record in self.__connector.records:
+            self.__families[record.family_code] = record
+        self.__need_update = False
+
+    @property
+    def families(self):
+        if self.__need_update:
+            self.__update_families_table()
+        return self.__families
 
 
 class DBManager(LinkAnaBase):
