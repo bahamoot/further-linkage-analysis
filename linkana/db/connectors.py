@@ -270,7 +270,12 @@ class SummarizeAnnovarDBContentRecord(SummarizeAnnovarDBRecord):
 
 
 class SummarizeAnnovarDB(object):
-    """ to connect to the database produced by summarize_annovar.pl"""
+    """
+
+    to connect to the database produced by summarize_annovar.pl
+    and provide the parsed raw content
+
+    """
 
     def __init__(self):
         self.__csv_file = None
@@ -308,7 +313,7 @@ class SummarizeAnnovarDB(object):
 
 
 class VcfDBRecord(object):
-    """ to automatically parse VCF data"""
+    """ to automatically parse a record from VCF file """
 
     def __init__(self, rec):
         if isinstance(rec, list):
@@ -386,7 +391,7 @@ class VcfDBRecord(object):
 
 
 class VcfDBHeaderRecord(VcfDBRecord):
-    """ to automatically parse VCF header"""
+    """ to automatically parse a VCF header """
 
     def __init__(self, rec):
         VcfDBRecord.__init__(self, rec)
@@ -403,7 +408,7 @@ class VcfDBHeaderRecord(VcfDBRecord):
 
 
 class GenotypeFieldRecord(object):
-    """ to automatically parse VCF data"""
+    """ to automatically parse data from genotype field """
 
     def __init__(self, rec, ref, alt):
         self.__raw = rec
@@ -493,7 +498,7 @@ class GenotypeFieldRecord(object):
 
 
 class VcfDBContentRecord(VcfDBRecord):
-    """ to automatically parse VCF content record"""
+    """ to automatically parse a mutation record in VCF format """
 
     def __init__(self, rec):
         VcfDBRecord.__init__(self, rec)
@@ -631,7 +636,7 @@ class VcfDB(object):
 
 
 class FamilyDBContentRecord(object):
-    """ to automatically parse Family data"""
+    """ to automatically parse Family data """
 
     def __init__(self, rec):
         if isinstance(rec, list):

@@ -22,7 +22,57 @@ class PatientRecord(object):
         return str(self.get_raw_repr())
 
     def get_raw_repr(self):
-        return "Patient record"
+        return {"patient code": self.patient_code}
+
+
+class AbstractSummarizeAnnovarDB(LinkAnaBase):
+    """
+
+    #1. an abstract connection to Summarize Annovar databases(not yet implemented)
+    #2. able to handle many SummarizeAnnovarDB connectors(not yet implemented)
+    3. a mutation annotation record can be accessed using mutation key
+
+    """
+
+    def __init__(self):
+        LinkAnaBase.__init__(self)
+        self.__connector = None
+        self.__mutations = {}
+
+    def __str__(self):
+        return self.__repr__()
+
+    def __repr__(self):
+        return str({'Connectors': self.__get_connectors(),
+                    })
+
+    def __get_connectors(self):
+        return self.__connectors
+
+    def add_connector(self, summarize_annovar_db_connector):
+        self.__connector = summarize_annovar_db_connector
+        self.__need_update = True
+
+    def __update_mutaitions_table(self):
+        """
+
+        assume that all overlapped records from different SummarizeAnnovarDBs
+        have the same content
+
+        """
+
+        self.__mutations = {}
+        #create table
+        for record in self.__connector.records:
+            self.__mutations[record.key] = record
+        self.__need_update = False
+
+    @property
+    def mutations(self):
+        if self.__need_update:
+            self.__update_mutaitions_table()
+
+        return self.__mutations
 
 
 class AbstractVcfDB(LinkAnaBase):
@@ -30,10 +80,10 @@ class AbstractVcfDB(LinkAnaBase):
 
     1. an abstract connection to VCF databases
     2. able to handle many VcfDB connectors
-    2. build up 2D mutations table (mutation, patient)
-    3. provide access to the content of VcfDB
-        - mutation perspective
-        - patient perspective
+    3. build up 2D mutations table (mutation, patient)
+    4. provide accesses to the content of VcfDB
+        - using mutation key
+        - using patient code
 
     """
 
@@ -73,13 +123,13 @@ class AbstractVcfDB(LinkAnaBase):
                 if patient_code not in self.__patients:
                     self.__patients[patient_code] = PatientRecord()
                     self.__patients[patient_code].patient_code = patient_code
+            #create table
             for record in connector.records:
                 mutation_genotype_fields = {}
                 for i in xrange(len(header.patient_codes)):
                     patient_code = header.patient_codes[i]
                     genotype_fields = record.genotype_fields[i]
                     #add pointer to patient record(column)
-                    #genotype_fields.patient = 20
                     genotype_fields.patient = self.__patients[patient_code]
                     #add pointer to mutation record(row)
                     genotype_fields.mutation = record
