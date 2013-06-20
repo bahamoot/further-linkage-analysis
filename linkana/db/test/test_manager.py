@@ -205,5 +205,142 @@ class TestAbstractVcfDB(SafeDBTester):
                          '0/0:14,0:14:33.10:0,33,394',
                          'Incorrect mutations table access')
 
+    def test_common_mutations1(self):
+        """
+
+        to check if actual mutations from one patient
+        are correctly retrieved
+
+        """
+
+        self.init_test(self.current_func_name)
+        abs_vcf_db = self.__create_db_instance()
+        test_file = os.path.join(self.data_dir,
+                                 self.current_func_name + '.vcf.gz')
+        test_chrom = 18
+        test_begin_pos = 12510000
+        test_end_pos = 14515000
+        vcf_db = VcfDB()
+        vcf_db.open_db(test_file, test_chrom, test_begin_pos, test_end_pos)
+        abs_vcf_db.add_connector(vcf_db)
+        common_mutations = abs_vcf_db.common_mutations(['Co1591'])
+        # *************** test keys ******************
+        self.assertEqual(len(common_mutations.keys()),
+                         5,
+                         'Incorrect number of common mutation keys')
+        self.assertTrue('18|12512255' not in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|12512281' not in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|12512294' in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|12512309' not in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|12512370' in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|12512385' not in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|14513526' not in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|14513529' in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|14513535' in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|14513545' not in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|14513570' in common_mutations,
+                         'Incorrect common mutation key')
+
+    def test_common_mutations2(self):
+        """
+
+        to check if common mutations between two patients
+        are correctly retrieved
+
+        """
+
+        self.init_test(self.current_func_name)
+        abs_vcf_db = self.__create_db_instance()
+        test_file = os.path.join(self.data_dir,
+                                 self.current_func_name + '.vcf.gz')
+        test_chrom = 18
+        test_begin_pos = 12510000
+        test_end_pos = 14515000
+        vcf_db = VcfDB()
+        vcf_db.open_db(test_file, test_chrom, test_begin_pos, test_end_pos)
+        abs_vcf_db.add_connector(vcf_db)
+        common_mutations = abs_vcf_db.common_mutations(['134/06', 'Co1584'])
+        # *************** test keys ******************
+        self.assertEqual(len(common_mutations.keys()),
+                         4,
+                         'Incorrect number of common mutation keys')
+        self.assertTrue('18|12512255' not in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|12512281' not in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|12512294' not in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|12512309' not in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|12512370' in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|12512385' in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|14513526' not in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|14513529' in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|14513535' in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|14513545' not in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|14513570' not in common_mutations,
+                         'Incorrect common mutation key')
+
+    def test_common_mutations3(self):
+        """
+
+        to check if common mutations between three patients
+        are correctly retrieved
+
+        """
+
+        self.init_test(self.current_func_name)
+        abs_vcf_db = self.__create_db_instance()
+        test_file = os.path.join(self.data_dir,
+                                 self.current_func_name + '.vcf.gz')
+        test_chrom = 18
+        test_begin_pos = 12510000
+        test_end_pos = 14515000
+        vcf_db = VcfDB()
+        vcf_db.open_db(test_file, test_chrom, test_begin_pos, test_end_pos)
+        abs_vcf_db.add_connector(vcf_db)
+        common_mutations = abs_vcf_db.common_mutations(['134/06', 'Co1584', 'Co1591'])
+        # *************** test keys ******************
+        self.assertEqual(len(common_mutations.keys()),
+                         3,
+                         'Incorrect number of common mutation keys')
+        self.assertTrue('18|12512255' not in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|12512281' not in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|12512294' not in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|12512309' not in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|12512370' in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|12512385' not in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|14513526' not in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|14513529' in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|14513535' in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|14513545' not in common_mutations,
+                         'Incorrect common mutation key')
+        self.assertTrue('18|14513570' not in common_mutations,
+                         'Incorrect common mutation key')
 
 

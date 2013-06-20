@@ -44,7 +44,8 @@ VCF_DB_0_IDX_FORMAT = 8
 VCF_DB_0_IDX_OTHERS = 9
 
 FAMILY_DB_0_IDX_FAMILY_CODE = 0
-FAMILY_DB_0_IDX_PATIENT_CODES = 1
+FAMILY_DB_0_IDX_TYPE3 = 1
+FAMILY_DB_0_IDX_PATIENT_CODES = 2
 
 VCF_GENOTYPE_FIELD_0_IDX_GT = 0
 
@@ -652,12 +653,17 @@ class FamilyDBContentRecord(object):
 
     def get_raw_repr(self):
         return {'Family code': self.family_code,
+                'Type': self.type3,
                 'Patients code': self.patient_codes,
                 }
 
     @property
     def family_code(self):
         return self.__rec[FAMILY_DB_0_IDX_FAMILY_CODE]
+
+    @property
+    def type3(self):
+        return self.__rec[FAMILY_DB_0_IDX_TYPE3]
 
     @property
     def patient_codes(self):

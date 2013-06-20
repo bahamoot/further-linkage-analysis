@@ -563,12 +563,31 @@ class TestFamilyDB(SafeDBTester):
                                  self.current_func_name + '.txt')
         db.open_db(test_file)
         records = db.records
-        records.next()
+        test_record = records.next()
+        self.assertEqual(test_record.family_code,
+                         '8',
+                         'Incorrect family code')
+        self.assertEqual(test_record.type3,
+                         'CAFAM',
+                         'Incorrect family type3')
+        patient_codes = test_record.patient_codes
+        self.assertEqual(len(patient_codes),
+                         2,
+                         'Incorrect number of patient codes being read')
+        self.assertEqual(patient_codes[0],
+                         'Co35',
+                         'Incorrect patient code')
+        self.assertEqual(patient_codes[1],
+                         'Co37',
+                         'Incorrect patient code')
         records.next()
         test_record = records.next()
         self.assertEqual(test_record.family_code,
                          '348',
                          'Incorrect family code')
+        self.assertEqual(test_record.type3,
+                         '',
+                         'Incorrect family type3')
         patient_codes = test_record.patient_codes
         self.assertEqual(len(patient_codes),
                          2,

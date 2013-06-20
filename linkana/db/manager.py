@@ -6,6 +6,8 @@ from linkana.template import LinkAnaBase
 from linkana.db.connectors import SummarizeAnnovarDB
 from linkana.db.connectors import VcfDB
 from linkana.db.connectors import FamilyDB
+from linkana.db.connectors import ZYGOSITY_UNKNOWN
+from linkana.db.connectors import ZYGOSITY_NONE
 
 
 class PatientRecord(object):
@@ -84,6 +86,8 @@ class AbstractVcfDB(LinkAnaBase):
     4. provide accesses to the content of VcfDB
         - using mutation key
         - using patient code
+    5. provide a filtering function
+        - common mutations given patient code(s)
 
     """
 
@@ -141,18 +145,41 @@ class AbstractVcfDB(LinkAnaBase):
                 self.__mutations[record.key] = record
         self.__need_update = False
 
+    def common_mutations(self, patient_codes):
+        """
+
+        return dict of mutations that are found in all patient
+        given patient codes
+
+        """
+
+        common_mutations = {}
+        for mutation_key in self.mutations:
+            mutation = self.mutations[mutation_key]
+            common_mutation = True
+            for patient_code in patient_codes:
+                zygosity = mutation.genotype_fields[patient_code].zygosity
+                if zygosity == ZYGOSITY_UNKNOWN:
+                    common_mutation = False
+                    break
+                if zygosity == ZYGOSITY_NONE:
+                    common_mutation = False
+                    break
+            if common_mutation:
+                common_mutations[mutation_key] = mutation
+        return common_mutations
+
+
     @property
     def patients(self):
         if self.__need_update:
             self.__update_mutaitions_table()
-
         return self.__patients
 
     @property
     def mutations(self):
         if self.__need_update:
             self.__update_mutaitions_table()
-
         return self.__mutations
 
 
