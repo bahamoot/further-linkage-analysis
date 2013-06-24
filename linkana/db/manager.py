@@ -1,7 +1,4 @@
-import pysam
-import csv
 import linkana.settings as lka_const
-from collections import OrderedDict
 from linkana.template import LinkAnaBase
 from linkana.db.connectors import SummarizeAnnovarDB
 from linkana.db.connectors import VcfDB
@@ -16,6 +13,7 @@ class PatientRecord(object):
     def __init__(self):
         self.genotype_fields = {}
         self.patient_code = ''
+        self.type3 = None
 
     def __str__(self):
         return self.__repr__()
@@ -228,6 +226,9 @@ class DBManager(LinkAnaBase):
 
     def __init__(self):
         LinkAnaBase.__init__(self)
+        self.__abs_sa_db = AbstractSummarizeAnnovarDB()
+        self.__abs_vcf_db = AbstractVcfDB()
+        self.__abs_fam_db = AbstractFamilyDB()
 
     def __str__(self):
         return self.__repr__()
@@ -239,31 +240,64 @@ class DBManager(LinkAnaBase):
                     })
 
     def __get_summarize_annovar_db_connection(self):
-        return 'Not yet implemented'
+        return self.__abs_sa_db
 
     def __get_vcf_db_connection(self):
-        return 'Not yet implemented'
+        return self.__abs_vcf_db
 
     def __get_family_db_connection(self):
-        return 'Not yet implemented'
+        return self.__abs_fam_db
 
     def __connect_summarize_annovar_db(self, csv_file, delimiter='\t'):
-        return 'Not yet implemented'
+        sa_db = SummarizeAnnovarDB()
+        sa_db.open_db(csv_file, delimiter)
+        self.__abs_sa_db.add_connector(sa_db)
+
+    def connect_summarize_annovar_db(self, csv_file, delimiter='\t'):
+        return self.__connect_summarize_annovar_db(csv_file, delimiter)
 
     def __connect_vcf_db(self, vcf_db_gz_file, chrom, begin_pos, end_pos):
-        return 'Not yet implemented'
+        vcf_db = VcfDB()
+        vcf_db.open_db(vcf_db_gz_file, chrom, begin_pos, end_pos)
+        self.__abs_vcf_db.add_connector(vcf_db)
+
+    def connect_vcf_db(self, vcf_db_gz_file, chrom, begin_pos, end_pos):
+        return self.__connect_vcf_db(vcf_db_gz_file, chrom, begin_pos, end_pos)
 
     def __connect_family_db(self, family_db_file):
-        return 'Not yet implemented'
+        fam_db = FamilyDB()
+        fam_db.open_db(family_db_file)
+        self.__abs_fam_db.add_connector(fam_db)
+
+    def connect_family_db(self, family_db_file):
+        return self.__connect_family_db(family_db_file)
 
     @property
     def summarize_annovar_db(self):
-        return 'Not yet implemented'
+        return self.__abs_sa_db
 
     @property
     def vcf_db(self):
-        return 'Not yet implemented'
+        return self.__abs_vcf_db
 
     @property
     def family_db(self):
-        return 'Not yet implemented'
+        return self.__abs_fam_db
+
+    @property
+    def valid_patient_codes(self):
+        """
+
+        to check if members that appear in family file are also in
+        Vcf database
+
+        """
+
+        vcf_patients = self.vcf_db.patients
+        families = self.family_db.families
+
+        for family_code in families:
+            for patient_code in families[family_code].patient_codes:
+                if patient_code not in vcf_patients:
+                    return False
+        return True

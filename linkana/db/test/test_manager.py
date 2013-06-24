@@ -8,6 +8,7 @@ from linkana.db.connectors import FamilyDB
 from linkana.db.manager import AbstractSummarizeAnnovarDB
 from linkana.db.manager import AbstractVcfDB
 from linkana.db.manager import AbstractFamilyDB
+from linkana.db.manager import DBManager
 
 
 class TestAbstractSummarizeAnnovarDB(SafeDBTester):
@@ -370,7 +371,7 @@ class TestAbstractFamilyDB(SafeDBTester):
         families = abs_fam_db.families
         # *************** test keys ******************
         self.assertEqual(len(families.keys()),
-                         6,
+                         7,
                          'Incorrect number of families keys')
         self.assertTrue('8' in families,
                          'Incorrect families key')
@@ -401,4 +402,104 @@ class TestAbstractFamilyDB(SafeDBTester):
                          'Incorrect patient code')
 
 
+class TestDBManager(SafeDBTester):
+
+    def __init__(self, test_name):
+        SafeDBTester.__init__(self, test_name)
+
+    def setUp(self):
+        self.test_class = 'DBManager'
+
+    def __create_db_instance(self):
+        db_man = DBManager()
+        return db_man
+
+    def test_abstract(self):
+        """
+
+        to roughly check if all the abstract properties are
+        properly implemented
+
+        """
+
+        self.init_test(self.current_func_name)
+        db_man = self.__create_db_instance()
+        test_sa_file = os.path.join(self.data_dir,
+                                    self.current_func_name + '.tab.csv')
+        db_man.connect_summarize_annovar_db(test_sa_file)
+        test_vcf_file = os.path.join(self.data_dir,
+                                     self.current_func_name + '.vcf.gz')
+        test_chrom = 18
+        test_begin_pos = 12510000
+        test_end_pos = 14515000
+        db_man.connect_vcf_db(test_vcf_file, test_chrom, test_begin_pos, test_end_pos)
+        test_fam_file = os.path.join(self.data_dir,
+                                     self.current_func_name + '.txt')
+        db_man.connect_family_db(test_fam_file)
+        # *************** test summarize annovar db ******************
+        sa_mutations = db_man.summarize_annovar_db.mutations
+        self.assertEqual(len(sa_mutations.keys()),
+                         9,
+                         'Incorrect number of mutation keys')
+        self.assertTrue('18|12702705' in sa_mutations,
+                         'Incorrect mutation key')
+        self.assertTrue('18|12697298' in sa_mutations,
+                         'Incorrect mutation key')
+        self.assertTrue('18|12702536' not in sa_mutations,
+                         'Incorrect mutation key')
+        # *************** test vcf db ******************
+        common_mutations = db_man.vcf_db.common_mutations(['134/06', 'Co1584', 'Co1591'])
+        self.assertEqual(len(common_mutations.keys()),
+                         3,
+                         'Incorrect number of common mutation keys')
+        self.assertTrue('18|12512255' not in common_mutations,
+                         'Incorrect common mutation key')
+        # *************** test family db ******************
+        families = db_man.family_db.families
+        test_family = families['425']
+        self.assertEqual(len(test_family.patient_codes),
+                         3,
+                         'Incorrect number of members')
+        self.assertEqual(test_family.type3,
+                         'CAFAM',
+                         'Incorrect family type3')
+        patient_codes = test_family.patient_codes
+        self.assertEqual(len(patient_codes),
+                         3,
+                         'Incorrect number of patient codes being read')
+        self.assertEqual(patient_codes[0],
+                         'Co1458',
+                         'Incorrect patient code')
+        self.assertEqual(patient_codes[1],
+                         'Co1595',
+                         'Incorrect patient code')
+        self.assertEqual(patient_codes[2],
+                         'Co866',
+                         'Incorrect patient code')
+
+    def test_valid_patient_codes(self):
+        """
+
+        To check if valid header can identify valid Vcf header line
+
+        """
+
+        self.init_test(self.current_func_name)
+        db_man = self.__create_db_instance()
+        test_vcf_file = os.path.join(self.data_dir,
+                                     self.current_func_name + '.vcf.gz')
+        test_chrom = 18
+        test_begin_pos = 12510000
+        test_end_pos = 14515000
+        test_fam_file = os.path.join(self.data_dir,
+                                     self.current_func_name + '_1.txt')
+        db_man.connect_vcf_db(test_vcf_file, test_chrom, test_begin_pos, test_end_pos)
+        db_man.connect_family_db(test_fam_file)
+        self.assertFalse(db_man.valid_patient_codes,
+                        'Invalid patient code validation process')
+        test_fam_file = os.path.join(self.data_dir,
+                                     self.current_func_name + '_2.txt')
+        db_man.connect_family_db(test_fam_file)
+        self.assertTrue(db_man.valid_patient_codes,
+                        'Invalid patient code validation process')
 

@@ -44,8 +44,10 @@ VCF_DB_0_IDX_FORMAT = 8
 VCF_DB_0_IDX_OTHERS = 9
 
 FAMILY_DB_0_IDX_FAMILY_CODE = 0
-FAMILY_DB_0_IDX_TYPE3 = 1
-FAMILY_DB_0_IDX_PATIENT_CODES = 2
+FAMILY_DB_0_IDX_TYPE1 = 1
+FAMILY_DB_0_IDX_TYPE2 = 2
+FAMILY_DB_0_IDX_TYPE3 = 3
+FAMILY_DB_0_IDX_PATIENT_CODES = 4
 
 VCF_GENOTYPE_FIELD_0_IDX_GT = 0
 
@@ -505,6 +507,7 @@ class VcfDBContentRecord(VcfDBRecord):
         VcfDBRecord.__init__(self, rec)
         self.__genotype_fields = None
         self.__stat = None
+        self.group_stat = {}
 
     def get_raw_repr(self):
         new_raw_repr = VcfDBRecord.get_raw_repr(self)

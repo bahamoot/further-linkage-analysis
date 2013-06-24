@@ -551,7 +551,7 @@ class TestFamilyDB(SafeDBTester):
                                  self.current_func_name + '.txt')
         db.open_db(test_file)
         self.assertEqual(len(list(db.records)),
-                         6,
+                         7,
                          'Incorrect number of records retrieved by FamilyDB')
 
     def test_records(self):
