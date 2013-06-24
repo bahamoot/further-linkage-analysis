@@ -134,7 +134,7 @@ class TestSummarizeAnnovarDB(SafeDBTester):
         records.next()
         test_record = records.next()
         self.assertEqual(test_record.key,
-                         '18|12702537',
+                         '18|12702537|T|G',
                          'Incorrect record key')
         self.assertEqual(test_record.func,
                          'exonic',

@@ -267,9 +267,11 @@ class SummarizeAnnovarDBContentRecord(SummarizeAnnovarDBRecord):
 
     @property
     def key(self):
-        key_fmt = "{chrom}|{vcf_pos}"
+        key_fmt = "{chrom}|{vcf_pos}|{ref}|{obs}"
         return key_fmt.format(chrom=self.chrom,
-                              vcf_pos=self.other_info2.split('|')[1])
+                              vcf_pos=self.other_info2.split('|')[1],
+                              ref=self.ref,
+                              obs=self.obs)
 
 
 class SummarizeAnnovarDB(object):
@@ -518,7 +520,11 @@ class VcfDBContentRecord(VcfDBRecord):
 
     def calculate_stat(self, genotype_fields=None):
         if genotype_fields is None:
-            genotype_fields = self.genotype_fields
+            if type(self.genotype_fields) is dict:
+                genotype_fields = map(lambda x: self.genotype_fields[x],
+                                      self.genotype_fields)
+            if type(self.genotype_fields) is list:
+                genotype_fields = self.genotype_fields
         #init
         stat = {}
         stat['allele_count'] = [0 for i in range(len(self.alt.split(',')))]

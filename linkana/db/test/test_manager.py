@@ -38,14 +38,14 @@ class TestAbstractSummarizeAnnovarDB(SafeDBTester):
         self.assertEqual(len(mutations.keys()),
                          9,
                          'Incorrect number of mutation keys')
-        self.assertTrue('18|12702705' in mutations,
+        self.assertTrue('18|12702705|G|C' in mutations,
                          'Incorrect mutation key')
-        self.assertTrue('18|12697298' in mutations,
+        self.assertTrue('18|12697298|G|T' in mutations,
                          'Incorrect mutation key')
-        self.assertTrue('18|12702536' not in mutations,
+        self.assertTrue('18|12702536|T|G' not in mutations,
                          'Incorrect mutation key')
         # *************** test contents ******************
-        test_mutation = mutations['18|12702537']
+        test_mutation = mutations['18|12702537|T|G']
         self.assertEqual(len(mutations),
                          9,
                          'Incorrect number of mutations')
@@ -441,18 +441,18 @@ class TestDBManager(SafeDBTester):
         self.assertEqual(len(sa_mutations.keys()),
                          9,
                          'Incorrect number of mutation keys')
-        self.assertTrue('18|12702705' in sa_mutations,
+        self.assertTrue('18|12702705|G|C' in sa_mutations,
                          'Incorrect mutation key')
-        self.assertTrue('18|12697298' in sa_mutations,
+        self.assertTrue('18|12697298|G|T' in sa_mutations,
                          'Incorrect mutation key')
-        self.assertTrue('18|12702536' not in sa_mutations,
+        self.assertTrue('18|12702536|T|G' not in sa_mutations,
                          'Incorrect mutation key')
         # *************** test vcf db ******************
         common_mutations = db_man.vcf_db.common_mutations(['134/06', 'Co1584', 'Co1591'])
         self.assertEqual(len(common_mutations.keys()),
                          3,
                          'Incorrect number of common mutation keys')
-        self.assertTrue('18|12512255' not in common_mutations,
+        self.assertTrue('18|12512255|T|G' not in common_mutations,
                          'Incorrect common mutation key')
         # *************** test family db ******************
         families = db_man.family_db.families

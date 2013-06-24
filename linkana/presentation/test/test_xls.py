@@ -59,4 +59,86 @@ class TestMutationAnnotator(SafePresentationTester):
                          60,
                          'Incorrect genotype count')
 
+    def test_export_family_xls1(self):
+        """ to check if mutation annotation from one family is correctly exported """
 
+        print 
+        self.individual_debug = True
+        self.init_test(self.current_func_name)
+        ma = self.__create_db_instance()
+        test_sa_file = os.path.join(self.data_dir,
+                                    self.current_func_name + '.tab.csv')
+        test_vcf_file = os.path.join(self.data_dir,
+                                     self.current_func_name + '.vcf.gz')
+        test_chrom = 18
+        test_begin_pos = 12750499
+        test_end_pos = 12793745
+        test_fam_file = os.path.join(self.data_dir,
+                                     self.current_func_name + '.txt')
+        db_man = DBManager()
+        db_man.connect_summarize_annovar_db(test_sa_file)
+        db_man.connect_vcf_db(test_vcf_file, test_chrom, test_begin_pos, test_end_pos)
+        db_man.connect_family_db(test_fam_file)
+
+        ma.db_manager = db_man
+        ma.export_family_xls('578', self.working_dir)
+    def test_export_family_xls2(self):
+        """ to check if mutation annotation from one family is correctly exported """
+
+        print 
+        self.individual_debug = True
+        self.init_test(self.current_func_name)
+        ma = self.__create_db_instance()
+        test_sa_file = os.path.join(self.data_dir,
+                                    self.current_func_name + '.tab.csv')
+        test_vcf_file = os.path.join(self.data_dir,
+                                     self.current_func_name + '.vcf.gz')
+#        test_chrom = 18
+#        test_begin_pos = 12750499
+#        test_end_pos = 12793745
+        test_chrom = 18
+        test_begin_pos = 12512309
+        test_end_pos = 14513570
+#        test_chrom = 18
+#        test_begin_pos = 12512384
+#        test_end_pos = 12512386
+#        test_end_pos = 12793469
+        test_fam_file = os.path.join(self.data_dir,
+                                     self.current_func_name + '.txt')
+        db_man = DBManager()
+        db_man.connect_summarize_annovar_db(test_sa_file)
+        db_man.connect_vcf_db(test_vcf_file, test_chrom, test_begin_pos, test_end_pos)
+        db_man.connect_family_db(test_fam_file)
+
+        ma.db_manager = db_man
+        ma.export_family_xls('296', self.working_dir)
+    def test_export_family_xls3(self):
+        """ to check if mutation annotation from one family is correctly exported """
+
+        print 
+        self.individual_debug = True
+        self.init_test(self.current_func_name)
+        ma = self.__create_db_instance()
+        test_sa_file = os.path.join(self.data_dir,
+                                    self.current_func_name + '.tab.csv')
+        test_vcf_file = os.path.join(self.data_dir,
+                                     self.current_func_name + '.vcf.gz')
+#        test_chrom = 18
+#        test_begin_pos = 12750499
+#        test_end_pos = 12793745
+        test_chrom = 18
+        test_begin_pos = 12512309
+        test_end_pos = 14513570
+#        test_chrom = 18
+#        test_begin_pos = 12512384
+#        test_end_pos = 12512386
+#        test_end_pos = 12793469
+        test_fam_file = os.path.join(self.data_dir,
+                                     self.current_func_name + '.txt')
+        db_man = DBManager()
+        db_man.connect_summarize_annovar_db(test_sa_file)
+        db_man.connect_vcf_db(test_vcf_file, test_chrom, test_begin_pos, test_end_pos)
+        db_man.connect_family_db(test_fam_file)
+
+        ma.db_manager = db_man
+        ma.export_family_xls('8', self.working_dir)
