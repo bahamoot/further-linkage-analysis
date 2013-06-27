@@ -588,6 +588,7 @@ class VcfDBContentRecord(VcfDBRecord):
     def genotype_fields(self, value):
         self.__genotype_fields = value
 
+    #******* No real use. Existing just for validating the counting method *******
     @property
     def allele_count(self):
         if self.__stat is None:
