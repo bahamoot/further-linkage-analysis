@@ -9,6 +9,13 @@ from linkana.db.manager import AbstractSummarizeAnnovarDB
 from linkana.db.manager import AbstractVcfDB
 from linkana.db.manager import AbstractFamilyDB
 from linkana.db.manager import DBManager
+from linkana.settings import TYPE1_ALL
+from linkana.settings import TYPE2_RECTAL
+from linkana.settings import TYPE2_NON_RECTAL
+from linkana.settings import TYPE3_COLON
+from linkana.settings import TYPE3_NON_COLON
+from linkana.settings import TYPE4_CAFAM
+from linkana.settings import TYPE4_NON_CAFAM
 
 
 class TestAbstractSummarizeAnnovarDB(SafeDBTester):
@@ -384,9 +391,15 @@ class TestAbstractFamilyDB(SafeDBTester):
         self.assertEqual(len(test_family.patient_codes),
                          3,
                          'Incorrect number of members')
+        self.assertEqual(test_family.type2,
+                         'RECTAL',
+                         'Incorrect family type2')
         self.assertEqual(test_family.type3,
-                         'CAFAM',
+                         '',
                          'Incorrect family type3')
+        self.assertEqual(test_family.type4,
+                         'CAFAM',
+                         'Incorrect family type4')
         patient_codes = test_family.patient_codes
         self.assertEqual(len(patient_codes),
                          3,
@@ -401,6 +414,44 @@ class TestAbstractFamilyDB(SafeDBTester):
                          'Co866',
                          'Incorrect patient code')
 
+
+    def test_group_members_count(self):
+        """
+
+        to check if number of members in each group are correctly counted
+
+        """
+
+        self.init_test(self.current_func_name)
+        abs_fam_db = self.__create_db_instance()
+        test_file = os.path.join(self.data_dir,
+                                 self.current_func_name + '.txt')
+        fam_db = FamilyDB()
+        fam_db.open_db(test_file)
+        abs_fam_db.add_connector(fam_db)
+        test_group_members_count = abs_fam_db.group_members_count
+        # *************** test group members count ******************
+        self.assertEqual(test_group_members_count[TYPE1_ALL],
+                         76,
+                         'Invaild number of members in group: '+TYPE1_ALL)
+        self.assertEqual(test_group_members_count[TYPE2_RECTAL],
+                         37,
+                         'Invaild number of members in group: '+TYPE2_RECTAL)
+        self.assertEqual(test_group_members_count[TYPE2_NON_RECTAL],
+                         39,
+                         'Invaild number of members in group: '+TYPE2_NON_RECTAL)
+        self.assertEqual(test_group_members_count[TYPE3_COLON],
+                         21,
+                         'Invaild number of members in group: '+TYPE3_COLON)
+        self.assertEqual(test_group_members_count[TYPE3_NON_COLON],
+                         55,
+                         'Invaild number of members in group: '+TYPE3_NON_COLON)
+        self.assertEqual(test_group_members_count[TYPE4_CAFAM],
+                         37,
+                         'Invaild number of members in group: '+TYPE4_CAFAM)
+        self.assertEqual(test_group_members_count[TYPE4_NON_CAFAM],
+                         39,
+                         'Invaild number of members in group: '+TYPE4_NON_CAFAM)
 
 class TestDBManager(SafeDBTester):
 
@@ -456,25 +507,28 @@ class TestDBManager(SafeDBTester):
                          'Incorrect common mutation key')
         # *************** test family db ******************
         families = db_man.family_db.families
-        test_family = families['425']
+        test_family = families['478']
         self.assertEqual(len(test_family.patient_codes),
-                         3,
+                         2,
                          'Incorrect number of members')
+        self.assertEqual(test_family.type2,
+                         'RECTAL',
+                         'Incorrect family type2')
         self.assertEqual(test_family.type3,
-                         'CAFAM',
+                         '',
                          'Incorrect family type3')
+        self.assertEqual(test_family.type4,
+                         '',
+                         'Incorrect family type4')
         patient_codes = test_family.patient_codes
         self.assertEqual(len(patient_codes),
-                         3,
+                         2,
                          'Incorrect number of patient codes being read')
         self.assertEqual(patient_codes[0],
-                         'Co1458',
+                         'Co1274',
                          'Incorrect patient code')
         self.assertEqual(patient_codes[1],
-                         'Co1595',
-                         'Incorrect patient code')
-        self.assertEqual(patient_codes[2],
-                         'Co866',
+                         'Co1207',
                          'Incorrect patient code')
 
     def test_valid_patient_codes(self):

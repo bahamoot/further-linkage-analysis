@@ -5,6 +5,13 @@ from linkana.db.connectors import VcfDB
 from linkana.db.connectors import FamilyDB
 from linkana.db.connectors import ZYGOSITY_UNKNOWN
 from linkana.db.connectors import ZYGOSITY_NONE
+from linkana.settings import TYPE1_ALL
+from linkana.settings import TYPE2_RECTAL
+from linkana.settings import TYPE2_NON_RECTAL
+from linkana.settings import TYPE3_COLON
+from linkana.settings import TYPE3_NON_COLON
+from linkana.settings import TYPE4_CAFAM
+from linkana.settings import TYPE4_NON_CAFAM
 
 
 class PatientRecord(object):
@@ -13,7 +20,9 @@ class PatientRecord(object):
     def __init__(self):
         self.genotype_fields = {}
         self.patient_code = ''
+        self.type2 = None
         self.type3 = None
+        self.type4 = None
 
     def __str__(self):
         return self.__repr__()
@@ -186,6 +195,7 @@ class AbstractFamilyDB(LinkAnaBase):
         LinkAnaBase.__init__(self)
         self.__connector = None
         self.__families = {}
+        self.__group_members_count = {}
 
     def __str__(self):
         return self.__repr__()
@@ -201,6 +211,32 @@ class AbstractFamilyDB(LinkAnaBase):
         self.__connector = family_db_connector
         self.__need_update = True
 
+    def __update_group_members_count(self):
+        group_members_count = {}
+        group_members_count[TYPE1_ALL] = 0
+        group_members_count[TYPE2_RECTAL] = 0
+        group_members_count[TYPE2_NON_RECTAL] = 0
+        group_members_count[TYPE3_COLON] = 0
+        group_members_count[TYPE3_NON_COLON] = 0
+        group_members_count[TYPE4_CAFAM] = 0
+        group_members_count[TYPE4_NON_CAFAM] = 0
+        for record in self.__connector.records:
+            if record.type2 == TYPE2_RECTAL:
+                group_members_count[TYPE2_RECTAL] += len(record.patient_codes)
+            else:
+                group_members_count[TYPE2_NON_RECTAL] += len(record.patient_codes)
+            if record.type3 == TYPE3_COLON:
+                group_members_count[TYPE3_COLON] += len(record.patient_codes)
+            else:
+                group_members_count[TYPE3_NON_COLON] += len(record.patient_codes)
+            if record.type4 == TYPE4_CAFAM:
+                group_members_count[TYPE4_CAFAM] += len(record.patient_codes)
+            else:
+                group_members_count[TYPE4_NON_CAFAM] += len(record.patient_codes)
+            group_members_count[TYPE1_ALL] += len(record.patient_codes)
+        self.__group_members_count = group_members_count
+        self.__need_update = False
+
     def __update_families_table(self):
         self.__families = {}
         #create table
@@ -209,9 +245,17 @@ class AbstractFamilyDB(LinkAnaBase):
         self.__need_update = False
 
     @property
+    def group_members_count(self):
+        if self.__need_update:
+            self.__update_families_table()
+            self.__update_group_members_count()
+        return self.__group_members_count
+
+    @property
     def families(self):
         if self.__need_update:
             self.__update_families_table()
+            self.__update_group_members_count()
         return self.__families
 
 

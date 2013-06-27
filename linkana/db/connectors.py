@@ -47,7 +47,8 @@ FAMILY_DB_0_IDX_FAMILY_CODE = 0
 FAMILY_DB_0_IDX_TYPE1 = 1
 FAMILY_DB_0_IDX_TYPE2 = 2
 FAMILY_DB_0_IDX_TYPE3 = 3
-FAMILY_DB_0_IDX_PATIENT_CODES = 4
+FAMILY_DB_0_IDX_TYPE4 = 4
+FAMILY_DB_0_IDX_PATIENT_CODES = 5
 
 VCF_GENOTYPE_FIELD_0_IDX_GT = 0
 
@@ -538,7 +539,7 @@ class VcfDBContentRecord(VcfDBRecord):
             if raw_gt == '.':
                 continue
             #genotype_count
-            stat['genotype_count'] += 2
+            stat['genotype_count'] += 1
             if raw_gt == '0/0':
                 continue
             gt = raw_gt.split('/')
@@ -566,8 +567,8 @@ class VcfDBContentRecord(VcfDBRecord):
         if self.__stat['allele_count'] != map(lambda x: int(x), infos['AC'].split(',')):
             raise Exception("Invalid 'allele_count' calculation", self.__stat['allele_count'], infos['AC'].split(','))
         #validate genotype_count
-        if self.__stat['genotype_count'] != int(infos['AN']):
-            raise Exception("Invalid 'allele_count' calculation", self.__stat['genotype_count'], infos['AN'])
+        if self.__stat['genotype_count'] != (int(infos['AN'])/2):
+            raise Exception("Invalid 'allele_count' calculation", self.__stat['genotype_count'], infos['AN']/2)
 
     @property
     def key(self):
@@ -665,7 +666,9 @@ class FamilyDBContentRecord(object):
 
     def get_raw_repr(self):
         return {'Family code': self.family_code,
-                'Type': self.type3,
+                'Type2': self.type2,
+                'Type3': self.type3,
+                'Type4': self.type4,
                 'Patients code': self.patient_codes,
                 }
 
@@ -674,8 +677,16 @@ class FamilyDBContentRecord(object):
         return self.__rec[FAMILY_DB_0_IDX_FAMILY_CODE]
 
     @property
+    def type2(self):
+        return self.__rec[FAMILY_DB_0_IDX_TYPE2]
+
+    @property
     def type3(self):
         return self.__rec[FAMILY_DB_0_IDX_TYPE3]
+
+    @property
+    def type4(self):
+        return self.__rec[FAMILY_DB_0_IDX_TYPE4]
 
     @property
     def patient_codes(self):

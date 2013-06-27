@@ -466,7 +466,7 @@ class TestVcfDB(SafeDBTester):
                          [23, 23],
                          'Incorrect patient count')
         self.assertEqual(test_record.genotype_count,
-                         114,
+                         57,
                          'Incorrect genotype count')
         self.assertEqual(test_record.genotype_fields[62].raw_gt,
                          '1/2',
@@ -488,7 +488,7 @@ class TestVcfDB(SafeDBTester):
                          [14],
                          'Incorrect patient count')
         self.assertEqual(test_record.genotype_count,
-                         78,
+                         39,
                          'Incorrect genotype count')
         self.assertEqual(test_record.key,
                          '18|14513526',
@@ -502,7 +502,7 @@ class TestVcfDB(SafeDBTester):
                          [11, 21, 10],
                          'Incorrect patient count')
         self.assertEqual(test_record.genotype_count,
-                         86,
+                         43,
                          'Incorrect genotype count')
         self.assertEqual(test_record.genotype_fields[6].raw_gt,
                          '0/2',
@@ -567,9 +567,15 @@ class TestFamilyDB(SafeDBTester):
         self.assertEqual(test_record.family_code,
                          '8',
                          'Incorrect family code')
+        self.assertEqual(test_record.type2,
+                         'RECTAL',
+                         'Incorrect family type2')
         self.assertEqual(test_record.type3,
-                         'CAFAM',
+                         '',
                          'Incorrect family type3')
+        self.assertEqual(test_record.type4,
+                         'CAFAM',
+                         'Incorrect family type4')
         patient_codes = test_record.patient_codes
         self.assertEqual(len(patient_codes),
                          2,
@@ -585,9 +591,15 @@ class TestFamilyDB(SafeDBTester):
         self.assertEqual(test_record.family_code,
                          '348',
                          'Incorrect family code')
-        self.assertEqual(test_record.type3,
+        self.assertEqual(test_record.type2,
                          '',
+                         'Incorrect family type2')
+        self.assertEqual(test_record.type3,
+                         'COLON',
                          'Incorrect family type3')
+        self.assertEqual(test_record.type4,
+                         '',
+                         'Incorrect family type4')
         patient_codes = test_record.patient_codes
         self.assertEqual(len(patient_codes),
                          2,

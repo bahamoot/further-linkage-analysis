@@ -4,3 +4,6 @@
 script/test_bin_annovar_summarize
 *~
 *lock*
+build/
+dist/
+LinkAna.egg-info/

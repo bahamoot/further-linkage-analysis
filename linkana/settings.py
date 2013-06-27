@@ -10,9 +10,23 @@ This module is all about constant value that are used in this application
 PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
 
 SCRIPT_DIR = os.path.join(PROJECT_ROOT, 'script')
-WRAPPED_SUMMARIZE_ANNOVAR = os.path.join(SCRIPT_DIR, 'wrapped_summarize_annovar')
-PREPARE_VCF_DB = os.path.join(SCRIPT_DIR, 'prepare_vcf_db')
+WRAPPED_SUMMARIZE_ANNOVAR = os.path.join(SCRIPT_DIR, '/home/jessada/development/CMM/projects/linkage_analysis/script/wrapped_summarize_annovar')
 
+REF_DB_FILE_PREFIX = '/home/jessada/development/scilifelab/tools/annovar/humandb/hg19_snp137'
+CHR18_BEGIN_MARKER = 'rs1013785'
+CHR18_END_MARKER = 'rs1010800'
+BWA_VCF_TABIX_FILE = '/home/jessada/development/CMM/master_data/CRC_screen4/bwa_GATK.vcf.gz'
+GLOBAL_WORKING_DIR = '/home/jessada/development/CMM/projects/linkage_analysis/tmp'
+SA_OUT_DIR = '/home/jessada/development/CMM/projects/linkage_analysis/data/summarize_annovar'
+
+# > > > > > > > > > > > > > patient groups < < < < < < < < < <
+TYPE1_ALL = 'ALL'
+TYPE2_RECTAL = 'RECTAL'
+TYPE2_NON_RECTAL = 'NON_RECTAL'
+TYPE3_COLON = 'COLON'
+TYPE3_NON_COLON = 'NON_COLON'
+TYPE4_CAFAM = 'CAFAM'
+TYPE4_NON_CAFAM = 'NON_CAFAM'
 
 
 ## > > > > > > > > > > > > > development files & folders < < < < < < < < < <
