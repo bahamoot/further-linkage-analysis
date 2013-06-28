@@ -291,30 +291,15 @@ class MutationAnnotator(LinkAnaBase):
                         ):
         group_members_count =  self.__group_members_count
         family = self.__families[family_code]
-        group_type2 = self.__vcf_patients[patient_codes[0]].type2
-        group_type3 = self.__vcf_patients[patient_codes[0]].type3
-        group_type4 = self.__vcf_patients[patient_codes[0]].type4
         group_header_fmt = "{group_txt} ({patients_count} patients)"
         header_type1 = group_header_fmt.format(group_txt='All',
                                                patients_count=group_members_count[TYPE1_ALL])
-        if family.type2 == TYPE2_RECTAL:
-            header_type2 = group_header_fmt.format(group_txt='Group "Rectal Family"',
-                                                   patients_count=group_members_count[TYPE2_RECTAL])
-        else:
-            header_type2 = group_header_fmt.format(group_txt='Group "Non-Rectal Family"',
-                                                   patients_count=group_members_count[TYPE2_NON_RECTAL])
-        if family.type3 == TYPE3_COLON:
-            header_type3 = group_header_fmt.format(group_txt='Group "Colon Family"',
-                                                   patients_count=group_members_count[TYPE3_COLON])
-        else:
-            header_type3 = group_header_fmt.format(group_txt='Group "Non-Colon Family"',
-                                                   patients_count=group_members_count[TYPE3_NON_COLON])
-        if family.type4 == TYPE4_CAFAM:
-            header_type4 = group_header_fmt.format(group_txt='Group "Cancer Family"',
-                                                   patients_count=group_members_count[TYPE4_CAFAM])
-        else:
-            header_type4 = group_header_fmt.format(group_txt='Group "Non-Cancer Family"',
-                                                   patients_count=group_members_count[TYPE4_NON_CAFAM])
+        header_type2 = group_header_fmt.format(group_txt='Group "Rectal Family"',
+                                               patients_count=group_members_count[TYPE2_RECTAL])
+        header_type3 = group_header_fmt.format(group_txt='Group "Colon Family"',
+                                               patients_count=group_members_count[TYPE3_COLON])
+        header_type4 = group_header_fmt.format(group_txt='Group "Cancer Family"',
+                                               patients_count=group_members_count[TYPE4_CAFAM])
 
         ws = wb.add_sheet(sheet_name)
         self.__write_header(ws, header_type1, header_type2, header_type3, header_type4)
@@ -336,26 +321,26 @@ class MutationAnnotator(LinkAnaBase):
             ws.write(row, MA_COL_0_IDX_ESP6500_ALL, xls_record.esp6500_all, st)
             ws.write(row, MA_COL_0_IDX_1000G2012APR_ALL, xls_record.maf, st)
             ws.write(row, MA_COL_0_IDX_DBSNP137, xls_record.dbsnp137, st)
-            ws.write(row, MA_COL_0_IDX_ALL_STAT_AC, xls_record.group_type1_ac, st)
-            ws.write(row, MA_COL_0_IDX_ALL_STAT_PC, xls_record.group_type1_pc, st)
-            ws.write(row, MA_COL_0_IDX_ALL_STAT_PP, float("{:.2f}".format(float(xls_record.group_type1_pc)/xls_record.group_type1_gc)), st)
-            ws.write(row, MA_COL_0_IDX_ALL_STAT_GC, xls_record.group_type1_gc, st)
-            ws.write(row, MA_COL_0_IDX_ALL_STAT_GP, float("{:.2f}".format(float(xls_record.group_type1_gc)/group_members_count[TYPE1_ALL])), st)
-            ws.write(row, MA_COL_0_IDX_TYPE2_STAT_AC, xls_record.group_type2_ac, st)
-            ws.write(row, MA_COL_0_IDX_TYPE2_STAT_PC, xls_record.group_type2_pc, st)
-            ws.write(row, MA_COL_0_IDX_TYPE2_STAT_PP, float("{:.2f}".format(float(xls_record.group_type2_pc)/xls_record.group_type2_gc)), st)
-            ws.write(row, MA_COL_0_IDX_TYPE2_STAT_GC, xls_record.group_type2_gc, st)
-            ws.write(row, MA_COL_0_IDX_TYPE2_STAT_GP, float("{:.2f}".format(float(xls_record.group_type2_gc)/group_members_count[group_type2])), st)
-            ws.write(row, MA_COL_0_IDX_TYPE3_STAT_AC, xls_record.group_type3_ac, st)
-            ws.write(row, MA_COL_0_IDX_TYPE3_STAT_PC, xls_record.group_type3_pc, st)
-            ws.write(row, MA_COL_0_IDX_TYPE3_STAT_PP, float("{:.2f}".format(float(xls_record.group_type3_pc)/xls_record.group_type3_gc)), st)
-            ws.write(row, MA_COL_0_IDX_TYPE3_STAT_GC, xls_record.group_type3_gc, st)
-            ws.write(row, MA_COL_0_IDX_TYPE3_STAT_GP, float("{:.2f}".format(float(xls_record.group_type3_gc)/group_members_count[group_type3])), st)
-            ws.write(row, MA_COL_0_IDX_TYPE4_STAT_AC, xls_record.group_type4_ac, st)
-            ws.write(row, MA_COL_0_IDX_TYPE4_STAT_PC, xls_record.group_type4_pc, st)
-            ws.write(row, MA_COL_0_IDX_TYPE4_STAT_PP, float("{:.2f}".format(float(xls_record.group_type4_pc)/xls_record.group_type4_gc)), st)
-            ws.write(row, MA_COL_0_IDX_TYPE4_STAT_GC, xls_record.group_type4_gc, st)
-            ws.write(row, MA_COL_0_IDX_TYPE4_STAT_GP, float("{:.2f}".format(float(xls_record.group_type4_gc)/group_members_count[group_type4])), st)
+            ws.write(row, MA_COL_0_IDX_ALL_STAT_AC, xls_record.stat_type1_ac, st)
+            ws.write(row, MA_COL_0_IDX_ALL_STAT_PC, xls_record.stat_type1_pc, st)
+            ws.write(row, MA_COL_0_IDX_ALL_STAT_PP, xls_record.stat_type1_pp, st)
+            ws.write(row, MA_COL_0_IDX_ALL_STAT_GC, xls_record.stat_type1_gc, st)
+            ws.write(row, MA_COL_0_IDX_ALL_STAT_GP, xls_record.stat_type1_gp, st)
+            ws.write(row, MA_COL_0_IDX_TYPE2_STAT_AC, xls_record.stat_type2_ac, st)
+            ws.write(row, MA_COL_0_IDX_TYPE2_STAT_PC, xls_record.stat_type2_pc, st)
+            ws.write(row, MA_COL_0_IDX_TYPE2_STAT_PP, xls_record.stat_type2_pp, st)
+            ws.write(row, MA_COL_0_IDX_TYPE2_STAT_GC, xls_record.stat_type2_gc, st)
+            ws.write(row, MA_COL_0_IDX_TYPE2_STAT_GP, xls_record.stat_type2_gp, st)
+            ws.write(row, MA_COL_0_IDX_TYPE3_STAT_AC, xls_record.stat_type3_ac, st)
+            ws.write(row, MA_COL_0_IDX_TYPE3_STAT_PC, xls_record.stat_type3_pc, st)
+            ws.write(row, MA_COL_0_IDX_TYPE3_STAT_PP, xls_record.stat_type3_pp, st)
+            ws.write(row, MA_COL_0_IDX_TYPE3_STAT_GC, xls_record.stat_type3_gc, st)
+            ws.write(row, MA_COL_0_IDX_TYPE3_STAT_GP, xls_record.stat_type3_gp, st)
+            ws.write(row, MA_COL_0_IDX_TYPE4_STAT_AC, xls_record.stat_type4_ac, st)
+            ws.write(row, MA_COL_0_IDX_TYPE4_STAT_PC, xls_record.stat_type4_pc, st)
+            ws.write(row, MA_COL_0_IDX_TYPE4_STAT_PP, xls_record.stat_type4_pp, st)
+            ws.write(row, MA_COL_0_IDX_TYPE4_STAT_GC, xls_record.stat_type4_gc, st)
+            ws.write(row, MA_COL_0_IDX_TYPE4_STAT_GP, xls_record.stat_type4_gp, st)
             ws.write(row, MA_COL_0_IDX_AVSIFT, xls_record.avsift, st)
             ws.write(row, MA_COL_0_IDX_LJB_PHYLOP, xls_record.ljb_phylop, st)
             ws.write(row, MA_COL_0_IDX_LJB_PHYLOP_PRED, xls_record.ljb_phylop_pred, st)
@@ -431,9 +416,6 @@ class MutationAnnotator(LinkAnaBase):
     def __get_xls_records(self, patient_codes):
         """ prepare data for one data sheet """
         xls_records = []
-        group_type2 = self.__vcf_patients[patient_codes[0]].type2
-        group_type3 = self.__vcf_patients[patient_codes[0]].type3
-        group_type4 = self.__vcf_patients[patient_codes[0]].type4
         sa_key_fmt = "{vcf_mutation_key}|{ref}|{obs}"
         for vcf_mutation_key in self.__db_manager.vcf_db.common_mutations(patient_codes):
             vcf_mutation = self.__vcf_mutations[vcf_mutation_key]
@@ -449,18 +431,27 @@ class MutationAnnotator(LinkAnaBase):
                 if sa_mutation_key in self.__sa_mutations:
                     mutation = self.__sa_mutations[sa_mutation_key]
                     mutation.zygosity = genotype_field.zygosity
-                    mutation.group_type1_ac = vcf_mutation.group_stat[TYPE1_ALL]['allele_count'][int(gt[0])-1]
-                    mutation.group_type1_pc = vcf_mutation.group_stat[TYPE1_ALL]['patient_count'][int(gt[0])-1]
-                    mutation.group_type1_gc = vcf_mutation.group_stat[TYPE1_ALL]['genotype_count']
-                    mutation.group_type2_ac = vcf_mutation.group_stat[group_type2]['allele_count'][int(gt[0])-1]
-                    mutation.group_type2_pc = vcf_mutation.group_stat[group_type2]['patient_count'][int(gt[0])-1]
-                    mutation.group_type2_gc = vcf_mutation.group_stat[group_type2]['genotype_count']
-                    mutation.group_type3_ac = vcf_mutation.group_stat[group_type3]['allele_count'][int(gt[0])-1]
-                    mutation.group_type3_pc = vcf_mutation.group_stat[group_type3]['patient_count'][int(gt[0])-1]
-                    mutation.group_type3_gc = vcf_mutation.group_stat[group_type3]['genotype_count']
-                    mutation.group_type4_ac = vcf_mutation.group_stat[group_type4]['allele_count'][int(gt[0])-1]
-                    mutation.group_type4_pc = vcf_mutation.group_stat[group_type4]['patient_count'][int(gt[0])-1]
-                    mutation.group_type4_gc = vcf_mutation.group_stat[group_type4]['genotype_count']
+                    idx = int(gt[0])-1
+                    mutation.stat_type1_ac = vcf_mutation.stats_type1_ac[idx]
+                    mutation.stat_type1_pc = vcf_mutation.stats_type1_pc[idx]
+                    mutation.stat_type1_pp = vcf_mutation.stats_type1_pp[idx]
+                    mutation.stat_type1_gc = vcf_mutation.stats_type1_gc
+                    mutation.stat_type1_gp = vcf_mutation.stats_type1_gp
+                    mutation.stat_type2_ac = vcf_mutation.stats_type2_ac[idx]
+                    mutation.stat_type2_pc = vcf_mutation.stats_type2_pc[idx]
+                    mutation.stat_type2_pp = vcf_mutation.stats_type2_pp[idx]
+                    mutation.stat_type2_gc = vcf_mutation.stats_type2_gc
+                    mutation.stat_type2_gp = vcf_mutation.stats_type2_gp
+                    mutation.stat_type3_ac = vcf_mutation.stats_type3_ac[idx]
+                    mutation.stat_type3_pc = vcf_mutation.stats_type3_pc[idx]
+                    mutation.stat_type3_pp = vcf_mutation.stats_type3_pp[idx]
+                    mutation.stat_type3_gc = vcf_mutation.stats_type3_gc
+                    mutation.stat_type3_gp = vcf_mutation.stats_type3_gp
+                    mutation.stat_type4_ac = vcf_mutation.stats_type4_ac[idx]
+                    mutation.stat_type4_pc = vcf_mutation.stats_type4_pc[idx]
+                    mutation.stat_type4_pp = vcf_mutation.stats_type4_pp[idx]
+                    mutation.stat_type4_gc = vcf_mutation.stats_type4_gc
+                    mutation.stat_type4_gp = vcf_mutation.stats_type4_gp
                     xls_records.append(mutation)
                 else:
                     self.info('Key "' + sa_mutation_key + '" not found')
@@ -472,18 +463,27 @@ class MutationAnnotator(LinkAnaBase):
                 if sa_mutation_key in self.__sa_mutations:
                     mutation = self.__sa_mutations[sa_mutation_key]
                     mutation.zygosity = genotype_field.zygosity
-                    mutation.group_type1_ac = vcf_mutation.group_stat[TYPE1_ALL]['allele_count'][int(gt[1])-1]
-                    mutation.group_type1_pc = vcf_mutation.group_stat[TYPE1_ALL]['patient_count'][int(gt[1])-1]
-                    mutation.group_type1_gc = vcf_mutation.group_stat[TYPE1_ALL]['genotype_count']
-                    mutation.group_type2_ac = vcf_mutation.group_stat[group_type2]['allele_count'][int(gt[1])-1]
-                    mutation.group_type2_pc = vcf_mutation.group_stat[group_type2]['patient_count'][int(gt[1])-1]
-                    mutation.group_type2_gc = vcf_mutation.group_stat[group_type2]['genotype_count']
-                    mutation.group_type3_ac = vcf_mutation.group_stat[group_type3]['allele_count'][int(gt[1])-1]
-                    mutation.group_type3_pc = vcf_mutation.group_stat[group_type3]['patient_count'][int(gt[1])-1]
-                    mutation.group_type3_gc = vcf_mutation.group_stat[group_type3]['genotype_count']
-                    mutation.group_type4_ac = vcf_mutation.group_stat[group_type4]['allele_count'][int(gt[1])-1]
-                    mutation.group_type4_pc = vcf_mutation.group_stat[group_type4]['patient_count'][int(gt[1])-1]
-                    mutation.group_type4_gc = vcf_mutation.group_stat[group_type4]['genotype_count']
+                    idx = int(gt[1])-1
+                    mutation.stat_type1_ac = vcf_mutation.stats_type1_ac[idx]
+                    mutation.stat_type1_pc = vcf_mutation.stats_type1_pc[idx]
+                    mutation.stat_type1_pp = vcf_mutation.stats_type1_pp[idx]
+                    mutation.stat_type1_gc = vcf_mutation.stats_type1_gc
+                    mutation.stat_type1_gp = vcf_mutation.stats_type1_gp
+                    mutation.stat_type2_ac = vcf_mutation.stats_type2_ac[idx]
+                    mutation.stat_type2_pc = vcf_mutation.stats_type2_pc[idx]
+                    mutation.stat_type2_pp = vcf_mutation.stats_type2_pp[idx]
+                    mutation.stat_type2_gc = vcf_mutation.stats_type2_gc
+                    mutation.stat_type2_gp = vcf_mutation.stats_type2_gp
+                    mutation.stat_type3_ac = vcf_mutation.stats_type3_ac[idx]
+                    mutation.stat_type3_pc = vcf_mutation.stats_type3_pc[idx]
+                    mutation.stat_type3_pp = vcf_mutation.stats_type3_pp[idx]
+                    mutation.stat_type3_gc = vcf_mutation.stats_type3_gc
+                    mutation.stat_type3_gp = vcf_mutation.stats_type3_gp
+                    mutation.stat_type4_ac = vcf_mutation.stats_type4_ac[idx]
+                    mutation.stat_type4_pc = vcf_mutation.stats_type4_pc[idx]
+                    mutation.stat_type4_pp = vcf_mutation.stats_type4_pp[idx]
+                    mutation.stat_type4_gc = vcf_mutation.stats_type4_gc
+                    mutation.stat_type4_gp = vcf_mutation.stats_type4_gp
                     xls_records.append(mutation)
                 else:
                     self.info('Key "' + sa_mutation_key + '" not found')
@@ -512,52 +512,71 @@ class MutationAnnotator(LinkAnaBase):
     def __annotate_group_stat(self):
         """ calculate group stat for each mutation record """
 
+        group_members_count = self.__group_members_count
         vcf_mutations = self.__vcf_mutations
         vcf_patients = self.__vcf_patients
         all_patient_codes = filter(lambda x: vcf_patients[x].type2 is not None, vcf_patients)
         rectal_patient_codes = filter(lambda x: vcf_patients[x].type2 == TYPE2_RECTAL, vcf_patients)
-        non_rectal_patient_codes = filter(lambda x: vcf_patients[x].type2 == TYPE2_NON_RECTAL, vcf_patients)
         colon_patient_codes = filter(lambda x: vcf_patients[x].type3 == TYPE3_COLON, vcf_patients)
-        non_colon_patient_codes = filter(lambda x: vcf_patients[x].type3 == TYPE3_NON_COLON, vcf_patients)
         cafam_patient_codes = filter(lambda x: vcf_patients[x].type4 == TYPE4_CAFAM, vcf_patients)
-        non_cafam_patient_codes = filter(lambda x: vcf_patients[x].type4 == TYPE4_NON_CAFAM, vcf_patients)
         for mutation_key in vcf_mutations:
             mutation = vcf_mutations[mutation_key]
             #re-calculate stat for all members
             all_genotypes = map(lambda x: mutation.genotype_fields[x],
                                 all_patient_codes)
             stat = mutation.calculate_stat(all_genotypes)
-            mutation.group_stat[TYPE1_ALL] = stat
+            mutation.stats_type1_ac = stat['allele_count']
+            mutation.stats_type1_pc = stat['patient_count']
+            mutation.stats_type1_pp = []
+            for pc in stat['patient_count']:
+                if stat['genotype_count'] == 0:
+                    mutation.stats_type1_pp.append('-')
+                else:
+                    mutation.stats_type1_pp.append(float("{:.2f}".format(float(pc)/stat['genotype_count'])))
+            mutation.stats_type1_gc = stat['genotype_count']
+            mutation.stats_type1_gp = float("{:.2f}".format(float(stat['genotype_count'])/group_members_count[TYPE1_ALL]))
             #calculate stat for RECTAL group
             rectal_genotypes = map(lambda x: mutation.genotype_fields[x],
                                    rectal_patient_codes)
             stat = mutation.calculate_stat(rectal_genotypes)
-            mutation.group_stat[TYPE2_RECTAL] = stat
-            #calculate stat for those outside RECTAL group
-            non_rectal_genotypes = map(lambda x: mutation.genotype_fields[x],
-                                      non_rectal_patient_codes)
-            stat = mutation.calculate_stat(non_rectal_genotypes)
-            mutation.group_stat[TYPE2_NON_RECTAL] = stat
+            mutation.stats_type2_ac = stat['allele_count']
+            mutation.stats_type2_pc = stat['patient_count']
+            mutation.stats_type2_pp = []
+            for pc in stat['patient_count']:
+                if stat['genotype_count'] == 0:
+                    mutation.stats_type2_pp.append('-')
+                else:
+                    mutation.stats_type2_pp.append(float("{:.2f}".format(float(pc)/stat['genotype_count'])))
+            mutation.stats_type2_gc = stat['genotype_count']
+            mutation.stats_type2_gp = float("{:.2f}".format(float(stat['genotype_count'])/group_members_count[TYPE2_RECTAL]))
             #calculate stat for COLON group
             colon_genotypes = map(lambda x: mutation.genotype_fields[x],
                                   colon_patient_codes)
             stat = mutation.calculate_stat(colon_genotypes)
-            mutation.group_stat[TYPE3_COLON] = stat
-            #calculate stat for those outside COLON group
-            non_colon_genotypes = map(lambda x: mutation.genotype_fields[x],
-                                      non_colon_patient_codes)
-            stat = mutation.calculate_stat(non_colon_genotypes)
-            mutation.group_stat[TYPE3_NON_COLON] = stat
+            mutation.stats_type3_ac = stat['allele_count']
+            mutation.stats_type3_pc = stat['patient_count']
+            mutation.stats_type3_pp = []
+            for pc in stat['patient_count']:
+                if stat['genotype_count'] == 0:
+                    mutation.stats_type3_pp.append('-')
+                else:
+                    mutation.stats_type3_pp.append(float("{:.2f}".format(float(pc)/stat['genotype_count'])))
+            mutation.stats_type3_gc = stat['genotype_count']
+            mutation.stats_type3_gp = float("{:.2f}".format(float(stat['genotype_count'])/group_members_count[TYPE3_COLON]))
             #calculate stat for CAFAM group
             cafam_genotypes = map(lambda x: mutation.genotype_fields[x],
                                   cafam_patient_codes)
             stat = mutation.calculate_stat(cafam_genotypes)
-            mutation.group_stat[TYPE4_CAFAM] = stat
-            #calculate stat for those outside CAFAM group
-            non_cafam_genotypes = map(lambda x: mutation.genotype_fields[x],
-                                      non_cafam_patient_codes)
-            stat = mutation.calculate_stat(non_cafam_genotypes)
-            mutation.group_stat[TYPE4_NON_CAFAM] = stat
+            mutation.stats_type4_ac = stat['allele_count']
+            mutation.stats_type4_pc = stat['patient_count']
+            mutation.stats_type4_pp = []
+            for pc in stat['patient_count']:
+                if stat['genotype_count'] == 0:
+                    mutation.stats_type4_pp.append('-')
+                else:
+                    mutation.stats_type4_pp.append(float("{:.2f}".format(float(pc)/stat['genotype_count'])))
+            mutation.stats_type4_gc = stat['genotype_count']
+            mutation.stats_type4_gp = float("{:.2f}".format(float(stat['genotype_count'])/group_members_count[TYPE4_CAFAM]))
 
     @property
     def vcf_mutations(self):
@@ -579,5 +598,3 @@ class MutationAnnotator(LinkAnaBase):
         self.__families = self.__db_manager.family_db.families
         self.__annotate_patient_group()
         self.__annotate_group_stat()
-
-

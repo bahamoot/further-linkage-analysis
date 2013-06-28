@@ -510,7 +510,7 @@ class VcfDBContentRecord(VcfDBRecord):
         VcfDBRecord.__init__(self, rec)
         self.__genotype_fields = None
         self.__stat = None
-        self.group_stat = {}
+#        self.group_stat = {}
 
     def get_raw_repr(self):
         new_raw_repr = VcfDBRecord.get_raw_repr(self)
