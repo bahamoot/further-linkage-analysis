@@ -39,6 +39,7 @@ def find_data_files(srcdir, *wildcards, **kw):
 
 #csv_files = find_data_files('data/', '*.csv')
 all_data_files = find_data_files('data/', '*.*')
+#all_data_files = find_data_files('script/', '*.*')
 
 setup(
     name='LinkAna',
@@ -46,10 +47,17 @@ setup(
     author='Jessada Thutkawkorapin',
     author_email='jessada.thutkawkorapin@gmail.com',
     packages=['linkana',
-              'linkana.analysis',
+              'linkana.misc',
+              'linkana.presentation',
               'linkana.db',
               ],
-    scripts=['bin/LinkAna_list_POTEC_from_one_member',
+    scripts=['bin/linkana_gen_sa_db_chr6_bwa',
+             'bin/linkana_gen_sa_db_chr18_bwa',
+             'bin/linkana_gen_sa_db_chr19_bwa',
+             'bin/linkana_export_xls_chr6_bwa',
+             'bin/linkana_export_xls_chr18_bwa',
+             'bin/linkana_export_xls_chr19_bwa',
+#             'script/wrapped_summarize_annovar',
              ],
     package=['LinkAna'],
 #    package_data={'': ['data/CBV/*.cbv']

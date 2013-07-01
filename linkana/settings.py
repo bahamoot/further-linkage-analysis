@@ -13,11 +13,17 @@ SCRIPT_DIR = os.path.join(PROJECT_ROOT, 'script')
 WRAPPED_SUMMARIZE_ANNOVAR = os.path.join(SCRIPT_DIR, '/home/jessada/development/CMM/projects/linkage_analysis/script/wrapped_summarize_annovar')
 
 REF_DB_FILE_PREFIX = '/home/jessada/development/scilifelab/tools/annovar/humandb/hg19_snp137'
+CHR6_BEGIN_MARKER = 'rs1001015'
+CHR6_END_MARKER = 'rs3734693'
 CHR18_BEGIN_MARKER = 'rs1013785'
 CHR18_END_MARKER = 'rs1010800'
+CHR19_BEGIN_MARKER = 'rs8109631'
+CHR19_END_MARKER = 'rs1529958'
 BWA_VCF_TABIX_FILE = '/home/jessada/development/CMM/master_data/CRC_screen4/bwa_GATK.vcf.gz'
 GLOBAL_WORKING_DIR = '/home/jessada/development/CMM/projects/linkage_analysis/tmp'
 SA_OUT_DIR = '/home/jessada/development/CMM/projects/linkage_analysis/data/summarize_annovar'
+FAMILY_FILE = '/home/jessada/development/CMM/projects/linkage_analysis/data/family/family_data.txt'
+XLS_OUT_DIR = '/home/jessada/development/CMM/projects/linkage_analysis/xls_out'
 
 # > > > > > > > > > > > > > patient groups < < < < < < < < < <
 TYPE1_ALL = 'ALL'

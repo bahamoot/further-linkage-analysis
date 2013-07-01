@@ -91,7 +91,14 @@ class MutationAnnotator(LinkAnaBase):
 
     def __export_xls(self, directory=None):
         """ export mutations from all families to the given directory """
-        pass
+
+        for family_code in self.__families:
+            self.__export_family_xls(family_code, directory)
+
+    def export_xls(self, directory=None):
+        """ export mutations from all families to the given directory """
+
+        return self.__export_xls(directory)
 
     def __write_header(self, ws,
                        header_type1,
@@ -454,7 +461,7 @@ class MutationAnnotator(LinkAnaBase):
                     mutation.stat_type4_gp = vcf_mutation.stats_type4_gp
                     xls_records.append(mutation)
                 else:
-                    self.info('Key "' + sa_mutation_key + '" not found')
+                    self.info('patient code: "' + str(patient_codes) + '"\tkey: "' + sa_mutation_key + '" not found')
 
             if (gt[1] != '0') and (gt[0] != gt[1]):
                 sa_mutation_key = sa_key_fmt.format(vcf_mutation_key=vcf_mutation_key,
@@ -486,7 +493,7 @@ class MutationAnnotator(LinkAnaBase):
                     mutation.stat_type4_gp = vcf_mutation.stats_type4_gp
                     xls_records.append(mutation)
                 else:
-                    self.info('Key "' + sa_mutation_key + '" not found')
+                    self.info('patient code: "' + str(patient_codes) + '"\tkey: "' + sa_mutation_key + '" not found')
         return sorted(xls_records, key=lambda record: record.maf, reverse=True)
 
     def __annotate_patient_group(self):

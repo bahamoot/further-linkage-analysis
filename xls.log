@@ -1,0 +1,226 @@
+exporting family: 216
+patient code: "['Co367']"	key: "18|11610163|G|T" not found
+patient code: "['Co367']"	key: "18|18512805|G|C" not found
+patient code: "['Co446']"	key: "18|14183451|G|A" not found
+patient code: "['Co446']"	key: "18|18518734|A|C" not found
+patient code: "['Co367', 'Co446']"	key: "18|11610163|G|T" not found
+exporting family: 740
+patient code: "['Co1373']"	key: "18|18512337|C|A" not found
+patient code: "['602-05o']"	key: "18|18517013|A|C" not found
+patient code: "['602-05o']"	key: "18|18517615|C|T" not found
+patient code: "['602-05o']"	key: "18|18518696|A|T" not found
+exporting family: 578
+patient code: "['Co1349']"	key: "18|18518734|A|C" not found
+patient code: "['531-04o']"	key: "18|18517001|T|A" not found
+patient code: "['531-04o']"	key: "18|14393945|G|A" not found
+patient code: "['531-04o']"	key: "18|18517013|A|C" not found
+exporting family: 312
+patient code: "['Co1116']"	key: "18|18519374|C|G" not found
+patient code: "['Co1116']"	key: "18|18519374|C|G" not found
+exporting family: 1206
+exporting family: 574
+patient code: "['468-04']"	key: "18|18517615|C|T" not found
+patient code: "['468-04']"	key: "18|18518931|C|T" not found
+patient code: "['474-05']"	key: "18|18517615|C|T" not found
+patient code: "['474-05']"	key: "18|18518931|C|T" not found
+patient code: "['468-04', '474-05']"	key: "18|18517615|C|T" not found
+patient code: "['468-04', '474-05']"	key: "18|18518931|C|T" not found
+exporting family: 110
+patient code: "['1526-02D']"	key: "18|18517615|C|T" not found
+patient code: "['Co1301']"	key: "18|18517914|T|G" not found
+patient code: "['Co1301']"	key: "18|18519925|A|G" not found
+patient code: "['Co1301']"	key: "18|18517615|C|T" not found
+patient code: "['1526-02D', 'Co1301']"	key: "18|18517615|C|T" not found
+exporting family: 231
+exporting family: 254
+patient code: "['Co616']"	key: "18|14393945|G|A" not found
+patient code: "['Co616']"	key: "18|18520089|T|G" not found
+patient code: "['Co1156']"	key: "18|18517216|A|G" not found
+patient code: "['Co616', 'Co1156']"	key: "18|14393945|G|A" not found
+patient code: "['Co616', 'Co1156']"	key: "18|18520089|T|G" not found
+exporting family: 26
+patient code: "['Co135']"	key: "18|18519474|T|A" not found
+patient code: "['Co131']"	key: "18|14393945|G|A" not found
+patient code: "['Co131']"	key: "18|18517216|A|G" not found
+exporting family: 695
+patient code: "['Co1354']"	key: "18|18517615|C|T" not found
+patient code: "['Co1354']"	key: "18|18519374|C|G" not found
+patient code: "['Co1359']"	key: "18|18520089|T|G" not found
+patient code: "['Co1359']"	key: "18|11610163|G|T" not found
+patient code: "['Co1359']"	key: "18|18512805|G|C" not found
+patient code: "['Co1359']"	key: "18|18517216|A|G" not found
+exporting family: 871
+patient code: "['Co1661']"	key: "18|18519896|G|A" not found
+patient code: "['Co1661']"	key: "18|18520060|A|T" not found
+patient code: "['Co1661']"	key: "18|11610163|G|T" not found
+patient code: "['Co1661']"	key: "18|18520089|T|G" not found
+patient code: "['Co1661']"	key: "18|18517013|A|C" not found
+patient code: "['Co1661']"	key: "18|18518734|A|C" not found
+patient code: "['Co1661']"	key: "18|14393945|G|A" not found
+patient code: "['Co1661']"	key: "18|18512920|T|G" not found
+patient code: "['Co1661']"	key: "18|18517615|C|T" not found
+patient code: "['Co1661']"	key: "18|14183451|G|A" not found
+patient code: "['Co1661']"	key: "18|18519374|C|G" not found
+patient code: "['Co1661']"	key: "18|18517216|A|G" not found
+patient code: "['Co1661', 'Co1618']"	key: "18|18520060|A|T" not found
+patient code: "['Co1661', 'Co1618']"	key: "18|18520089|T|G" not found
+patient code: "['Co1661', 'Co1618']"	key: "18|11610163|G|T" not found
+patient code: "['Co1661', 'Co1618']"	key: "18|18517216|A|G" not found
+exporting family: 1113
+patient code: "['642-06']"	key: "18|18517914|T|G" not found
+patient code: "['642-06']"	key: "18|12506346|C|T" not found
+exporting family: 918
+patient code: "['134-06']"	key: "18|18517615|C|T" not found
+patient code: "['134-06']"	key: "18|18518931|C|T" not found
+patient code: "['354-06']"	key: "18|18519925|A|G" not found
+patient code: "['354-06']"	key: "18|18518931|C|T" not found
+patient code: "['354-06']"	key: "18|18517615|C|T" not found
+patient code: "['134-06', '354-06']"	key: "18|18517615|C|T" not found
+patient code: "['134-06', '354-06']"	key: "18|18518931|C|T" not found
+exporting family: 650
+patient code: "['398-05o']"	key: "18|18512805|G|C" not found
+patient code: "['398-05o']"	key: "18|18517013|A|C" not found
+patient code: "['398-05o']"	key: "18|18512920|T|G" not found
+patient code: "['398-05o']"	key: "18|18517615|C|T" not found
+patient code: "['398-05o']"	key: "18|14183451|G|A" not found
+patient code: "['729-05o']"	key: "18|14183451|G|A" not found
+patient code: "['398-05o', '729-05o']"	key: "18|18517013|A|C" not found
+patient code: "['398-05o', '729-05o']"	key: "18|14183451|G|A" not found
+exporting family: 325
+patient code: "['Co851']"	key: "18|18512805|G|C" not found
+patient code: "['Co851']"	key: "18|18517013|A|C" not found
+patient code: "['Co851']"	key: "18|18517216|A|G" not found
+patient code: "['Co859']"	key: "18|14393945|G|A" not found
+patient code: "['Co859']"	key: "18|18517615|C|T" not found
+patient code: "['Co851', 'Co859']"	key: "18|18517216|A|G" not found
+exporting family: 739
+patient code: "['529-05']"	key: "18|18519925|A|G" not found
+patient code: "['529-05']"	key: "18|18519038|T|A" not found
+patient code: "['529-05']"	key: "18|18517615|C|T" not found
+exporting family: 8
+exporting family: 425
+patient code: "['Co1595']"	key: "18|18517615|C|T" not found
+patient code: "['Co1595']"	key: "18|18517384|A|G" not found
+exporting family: 409
+patient code: "['Co1254']"	key: "18|14393945|G|A" not found
+patient code: "['Co1254']"	key: "18|14393945|G|A" not found
+exporting family: 141
+patient code: "['Co305']"	key: "18|19100517|T|A" not found
+patient code: "['Co305']"	key: "18|14393945|G|A" not found
+patient code: "['Co785']"	key: "18|14393945|G|A" not found
+patient code: "['Co305', 'Co785']"	key: "18|19100517|T|A" not found
+patient code: "['Co305', 'Co785']"	key: "18|14393945|G|A" not found
+exporting family: 301
+patient code: "['Co1053']"	key: "18|11610163|G|T" not found
+patient code: "['Co1053']"	key: "18|18518734|A|C" not found
+patient code: "['Co1053']"	key: "18|18519374|C|G" not found
+exporting family: 185
+patient code: "['Co603']"	key: "18|18517013|A|C" not found
+patient code: "['Co603']"	key: "18|14393945|G|A" not found
+patient code: "['Co603']"	key: "18|18512775|G|T" not found
+patient code: "['Co669']"	key: "18|18519354|T|C" not found
+patient code: "['Co603', 'Co669']"	key: "18|18517013|A|C" not found
+exporting family: 975
+patient code: "['Co1600']"	key: "18|18517615|C|T" not found
+patient code: "['Co1600']"	key: "18|18519404|C|T" not found
+patient code: "['Co1591']"	key: "18|18519404|C|T" not found
+patient code: "['Co1591']"	key: "18|18517615|C|T" not found
+patient code: "['Co1600', 'Co1591']"	key: "18|18517615|C|T" not found
+patient code: "['Co1600', 'Co1591']"	key: "18|18519404|C|T" not found
+exporting family: 445
+patient code: "['Co1158']"	key: "18|14183451|G|A" not found
+exporting family: 478
+patient code: "['Co1274']"	key: "18|18519925|A|G" not found
+patient code: "['Co1274']"	key: "18|18516936|G|A" not found
+patient code: "['Co1274']"	key: "18|18519404|C|T" not found
+patient code: "['Co1274']"	key: "18|18517615|C|T" not found
+patient code: "['Co1207']"	key: "18|18517615|C|T" not found
+patient code: "['Co1207']"	key: "18|18518931|C|T" not found
+patient code: "['Co1207']"	key: "18|19093963|G|T" not found
+patient code: "['Co1207']"	key: "18|18519404|C|T" not found
+patient code: "['Co1274', 'Co1207']"	key: "18|18517615|C|T" not found
+patient code: "['Co1274', 'Co1207']"	key: "18|18519404|C|T" not found
+exporting family: 91
+patient code: "['Co700']"	key: "18|11610163|G|T" not found
+patient code: "['Co700']"	key: "18|11610674|-|AA" not found
+patient code: "['Co700']"	key: "18|14393945|G|A" not found
+patient code: "['Co700']"	key: "18|14376500|G|T" not found
+patient code: "['Co700']"	key: "18|18519374|C|G" not found
+patient code: "['Co454']"	key: "18|11610163|G|T" not found
+patient code: "['Co454']"	key: "18|14393945|G|A" not found
+patient code: "['Co700', 'Co454']"	key: "18|11610163|G|T" not found
+patient code: "['Co700', 'Co454']"	key: "18|14393945|G|A" not found
+exporting family: 485
+patient code: "['Co1322']"	key: "18|18519374|C|G" not found
+exporting family: 94
+exporting family: 13
+patient code: "['Co95']"	key: "18|14393945|G|A" not found
+patient code: "['Co95']"	key: "18|18519374|C|G" not found
+patient code: "['Co95']"	key: "18|14393945|G|A" not found
+patient code: "['Co95']"	key: "18|18519374|C|G" not found
+exporting family: 12
+patient code: "['Co90']"	key: "18|18518704|C|G" not found
+patient code: "['Co90']"	key: "18|18518703|A|G" not found
+patient code: "['Co90']"	key: "18|18512805|G|C" not found
+patient code: "['Co90']"	key: "18|18517013|A|C" not found
+patient code: "['Co90']"	key: "18|18518734|A|C" not found
+patient code: "['Co90']"	key: "18|14393945|G|A" not found
+patient code: "['Co90']"	key: "18|18518696|A|T" not found
+patient code: "['Co90']"	key: "18|18518695|G|T" not found
+patient code: "['Co90']"	key: "18|18519374|C|G" not found
+patient code: "['Co89']"	key: "18|18520089|T|G" not found
+patient code: "['Co89']"	key: "18|18519374|C|G" not found
+patient code: "['Co90', 'Co89']"	key: "18|14393945|G|A" not found
+patient code: "['Co90', 'Co89']"	key: "18|18519374|C|G" not found
+exporting family: 348
+patient code: "['Co846']"	key: "18|18519038|T|A" not found
+patient code: "['Co846']"	key: "18|18518931|C|T" not found
+patient code: "['Co846']"	key: "18|18519404|C|T" not found
+patient code: "['Co846']"	key: "18|14252254|C|A" not found
+patient code: "['Co846']"	key: "18|18517615|C|T" not found
+patient code: "['Co857']"	key: "18|18517914|T|G" not found
+patient code: "['Co857']"	key: "18|18517615|C|T" not found
+patient code: "['Co857']"	key: "18|18518931|C|T" not found
+patient code: "['Co857']"	key: "18|18519404|C|T" not found
+patient code: "['Co846', 'Co857']"	key: "18|18517615|C|T" not found
+patient code: "['Co846', 'Co857']"	key: "18|18518931|C|T" not found
+patient code: "['Co846', 'Co857']"	key: "18|18519404|C|T" not found
+exporting family: 849
+patient code: "['Co1765']"	key: "18|18517615|C|T" not found
+patient code: "['Co1764']"	key: "18|18519374|C|G" not found
+patient code: "['Co1764']"	key: "18|18517216|A|G" not found
+exporting family: 415
+patient code: "['Co1031']"	key: "18|18517615|C|T" not found
+patient code: "['Co1031']"	key: "18|10759338|G|T" not found
+patient code: "['Co1031']"	key: "18|18517384|A|G" not found
+patient code: "['Co1031']"	key: "18|18519404|C|T" not found
+patient code: "['Co1037']"	key: "18|18517615|C|T" not found
+patient code: "['Co1037']"	key: "18|18519038|T|A" not found
+patient code: "['Co1037']"	key: "18|18516936|G|A" not found
+patient code: "['Co1031', 'Co1037']"	key: "18|18517615|C|T" not found
+exporting family: 532
+patient code: "['Co1583']"	key: "18|18517615|C|T" not found
+patient code: "['Co1583']"	key: "18|18518931|C|T" not found
+patient code: "['Co1583']"	key: "18|18519404|C|T" not found
+patient code: "['Co1584']"	key: "18|18519479|G|C" not found
+patient code: "['Co1584']"	key: "18|18517615|C|T" not found
+patient code: "['Co1583', 'Co1584']"	key: "18|18517615|C|T" not found
+exporting family: 350
+exporting family: 296
+patient code: "['Co793']"	key: "18|14393945|G|A" not found
+patient code: "['Co793']"	key: "18|11610163|G|T" not found
+patient code: "['Co793']"	key: "18|18519374|C|G" not found
+patient code: "['Co793']"	key: "18|18517216|A|G" not found
+patient code: "['Co876']"	key: "18|18517615|C|T" not found
+patient code: "['Co793', 'Co876']"	key: "18|11610163|G|T" not found
+exporting family: 434
+patient code: "['Co1051']"	key: "18|18517914|T|G" not found
+patient code: "['Co1051']"	key: "18|18517615|C|T" not found
+patient code: "['Co1534']"	key: "18|18517914|T|G" not found
+patient code: "['Co1534']"	key: "18|18519925|A|G" not found
+patient code: "['Co1534']"	key: "18|18517615|C|T" not found
+patient code: "['Co1534']"	key: "18|10759338|G|T" not found
+patient code: "['Co1534']"	key: "18|18519404|C|T" not found
+patient code: "['Co1051', 'Co1534']"	key: "18|18517914|T|G" not found
+patient code: "['Co1051', 'Co1534']"	key: "18|18517615|C|T" not found
+exporting family: 275
