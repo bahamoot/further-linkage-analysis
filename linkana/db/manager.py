@@ -117,6 +117,7 @@ class AbstractVcfDB(LinkAnaBase):
 
         """
 
+        self.info("build VCF mutations table")
         self.__mutations = {}
         self.__patients = {}
         for connector in self.__connectors:
@@ -293,6 +294,7 @@ class DBManager(LinkAnaBase):
         return self.__abs_fam_db
 
     def __connect_summarize_annovar_db(self, csv_file, delimiter='\t'):
+        self.info("create summarize-annovar db connection")
         sa_db = SummarizeAnnovarDB()
         sa_db.open_db(csv_file, delimiter)
         self.__abs_sa_db.add_connector(sa_db)
@@ -301,6 +303,7 @@ class DBManager(LinkAnaBase):
         return self.__connect_summarize_annovar_db(csv_file, delimiter)
 
     def __connect_vcf_db(self, vcf_db_gz_file, chrom, begin_pos, end_pos):
+        self.info("create vcf db connection")
         vcf_db = VcfDB()
         vcf_db.open_db(vcf_db_gz_file, chrom, begin_pos, end_pos)
         self.__abs_vcf_db.add_connector(vcf_db)
@@ -309,6 +312,7 @@ class DBManager(LinkAnaBase):
         return self.__connect_vcf_db(vcf_db_gz_file, chrom, begin_pos, end_pos)
 
     def __connect_family_db(self, family_db_file):
+        self.info("create family db connection")
         fam_db = FamilyDB()
         fam_db.open_db(family_db_file)
         self.__abs_fam_db.add_connector(fam_db)

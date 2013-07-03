@@ -596,6 +596,7 @@ class MutationAnnotator(LinkAnaBase):
     @db_manager.setter
     def db_manager(self, value):
         self.__db_manager = value
+        self.info("connect db manager")
         if not self.__db_manager.valid_patient_codes:
             self.throw("Invalid patient codes either in Vcf database or Family data. Please check")
         self.__group_members_count = self.__db_manager.family_db.group_members_count
@@ -603,5 +604,7 @@ class MutationAnnotator(LinkAnaBase):
         self.__vcf_patients = self.__db_manager.vcf_db.patients
         self.__vcf_mutations = self.__db_manager.vcf_db.mutations
         self.__families = self.__db_manager.family_db.families
+        self.info("annotate patient group")
         self.__annotate_patient_group()
+        self.info("annoate group stat")
         self.__annotate_group_stat()

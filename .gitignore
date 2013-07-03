@@ -7,3 +7,4 @@ script/test_bin_annovar_summarize
 build/
 dist/
 LinkAna.egg-info/
+xls_out/
