@@ -1,0 +1,6 @@
+from linkana.app import export_xls_chr9_axeq_fam24
+
+export_xls_chr9_axeq_fam24()
+
+
+

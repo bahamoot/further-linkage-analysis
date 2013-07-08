@@ -21,9 +21,11 @@ CHR19_BEGIN_MARKER = 'rs8109631'
 CHR19_END_MARKER = 'rs1529958'
 BWA_VCF_TABIX_FILE = '/home/jessada/development/CMM/master_data/CRC_screen4/bwa_GATK.vcf.gz'
 MOSAIK_VCF_TABIX_FILE = '/home/jessada/development/CMM/master_data/realign/merged/Mosaik_Samtools.vcf.gz'
+AXEQ_FAM24_VCF_TABIX_FILE = '/home/jessada/development/CMM/master_data/24/merged/Axeq_fam24.vcf.gz'
 GLOBAL_WORKING_DIR = '/home/jessada/development/CMM/projects/linkage_analysis/tmp'
 SA_OUT_DIR = '/home/jessada/development/CMM/projects/linkage_analysis/data/summarize_annovar'
-FAMILY_FILE = '/home/jessada/development/CMM/projects/linkage_analysis/data/family/family_data.txt'
+GLOBAL_FAMILY_FILE = '/home/jessada/development/CMM/projects/linkage_analysis/data/family/family_data.txt'
+AXEQ_FAM24_FAMILY_FILE = '/home/jessada/development/CMM/projects/linkage_analysis/data/family/24.txt'
 XLS_OUT_DIR = '/home/jessada/development/CMM/projects/linkage_analysis/xls_out'
 
 # > > > > > > > > > > > > > patient groups < < < < < < < < < <

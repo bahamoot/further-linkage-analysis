@@ -89,13 +89,13 @@ class MutationAnnotator(LinkAnaBase):
     def __get_raw_repr(self):
         return "to be discussed"
 
-    def __export_xls(self, directory=None):
+    def __export_xls(self, directory):
         """ export mutations from all families to the given directory """
 
         for family_code in self.__families:
             self.__export_family_xls(family_code, directory)
 
-    def export_xls(self, directory=None):
+    def export_xls(self, directory):
         """ export mutations from all families to the given directory """
 
         return self.__export_xls(directory)
@@ -313,12 +313,14 @@ class MutationAnnotator(LinkAnaBase):
 
         #content
         row = 2
+        default_st = xlwt.XFStyle()
         for xls_record in self.__get_xls_records(patient_codes):
             row += 1
-            st = xlwt.XFStyle()
             if (isFloat(xls_record.maf) and (float(xls_record.maf)<=0.1)) or (xls_record.maf=='') :
                 if (xls_record.exonic_func != 'synonymous SNV'):
                     st = highlight_st
+            else:
+                st = default_st
             ws.write(row, MA_COL_0_IDX_FUNC, xls_record.func, st)
             ws.write(row, MA_COL_0_IDX_GENE, xls_record.gene, st)
             ws.write(row, MA_COL_0_IDX_EXONICFUNC, xls_record.exonic_func, st)
@@ -361,8 +363,8 @@ class MutationAnnotator(LinkAnaBase):
             ws.write(row, MA_COL_0_IDX_LJB_MT_PRED, xls_record.ljb_mt_pred, st)
             ws.write(row, MA_COL_0_IDX_LJB_GERP, xls_record.ljb_gerp, st)
             ws.write(row, MA_COL_0_IDX_CHROM, xls_record.chrom, st)
-            ws.write(row, MA_COL_0_IDX_START, xls_record.start_pos, st)
-            ws.write(row, MA_COL_0_IDX_END, xls_record.end_pos, st)
+            ws.write(row, MA_COL_0_IDX_START, int(xls_record.start_pos), st)
+            ws.write(row, MA_COL_0_IDX_END, int(xls_record.end_pos), st)
             ws.write(row, MA_COL_0_IDX_REF, xls_record.ref, st)
             ws.write(row, MA_COL_0_IDX_OBS, xls_record.obs, st)
             ws.write(row, MA_COL_0_IDX_ZYGOSITY, xls_record.zygosity, st)
@@ -390,7 +392,7 @@ class MutationAnnotator(LinkAnaBase):
         ws.set_horz_split_pos(3)
         ws.set_remove_splits(True)
 
-    def __export_family_xls(self, family_code, directory=None):
+    def __export_family_xls(self, family_code, directory):
         """ export mutations for one family to the given directory """
 
         self.info("exporting family: " + family_code)
@@ -416,11 +418,11 @@ class MutationAnnotator(LinkAnaBase):
                              )
         wb.save(output_file)
 
-    def export_family_xls(self, family_code, directory=None):
+    def export_family_xls(self, family_code, directory):
         """ export mutations for one family to the given directory """
         return self.__export_family_xls(family_code, directory)
 
-    def __get_xls_records(self, patient_codes):
+    def __get_xls_records(self, patient_codes, exom_only=False):
         """ prepare data for one data sheet """
         xls_records = []
         sa_key_fmt = "{vcf_mutation_key}|{ref}|{obs}"
@@ -495,6 +497,9 @@ class MutationAnnotator(LinkAnaBase):
                 else:
                     self.info('patient code: "' + str(patient_codes) + '"\tkey: "' + sa_mutation_key + '" not found')
         return sorted(xls_records, key=lambda record: record.maf, reverse=True)
+
+    def get_xls_records(self, patient_codes, exom_only=False):
+        return self.__get_xls_records(patient_codes, exom_only)
 
     def __annotate_patient_group(self):
         """ to identify patient group in patient record """

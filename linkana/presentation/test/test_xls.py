@@ -223,6 +223,21 @@ class TestMutationAnnotator(SafePresentationTester):
                          0.55,
                          'Incorrect type1 genotype percentage')
 
+    def test_get_xls_record_genome(self):
+        """ to check if the exporting content is correctly fetched """
+
+        self.init_test(self.current_func_name)
+        self.info('')
+        self.info('')
+        self.info('')
+        self.info('')
+        self.info('')
+        self.info('*************************** Have to test this **********************************')
+        self.info('')
+        self.info('')
+        self.info('')
+        self.info('')
+
     def test_export_xls1(self):
         """ to check if mutation annotation from one family is correctly exported """
 

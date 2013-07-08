@@ -145,7 +145,7 @@ class AbstractVcfDB(LinkAnaBase):
                 self.__mutations[record.key] = record
         self.__need_update = False
 
-    def common_mutations(self, patient_codes):
+    def common_mutations(self, patient_codes, exom_only=False):
         """
 
         return dict of mutations that are found in all patient
