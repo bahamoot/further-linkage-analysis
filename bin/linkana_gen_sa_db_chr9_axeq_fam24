@@ -1,6 +1,0 @@
-from linkana.app import generate_summarize_annovar_db_chr9_axeq_fam24
-
-generate_summarize_annovar_db_chr9_axeq_fam24()
-
-
-

@@ -1,9 +1,9 @@
 import os
 import sys
 from linkana.settings import REF_DB_FILE_PREFIX
-from linkana.settings import BWA_VCF_TABIX_FILE
-from linkana.settings import MOSAIK_VCF_TABIX_FILE
-from linkana.settings import AXEQ_FAM24_VCF_TABIX_FILE
+from linkana.settings import UPPSALA_BWA_VCF_TABIX_FILE
+from linkana.settings import UPPSALA_MOSAIK_VCF_TABIX_FILE
+from linkana.settings import AXEQ_VCF_TABIX_FILE
 from linkana.settings import GLOBAL_WORKING_DIR
 from linkana.settings import SA_OUT_DIR
 from linkana.settings import CHR6_BEGIN_MARKER
@@ -12,98 +12,98 @@ from linkana.settings import CHR18_BEGIN_MARKER
 from linkana.settings import CHR18_END_MARKER
 from linkana.settings import CHR19_BEGIN_MARKER
 from linkana.settings import CHR19_END_MARKER
-from linkana.settings import GLOBAL_FAMILY_FILE
-from linkana.settings import AXEQ_FAM24_FAMILY_FILE
+from linkana.settings import UPPSALA_FAMILY_FILE
+from linkana.settings import AXEQ_FAMILY_FILE
 from linkana.settings import XLS_OUT_DIR
 from linkana.misc.script import get_region_chrom
 from linkana.misc.script import summarize_annovar
 from linkana.presentation.xls import MutationAnnotator
 from linkana.db.manager import DBManager
 
-def export_xls_chr6_bwa():
-    sa_tab_csv_file = os.path.join(SA_OUT_DIR, 'chr6_bwa.tab.csv')
-    xls_out_dir = os.path.join(XLS_OUT_DIR, 'chr6_bwa')
+def export_xls_chr6_uppsala_bwa():
+    sa_tab_csv_file = os.path.join(SA_OUT_DIR, 'chr6_uppsala_bwa.tab.csv')
+    xls_out_dir = os.path.join(XLS_OUT_DIR, 'chr6_uppsala_bwa')
     export_xls('6',
                CHR6_BEGIN_MARKER,
                CHR6_END_MARKER,
                sa_tab_csv_file,
-               BWA_VCF_TABIX_FILE,
-               GLOBAL_FAMILY_FILE,
+               UPPSALA_BWA_VCF_TABIX_FILE,
+               UPPSALA_FAMILY_FILE,
                xls_out_dir,
                )
 
-def export_xls_chr18_bwa():
-    sa_tab_csv_file = os.path.join(SA_OUT_DIR, 'chr18_bwa.tab.csv')
-    xls_out_dir = os.path.join(XLS_OUT_DIR, 'chr18_bwa')
+def export_xls_chr18_uppsala_bwa():
+    sa_tab_csv_file = os.path.join(SA_OUT_DIR, 'chr18_uppsala_bwa.tab.csv')
+    xls_out_dir = os.path.join(XLS_OUT_DIR, 'chr18_uppsala_bwa')
     export_xls('18',
                CHR18_BEGIN_MARKER,
                CHR18_END_MARKER,
                sa_tab_csv_file,
-               BWA_VCF_TABIX_FILE,
-               GLOBAL_FAMILY_FILE,
+               UPPSALA_BWA_VCF_TABIX_FILE,
+               UPPSALA_FAMILY_FILE,
                xls_out_dir,
                )
 
-def export_xls_chr19_bwa():
-    sa_tab_csv_file = os.path.join(SA_OUT_DIR, 'chr19_bwa.tab.csv')
-    xls_out_dir = os.path.join(XLS_OUT_DIR, 'chr19_bwa')
+def export_xls_chr19_uppsala_bwa():
+    sa_tab_csv_file = os.path.join(SA_OUT_DIR, 'chr19_uppsala_bwa.tab.csv')
+    xls_out_dir = os.path.join(XLS_OUT_DIR, 'chr19_uppsala_bwa')
     export_xls('19',
                CHR19_BEGIN_MARKER,
                CHR19_END_MARKER,
                sa_tab_csv_file,
-               BWA_VCF_TABIX_FILE,
-               GLOBAL_FAMILY_FILE,
+               UPPSALA_BWA_VCF_TABIX_FILE,
+               UPPSALA_FAMILY_FILE,
                xls_out_dir,
                )
 
-def export_xls_chr6_mosaik():
-    sa_tab_csv_file = os.path.join(SA_OUT_DIR, 'chr6_mosaik.tab.csv')
-    xls_out_dir = os.path.join(XLS_OUT_DIR, 'chr6_mosaik')
+def export_xls_chr6_uppsala_mosaik():
+    sa_tab_csv_file = os.path.join(SA_OUT_DIR, 'chr6_uppsala_mosaik.tab.csv')
+    xls_out_dir = os.path.join(XLS_OUT_DIR, 'chr6_uppsala_mosaik')
     export_xls('6',
                CHR6_BEGIN_MARKER,
                CHR6_END_MARKER,
                sa_tab_csv_file,
-               MOSAIK_VCF_TABIX_FILE,
-               GLOBAL_FAMILY_FILE,
+               UPPSALA_MOSAIK_VCF_TABIX_FILE,
+               UPPSALA_FAMILY_FILE,
                xls_out_dir,
                report_code='chr6_daniel',
                )
 
-def export_xls_chr18_mosaik():
-    sa_tab_csv_file = os.path.join(SA_OUT_DIR, 'chr18_mosaik.tab.csv')
-    xls_out_dir = os.path.join(XLS_OUT_DIR, 'chr18_mosaik')
+def export_xls_chr18_uppsala_mosaik():
+    sa_tab_csv_file = os.path.join(SA_OUT_DIR, 'chr18_uppsala_mosaik.tab.csv')
+    xls_out_dir = os.path.join(XLS_OUT_DIR, 'chr18_uppsala_mosaik')
     export_xls('18',
                CHR18_BEGIN_MARKER,
                CHR18_END_MARKER,
                sa_tab_csv_file,
-               MOSAIK_VCF_TABIX_FILE,
-               GLOBAL_FAMILY_FILE,
+               UPPSALA_MOSAIK_VCF_TABIX_FILE,
+               UPPSALA_FAMILY_FILE,
                xls_out_dir,
                report_code='chr18_daniel',
                )
 
-def export_xls_chr19_mosaik():
-    sa_tab_csv_file = os.path.join(SA_OUT_DIR, 'chr19_mosaik.tab.csv')
-    xls_out_dir = os.path.join(XLS_OUT_DIR, 'chr19_mosaik')
+def export_xls_chr19_uppsala_mosaik():
+    sa_tab_csv_file = os.path.join(SA_OUT_DIR, 'chr19_uppsala_mosaik.tab.csv')
+    xls_out_dir = os.path.join(XLS_OUT_DIR, 'chr19_uppsala_mosaik')
     export_xls('19',
                CHR19_BEGIN_MARKER,
                CHR19_END_MARKER,
                sa_tab_csv_file,
-               MOSAIK_VCF_TABIX_FILE,
-               GLOBAL_FAMILY_FILE,
+               UPPSALA_MOSAIK_VCF_TABIX_FILE,
+               UPPSALA_FAMILY_FILE,
                xls_out_dir,
                report_code='chr19_daniel',
                )
 
-def export_xls_chr9_axeq_fam24():
-    sa_tab_csv_file = os.path.join(SA_OUT_DIR, 'chr9_axeq_fam24.tab.csv')
-    xls_out_dir = os.path.join(XLS_OUT_DIR, 'chr9_axeq_fam24')
+def export_xls_chr9_axeq():
+    sa_tab_csv_file = os.path.join(SA_OUT_DIR, 'chr9_axeq.tab.csv')
+    xls_out_dir = os.path.join(XLS_OUT_DIR, 'chr9_axeq')
     export_xls_pos('9',
                    '1',
                    '106000000',
                    sa_tab_csv_file,
-                   AXEQ_FAM24_VCF_TABIX_FILE,
-                   AXEQ_FAM24_FAMILY_FILE,
+                   AXEQ_VCF_TABIX_FILE,
+                   AXEQ_FAMILY_FILE,
                    xls_out_dir,
                    report_code='chr9_axeq',
                    )
@@ -153,67 +153,67 @@ def export_xls_pos(chrom,
     ma.db_manager = db_man
     ma.export_xls(output_dir)
 
-def generate_summarize_annovar_db_chr6_bwa():
+def generate_summarize_annovar_db_chr6_uppsala_bwa():
     generate_summarize_annovar_db('6',
                                   CHR6_BEGIN_MARKER,
                                   CHR6_END_MARKER,
-                                  BWA_VCF_TABIX_FILE,
+                                  UPPSALA_BWA_VCF_TABIX_FILE,
                                   GLOBAL_WORKING_DIR,
-                                  'chr6_bwa',
+                                  'chr6_uppsala_bwa',
                                   )
 
-def generate_summarize_annovar_db_chr18_bwa():
+def generate_summarize_annovar_db_chr18_uppsala_bwa():
     generate_summarize_annovar_db('18',
                                   CHR18_BEGIN_MARKER,
                                   CHR18_END_MARKER,
-                                  BWA_VCF_TABIX_FILE,
+                                  UPPSALA_BWA_VCF_TABIX_FILE,
                                   GLOBAL_WORKING_DIR,
-                                  'chr18_bwa',
+                                  'chr18_uppsala_bwa',
                                   )
 
-def generate_summarize_annovar_db_chr19_bwa():
+def generate_summarize_annovar_db_chr19_uppsala_bwa():
     generate_summarize_annovar_db('19',
                                   CHR19_BEGIN_MARKER,
                                   CHR19_END_MARKER,
-                                  BWA_VCF_TABIX_FILE,
+                                  UPPSALA_BWA_VCF_TABIX_FILE,
                                   GLOBAL_WORKING_DIR,
-                                  'chr19_bwa',
+                                  'chr19_uppsala_bwa',
                                   )
 
-def generate_summarize_annovar_db_chr6_mosaik():
+def generate_summarize_annovar_db_chr6_uppsala_mosaik():
     generate_summarize_annovar_db('6',
                                   CHR6_BEGIN_MARKER,
                                   CHR6_END_MARKER,
-                                  MOSAIK_VCF_TABIX_FILE,
+                                  UPPSALA_MOSAIK_VCF_TABIX_FILE,
                                   GLOBAL_WORKING_DIR,
-                                  'chr6_mosaik',
+                                  'chr6_uppsala_mosaik',
                                   )
 
-def generate_summarize_annovar_db_chr18_mosaik():
+def generate_summarize_annovar_db_chr18_uppsala_mosaik():
     generate_summarize_annovar_db('18',
                                   CHR18_BEGIN_MARKER,
                                   CHR18_END_MARKER,
-                                  MOSAIK_VCF_TABIX_FILE,
+                                  UPPSALA_MOSAIK_VCF_TABIX_FILE,
                                   GLOBAL_WORKING_DIR,
-                                  'chr18_mosaik',
+                                  'chr18_uppsala_mosaik',
                                   )
 
-def generate_summarize_annovar_db_chr19_mosaik():
+def generate_summarize_annovar_db_chr19_uppsala_mosaik():
     generate_summarize_annovar_db('19',
                                   CHR19_BEGIN_MARKER,
                                   CHR19_END_MARKER,
-                                  MOSAIK_VCF_TABIX_FILE,
+                                  UPPSALA_MOSAIK_VCF_TABIX_FILE,
                                   GLOBAL_WORKING_DIR,
-                                  'chr19_mosaik',
+                                  'chr19_uppsala_mosaik',
                                   )
 
-def generate_summarize_annovar_db_chr9_axeq_fam24():
+def generate_summarize_annovar_db_chr9_axeq():
     summarize_annovar('9',
                       '1',
                       '106000000',
-                      AXEQ_FAM24_VCF_TABIX_FILE,
+                      AXEQ_VCF_TABIX_FILE,
                       GLOBAL_WORKING_DIR,
-                      'chr9_axeq_fam24',
+                      'chr9_axeq',
                       )
 
 #def generate_summarize_annovar_db_pos(chrom,

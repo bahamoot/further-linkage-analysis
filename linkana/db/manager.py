@@ -157,8 +157,10 @@ class AbstractVcfDB(LinkAnaBase):
         for mutation_key in self.mutations:
             mutation = self.mutations[mutation_key]
             common_mutation = True
+            print mutation_key
             for patient_code in patient_codes:
                 zygosity = mutation.genotype_fields[patient_code].zygosity
+                print mutation.genotype_fields[patient_code]
                 if zygosity == ZYGOSITY_UNKNOWN:
                     common_mutation = False
                     break
@@ -294,7 +296,7 @@ class DBManager(LinkAnaBase):
         return self.__abs_fam_db
 
     def __connect_summarize_annovar_db(self, csv_file, delimiter='\t'):
-        self.info("create summarize-annovar db connection")
+        self.info("create summarize-annovar db connection to " + csv_file)
         sa_db = SummarizeAnnovarDB()
         sa_db.open_db(csv_file, delimiter)
         self.__abs_sa_db.add_connector(sa_db)
@@ -303,7 +305,7 @@ class DBManager(LinkAnaBase):
         return self.__connect_summarize_annovar_db(csv_file, delimiter)
 
     def __connect_vcf_db(self, vcf_db_gz_file, chrom, begin_pos, end_pos):
-        self.info("create vcf db connection")
+        self.info("create vcf db connection to " + vcf_db_gz_file)
         vcf_db = VcfDB()
         vcf_db.open_db(vcf_db_gz_file, chrom, begin_pos, end_pos)
         self.__abs_vcf_db.add_connector(vcf_db)
@@ -312,7 +314,7 @@ class DBManager(LinkAnaBase):
         return self.__connect_vcf_db(vcf_db_gz_file, chrom, begin_pos, end_pos)
 
     def __connect_family_db(self, family_db_file):
-        self.info("create family db connection")
+        self.info("create family db connection to " + family_db_file)
         fam_db = FamilyDB()
         fam_db.open_db(family_db_file)
         self.__abs_fam_db.add_connector(fam_db)
@@ -347,5 +349,6 @@ class DBManager(LinkAnaBase):
         for family_code in families:
             for patient_code in families[family_code].patient_codes:
                 if patient_code not in vcf_patients:
+                    self.info("patient code " + patient_code + " not found")
                     return False
         return True

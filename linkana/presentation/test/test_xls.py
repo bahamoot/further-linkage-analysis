@@ -223,10 +223,27 @@ class TestMutationAnnotator(SafePresentationTester):
                          0.55,
                          'Incorrect type1 genotype percentage')
 
-    def test_get_xls_record_genome(self):
+    def test_get_xls_records_genome(self):
         """ to check if the exporting content is correctly fetched """
 
         self.init_test(self.current_func_name)
+#        ma = self.__create_xls_instance()
+#        test_sa_file = os.path.join(self.data_dir,
+#                                    self.current_func_name + '.tab.csv')
+#        test_vcf_file = os.path.join(self.data_dir,
+#                                     self.current_func_name + '.vcf.gz')
+#        test_chrom = 18
+#        test_begin_pos = 12750499
+#        test_end_pos = 12793745
+#        test_fam_file = os.path.join(self.data_dir,
+#                                     self.current_func_name + '.txt')
+#        db_man = DBManager()
+#        db_man.connect_summarize_annovar_db(test_sa_file)
+#        db_man.connect_vcf_db(test_vcf_file, test_chrom, test_begin_pos, test_end_pos)
+#        db_man.connect_family_db(test_fam_file)
+#
+#        ma.db_manager = db_man
+
         self.info('')
         self.info('')
         self.info('')
@@ -238,6 +255,7 @@ class TestMutationAnnotator(SafePresentationTester):
         self.info('')
         self.info('')
 
+    @unittest.skip("to much txt print out")
     def test_export_xls1(self):
         """ to check if mutation annotation from one family is correctly exported """
 
@@ -388,3 +406,4 @@ class TestMutationAnnotator(SafePresentationTester):
         ma.db_manager = db_man
         ma.export_family_xls('918', self.working_dir)
         ma.export_family_xls('8', self.working_dir)
+
