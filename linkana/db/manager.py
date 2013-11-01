@@ -2,10 +2,10 @@ import linkana.settings as lka_const
 import gc
 from linkana.template import LinkAnaBase
 from linkana.db.connectors import SummarizeAnnovarDB
-from linkana.db.connectors import VcfDB
+from linkana.db.connection.vcfdb import VcfDB
 from linkana.db.connectors import FamilyDB
-from linkana.db.connectors import ZYGOSITY_UNKNOWN
-from linkana.db.connectors import ZYGOSITY_NONE
+from linkana.db.connection.vcfdb import ZYGOSITY_UNKNOWN
+from linkana.db.connection.vcfdb import ZYGOSITY_NONE
 from linkana.settings import TYPE1_ALL
 from linkana.settings import TYPE2_RECTAL
 from linkana.settings import TYPE2_NON_RECTAL
@@ -329,13 +329,7 @@ class DBManager(LinkAnaBase):
                          end_pos,
                          patient_codes=None,
                          ):
-        info = []
         self.info("creating vcf db connection to " + vcf_db_gz_file)
-        info.append("chrom: " + str(chrom))
-        info.append("begin pos: " + str(begin_pos))
-        info.append("end pos: " + str(end_pos))
-        info.append("\t\tpatient codes: " + str(patient_codes))
-        self.info("[Params] " + "\t".join(info))
         #self.info("\t\tchrom: " + str(chrom) + "\tbegin pos: " + str(begin_pos) + "\tend_pos:" + str(end_pos))
         vcf_db = VcfDB()
         vcf_db.open_db(vcf_db_gz_file,

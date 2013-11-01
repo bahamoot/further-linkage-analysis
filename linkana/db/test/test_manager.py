@@ -3,7 +3,7 @@ import csv
 import linkana.settings as lka_const
 from linkana.db.test.template import SafeDBTester
 from linkana.db.connectors import SummarizeAnnovarDB
-from linkana.db.connectors import VcfDB
+from linkana.db.connection.vcfdb import VcfDB
 from linkana.db.connectors import FamilyDB
 from linkana.db.manager import AbstractSummarizeAnnovarDB
 from linkana.db.manager import AbstractVcfDB
