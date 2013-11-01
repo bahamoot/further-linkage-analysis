@@ -10,7 +10,7 @@ This module is all about constant value that are used in this application
 PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
 
 SCRIPT_DIR = os.path.join(PROJECT_ROOT, 'script')
-WRAPPED_SUMMARIZE_ANNOVAR = os.path.join(SCRIPT_DIR, '/home/jessada/development/CMM/projects/linkage_analysis/script/wrapped_summarize_annovar')
+WRAPPED_SUMMARIZE_ANNOVAR = os.path.join(SCRIPT_DIR, '/home/jessada/development/projects/CMM_linkage_analysis/script/wrapped_summarize_annovar')
 
 REF_DB_FILE_PREFIX = '/home/jessada/development/scilifelab/tools/annovar/humandb/hg19_snp137'
 CHR6_BEGIN_MARKER = 'rs1001015'
@@ -19,14 +19,16 @@ CHR18_BEGIN_MARKER = 'rs1013785'
 CHR18_END_MARKER = 'rs1010800'
 CHR19_BEGIN_MARKER = 'rs8109631'
 CHR19_END_MARKER = 'rs1529958'
-UPPSALA_BWA_VCF_TABIX_FILE = '/home/jessada/development/CMM/master_data/CRC_screen4/bwa_GATK.vcf.gz'
-UPPSALA_MOSAIK_VCF_TABIX_FILE = '/home/jessada/development/CMM/master_data/realign/merged/Mosaik_Samtools.vcf.gz'
-AXEQ_VCF_TABIX_FILE = '/home/jessada/development/CMM/master_data/axeq/merged/Axeq.vcf.gz'
-GLOBAL_WORKING_DIR = '/home/jessada/development/CMM/projects/linkage_analysis/tmp'
-SA_OUT_DIR = '/home/jessada/development/CMM/projects/linkage_analysis/data/summarize_annovar'
-UPPSALA_FAMILY_FILE = '/home/jessada/development/CMM/projects/linkage_analysis/data/family/uppsala_family.txt'
-AXEQ_FAMILY_FILE = '/home/jessada/development/CMM/projects/linkage_analysis/data/family/axeq_family.txt'
-XLS_OUT_DIR = '/home/jessada/development/CMM/projects/linkage_analysis/xls_out'
+UPPSALA_BWA_VCF_TABIX_FILE = '/home/jessada/development/master_data/CMM_b2011117/CRC_screen4/bwa_GATK.vcf.gz'
+UPPSALA_MOSAIK_VCF_TABIX_FILE = '/home/jessada/development/master_data/CMM_b2011117/realign/merged/Mosaik_Samtools.vcf.gz'
+AXEQ_VCF_TABIX_FILE = '/home/jessada/development/master_data/CMM_b2012247/merged/Axeq.vcf.gz'
+SCILIFE_VCF_TABIX_FILE = '/home/jessada/development/master_data/CMM_b2011157/vcf/merged/scilife.vcf.gz'
+GLOBAL_WORKING_DIR = '/home/jessada/development/projects/CMM_linkage_analysis/tmp'
+SA_DB_DIR = '/home/jessada/development/master_data/linkana/summarize_annovar'
+UPPSALA_FAMILY_FILE = '/home/jessada/development/master_data/linkana/family/uppsala_family.txt'
+AXEQ_FAMILY_FILE = '/home/jessada/development/master_data/linkana/family/axeq_family.txt'
+SCILIFE_FAMILY_FILE = '/home/jessada/development/master_data/linkana/family/scilife_family.txt'
+XLS_OUT_DIR = '/home/jessada/development/projects/CMM_linkage_analysis/xls_out'
 
 # > > > > > > > > > > > > > patient groups < < < < < < < < < <
 TYPE1_ALL = 'ALL'

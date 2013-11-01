@@ -255,7 +255,7 @@ class TestMutationAnnotator(SafePresentationTester):
         self.info('')
         self.info('')
 
-    @unittest.skip("to much txt print out")
+    @unittest.skip("too much txt print out")
     def test_export_xls1(self):
         """ to check if mutation annotation from one family is correctly exported """
 
@@ -407,3 +407,27 @@ class TestMutationAnnotator(SafePresentationTester):
         ma.export_family_xls('918', self.working_dir)
         ma.export_family_xls('8', self.working_dir)
 
+    def test_export_family_with_exon_filter(self):
+        self.individual_debug = True
+        self.init_test(self.current_func_name)
+        ma = self.__create_xls_instance()
+        test_sa_file = os.path.join(self.data_dir,
+                                    self.current_func_name + '.tab.csv')
+        test_vcf_file = os.path.join(self.data_dir,
+                                     self.current_func_name + '.vcf.gz')
+        test_chrom = ""
+        test_begin_pos = 12512309
+        test_end_pos = 14513570
+        test_fam_file = os.path.join(self.data_dir,
+                                     self.current_func_name + '.txt')
+        db_man = DBManager()
+        self.dbg("export family xls4: before connect summarize annovar")
+        db_man.connect_summarize_annovar_db(test_sa_file)
+        self.dbg("export family xls4: before connect vcf db")
+        db_man.connect_vcf_db(test_vcf_file, test_chrom, test_begin_pos, test_end_pos)
+        self.dbg("export family xls4: before connect family db")
+        db_man.connect_family_db(test_fam_file)
+
+        ma.db_manager = db_man
+        ma.export_family_xls('91', self.working_dir)
+        ma.export_family_xls('296', self.working_dir)

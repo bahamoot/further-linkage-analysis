@@ -17,7 +17,13 @@ def exec_sh(cmd):
         raise Exception("Error found during execute command '%s' with error code %d" % (cmd, p))
     return p
 
-def summarize_annovar(chrom, begin_pos, end_pos, tabix_file, working_dir, out_prefix):
+def summarize_annovar(tabix_file,
+                      working_dir,
+                      out_prefix,
+                      chrom='""',
+                      begin_pos='""',
+                      end_pos='""',
+                      ):
     cmd = []
     cmd.append(lka_const.WRAPPED_SUMMARIZE_ANNOVAR)
     cmd.append(chrom)

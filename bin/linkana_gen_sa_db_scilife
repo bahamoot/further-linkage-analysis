@@ -1,0 +1,6 @@
+from linkana.app import generate_summarize_annovar_db_scilife
+
+generate_summarize_annovar_db_scilife()
+
+
+

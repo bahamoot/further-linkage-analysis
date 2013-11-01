@@ -38,7 +38,7 @@ def find_data_files(srcdir, *wildcards, **kw):
     return file_list
 
 #csv_files = find_data_files('data/', '*.csv')
-all_data_files = find_data_files('data/', '*.*')
+#all_data_files = find_data_files('data/', '*.*')
 #all_data_files = find_data_files('script/', '*.*')
 
 setup(
@@ -51,26 +51,28 @@ setup(
               'linkana.presentation',
               'linkana.db',
               ],
-    scripts=['bin/linkana_gen_sa_db_chr6_bwa',
-             'bin/linkana_gen_sa_db_chr18_bwa',
-             'bin/linkana_gen_sa_db_chr19_bwa',
-             'bin/linkana_gen_sa_db_chr6_mosaik',
-             'bin/linkana_gen_sa_db_chr18_mosaik',
-             'bin/linkana_gen_sa_db_chr19_mosaik',
+    scripts=['bin/linkana_gen_sa_db_chr6_uppsala_bwa',
+             'bin/linkana_gen_sa_db_chr18_uppsala_bwa',
+             'bin/linkana_gen_sa_db_chr19_uppsala_bwa',
+             'bin/linkana_gen_sa_db_chr6_uppsala_mosaik',
+             'bin/linkana_gen_sa_db_chr18_uppsala_mosaik',
+             'bin/linkana_gen_sa_db_chr19_uppsala_mosaik',
              'bin/linkana_gen_sa_db_chr9_axeq',
-             'bin/linkana_export_xls_chr6_bwa',
-             'bin/linkana_export_xls_chr18_bwa',
-             'bin/linkana_export_xls_chr19_bwa',
-             'bin/linkana_export_xls_chr6_mosaik',
-             'bin/linkana_export_xls_chr18_mosaik',
-             'bin/linkana_export_xls_chr19_mosaik',
+             'bin/linkana_gen_sa_db_scilife',
+             'bin/linkana_export_xls_chr6_uppsala_bwa',
+             'bin/linkana_export_xls_chr18_uppsala_bwa',
+             'bin/linkana_export_xls_chr19_uppsala_bwa',
+             'bin/linkana_export_xls_chr6_uppsala_mosaik',
+             'bin/linkana_export_xls_chr18_uppsala_mosaik',
+             'bin/linkana_export_xls_chr19_uppsala_mosaik',
              'bin/linkana_export_xls_chr9_axeq',
+             'bin/linkana_export_xls_scilife',
 #             'script/wrapped_summarize_annovar',
              ],
     package=['LinkAna'],
 #    package_data={'': ['data/CBV/*.cbv']
 #                  },
-    data_files=all_data_files,
+#    data_files=all_data_files,
 #    data_files=[('data/family0008_chr18/', ['data/family0008_chr18/*.csv',
 #                                            ]),
 #                ],

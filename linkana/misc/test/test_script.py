@@ -92,12 +92,12 @@ class TestScript(SafeMiscTester):
                                        self.current_func_name + '.vcf.gz')
         test_working_dir = self.working_dir
         test_out_prefix = 'test_summarize_annovar1_out'
-        summarize_annovar(test_chrom,
-                          test_begin_pos,
-                          test_end_pos,
-                          test_tabix_file,
+        summarize_annovar(test_tabix_file,
                           test_working_dir,
                           test_out_prefix,
+                          test_chrom,
+                          test_begin_pos,
+                          test_end_pos,
                           )
         expected_tmp_avdb_file = os.path.join(self.data_dir,
                                               'expected_tmp_avdb1')
@@ -132,12 +132,12 @@ class TestScript(SafeMiscTester):
                                        self.current_func_name + '.vcf.gz')
         test_working_dir = self.working_dir
         test_out_prefix = 'test_summarize_annovar2_out'
-        summarize_annovar(test_chrom,
-                          test_begin_pos,
-                          test_end_pos,
-                          test_tabix_file,
+        summarize_annovar(test_tabix_file,
                           test_working_dir,
                           test_out_prefix,
+                          test_chrom,
+                          test_begin_pos,
+                          test_end_pos,
                           )
         expected_tmp_avdb_file = os.path.join(self.data_dir,
                                               'expected_tmp_avdb2')
@@ -155,6 +155,41 @@ class TestScript(SafeMiscTester):
                         "avdb file is incorrectly produced")
         expected_tab_csv_file = os.path.join(self.data_dir,
                                              'expected_tab_csv2')
+        tab_csv_file = os.path.join(test_working_dir,
+                                    test_out_prefix + '.tab.csv')
+        self.assertTrue(filecmp.cmp(tab_csv_file, 
+                                    expected_tab_csv_file),
+                        "incorrect csv output file")
+
+    @unittest.skip("temporary disable due to long testing time")
+    def test_summarize_annovar3(self):
+        self.individual_debug = True
+        """ to test if summarize can run for one whole vcf file """
+        self.init_test(self.current_func_name)
+        test_tabix_file = os.path.join(self.data_dir,
+                                       self.current_func_name + '.vcf.gz')
+        test_working_dir = self.working_dir
+        test_out_prefix = 'test_summarize_annovar3_out'
+        summarize_annovar(test_tabix_file,
+                          test_working_dir,
+                          test_out_prefix,
+                          )
+        expected_tmp_avdb_file = os.path.join(self.data_dir,
+                                              'expected_tmp_avdb3')
+        tmp_avdb_file = os.path.join(test_working_dir,
+                                     test_out_prefix + '_tmp_avdb')
+        self.assertTrue(filecmp.cmp(tmp_avdb_file, 
+                                    expected_tmp_avdb_file),
+                        "avdb file is incorrectly prepared")
+        expected_avdb_file = os.path.join(self.data_dir,
+                                          'expected_avdb3')
+        avdb_file = os.path.join(test_working_dir,
+                                 test_out_prefix + '.avdb')
+        self.assertTrue(filecmp.cmp(avdb_file, 
+                                    expected_avdb_file),
+                        "avdb file is incorrectly produced")
+        expected_tab_csv_file = os.path.join(self.data_dir,
+                                             'expected_tab_csv3')
         tab_csv_file = os.path.join(test_working_dir,
                                     test_out_prefix + '.tab.csv')
         self.assertTrue(filecmp.cmp(tab_csv_file, 

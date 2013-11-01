@@ -76,8 +76,9 @@ class MutationAnnotator(LinkAnaBase):
 
     """
 
-    def __init__(self, report_code='ma'):
+    def __init__(self, report_code='ma', exom_only=False):
         LinkAnaBase.__init__(self)
+        self.__exom_only=exom_only
         self.__report_code = report_code
 
     def __str__(self):
@@ -422,7 +423,7 @@ class MutationAnnotator(LinkAnaBase):
         """ export mutations for one family to the given directory """
         return self.__export_family_xls(family_code, directory)
 
-    def __get_xls_records(self, patient_codes, exom_only=False):
+    def __get_xls_records(self, patient_codes):
         """ prepare data for one data sheet """
         xls_records = []
         sa_key_fmt = "{vcf_mutation_key}|{ref}|{obs}"
@@ -432,13 +433,18 @@ class MutationAnnotator(LinkAnaBase):
             gt = genotype_field.raw_gt.split('/')
             annovar_mutations = genotype_field.annovar_mutations
             annovar_idx = 0
+            sa_mutation_key = sa_key_fmt.format(vcf_mutation_key=vcf_mutation_key,
+                                                ref=annovar_mutations[annovar_idx]['ref'],
+                                                obs=annovar_mutations[annovar_idx]['alt'])
             if gt[0] != '0':
-                sa_mutation_key = sa_key_fmt.format(vcf_mutation_key=vcf_mutation_key,
-                                                    ref=annovar_mutations[annovar_idx]['ref'],
-                                                    obs=annovar_mutations[annovar_idx]['alt'])
+#                sa_mutation_key = sa_key_fmt.format(vcf_mutation_key=vcf_mutation_key,
+#                                                    ref=annovar_mutations[annovar_idx]['ref'],
+#                                                    obs=annovar_mutations[annovar_idx]['alt'])
                 annovar_idx += 1
                 if sa_mutation_key in self.__sa_mutations:
                     mutation = self.__sa_mutations[sa_mutation_key]
+                    if mutation.func != "exonic":
+                        continue
                     mutation.zygosity = genotype_field.zygosity
                     idx = int(gt[0])-1
                     mutation.stat_type1_ac = vcf_mutation.stats_type1_ac[idx]
@@ -463,14 +469,16 @@ class MutationAnnotator(LinkAnaBase):
                     mutation.stat_type4_gp = vcf_mutation.stats_type4_gp
                     xls_records.append(mutation)
                 else:
-                    self.info('patient code: "' + str(patient_codes) + '"\tkey: "' + sa_mutation_key + '" not found')
+                    self.warn('patient code: "' + str(patient_codes) + '"\tkey: "' + sa_mutation_key + '" not found')
 
             if (gt[1] != '0') and (gt[0] != gt[1]):
-                sa_mutation_key = sa_key_fmt.format(vcf_mutation_key=vcf_mutation_key,
-                                                    ref=annovar_mutations[annovar_idx]['ref'],
-                                                    obs=annovar_mutations[annovar_idx]['alt'])
+#                sa_mutation_key = sa_key_fmt.format(vcf_mutation_key=vcf_mutation_key,
+#                                                    ref=annovar_mutations[annovar_idx]['ref'],
+#                                                    obs=annovar_mutations[annovar_idx]['alt'])
                 if sa_mutation_key in self.__sa_mutations:
                     mutation = self.__sa_mutations[sa_mutation_key]
+                    if mutation.func != "exonic":
+                        continue
                     mutation.zygosity = genotype_field.zygosity
                     idx = int(gt[1])-1
                     mutation.stat_type1_ac = vcf_mutation.stats_type1_ac[idx]
@@ -498,8 +506,8 @@ class MutationAnnotator(LinkAnaBase):
                     self.info('patient code: "' + str(patient_codes) + '"\tkey: "' + sa_mutation_key + '" not found')
         return sorted(xls_records, key=lambda record: record.maf, reverse=True)
 
-    def get_xls_records(self, patient_codes, exom_only=False):
-        return self.__get_xls_records(patient_codes, exom_only)
+    def get_xls_records(self, patient_codes):
+        return self.__get_xls_records(patient_codes)
 
     def __annotate_patient_group(self):
         """ to identify patient group in patient record """
@@ -600,16 +608,17 @@ class MutationAnnotator(LinkAnaBase):
 
     @db_manager.setter
     def db_manager(self, value):
+        db_man = value
         self.__db_manager = value
-        self.info("connect db manager")
+        self.info("connecting db manager")
         if not self.__db_manager.valid_patient_codes:
             self.throw("Invalid patient codes either in Vcf database or Family data. Please check")
-        self.__group_members_count = self.__db_manager.family_db.group_members_count
-        self.__sa_mutations = self.__db_manager.summarize_annovar_db.mutations
-        self.__vcf_patients = self.__db_manager.vcf_db.patients
-        self.__vcf_mutations = self.__db_manager.vcf_db.mutations
+        self.__group_members_count = db_man.family_db.group_members_count
+        self.__sa_mutations = db_man.summarize_annovar_db.mutations
+        self.__vcf_patients = db_man.vcf_db.patients
+        self.__vcf_mutations = db_man.vcf_db.mutations
         self.__families = self.__db_manager.family_db.families
-        self.info("annotate patient group")
+        self.info("annotating patient group")
         self.__annotate_patient_group()
-        self.info("annoate group stat")
+        self.info("annotating group stat")
         self.__annotate_group_stat()

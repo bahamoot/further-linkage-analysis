@@ -1,6 +1,0 @@
-from linkana.app import export_xls_chr18_bwa
-
-export_xls_chr18_bwa()
-
-
-

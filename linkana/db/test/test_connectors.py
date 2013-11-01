@@ -228,7 +228,7 @@ class TestVcfDB(SafeDBTester):
         db = VcfDB()
         return db
 
-    def test_header(self):
+    def test_header_general(self):
         """ to see if VcfDB can correctly retrieve and translate VCF header """
 
         self.init_test(self.current_func_name)
@@ -280,6 +280,50 @@ class TestVcfDB(SafeDBTester):
         self.assertEqual(patient_codes[74],
                          'co1053',
                          'Incorrect patient code')
+        genotype_idx = header.genotype_idx
+        self.assertEqual(len(genotype_idx),
+                         77,
+                         'Incorrect number of patients')
+
+    def test_header_target_patients(self):
+        """
+
+        to see if VcfDB can correctly retrieve and translate VCF header for
+        indicated patients
+
+        """
+
+        self.init_test(self.current_func_name)
+        db = self.__create_db_instance()
+        test_file = os.path.join(self.data_dir,
+                                 self.current_func_name + '.vcf.gz')
+        test_chrom = ""
+        test_begin_pos = ""
+        test_end_pos = ""
+        db.open_db(test_file, patient_codes=["Br694", "Br697", "Br526", "Br710"])
+        header = db.header
+        patient_codes = header.patient_codes
+        self.assertTrue("Br694" in patient_codes,
+                        'Invalid target patient code')
+        self.assertTrue("Br697" in patient_codes,
+                        'Invalid target patient code')
+        self.assertTrue("Br526" in patient_codes,
+                        'Invalid target patient code')
+        self.assertTrue("Br710" in patient_codes,
+                        'Invalid target patient code')
+        self.assertFalse("Co1368" in patient_codes,
+                        'Invalid target patient code')
+        genotype_idx = header.genotype_idx
+        self.assertTrue(0 in genotype_idx,
+                        'Invalid genotype index')
+        self.assertTrue(12 in genotype_idx,
+                        'Invalid genotype index')
+        self.assertTrue(20 in genotype_idx,
+                        'Invalid genotype index')
+        self.assertTrue(30 in genotype_idx,
+                        'Invalid genotype index')
+        self.assertFalse(10 in genotype_idx,
+                        'Invalid genotype index')
 
     def test_records_count(self):
         """ to check if all records are read """
@@ -296,7 +340,7 @@ class TestVcfDB(SafeDBTester):
                          6,
                          'Incorrect number of records retrieved by VcfDB')
 
-    def test_record_content1(self):
+    def test_record_content_raw_vcf(self):
         """ to see if VcfDB can correctly retrieve raw VCF contents """
 
         self.init_test(self.current_func_name)
@@ -354,7 +398,7 @@ class TestVcfDB(SafeDBTester):
                          '0/1:23,21:44:99:360,0,571',
                          'Incorrect patient raw content')
 
-    def test_record_content2(self):
+    def test_record_content_parse_vcf(self):
         """ to see if VcfDB can correctly parse VCF contents """
 
         self.init_test(self.current_func_name)
@@ -528,6 +572,85 @@ class TestVcfDB(SafeDBTester):
         self.assertEqual(test_record.genotype_fields[9].zygosity,
                          'hom',
                          'Incorrect zygosity')
+
+    def test_record_content_whole_vcf(self):
+        """ to see if VcfDB can correctly read one whole vcf file """
+
+        self.init_test(self.current_func_name)
+        db = self.__create_db_instance()
+        test_file = os.path.join(self.data_dir,
+                                 self.current_func_name + '.vcf.gz')
+        db.open_db(test_file)
+        self.assertEqual(len(list(db.records)),
+                         18,
+                         'Incorrect number of records retrieved by VcfDB')
+
+    def test_record_content_whole_chrom(self):
+        """ to see if VcfDB can correctly read one whole chromosome """
+
+        self.init_test(self.current_func_name)
+        db = self.__create_db_instance()
+        test_file = os.path.join(self.data_dir,
+                                 self.current_func_name + '.vcf.gz')
+        db.open_db(test_file, chrom='X')
+        self.assertEqual(len(list(db.records)),
+                         3,
+                         'Incorrect number of records retrieved by VcfDB')
+
+    def test_record_content_target_patients(self):
+        """
+
+        to see if VcfDB can correctly read the db if target patients are indicated
+
+        """
+
+        self.init_test(self.current_func_name)
+        db = self.__create_db_instance()
+        test_file = os.path.join(self.data_dir,
+                                 self.current_func_name + '.vcf.gz')
+        test_chrom = 18
+        test_begin_pos = 12702537
+        test_end_pos = '12703020'
+        db.open_db(test_file, patient_codes=["Br694", "Br697", "Br526", "Br710"])
+        records = db.records
+        records.next()
+        records.next()
+        records.next()
+        test_record = records.next()
+        self.assertEqual(test_record.key,
+                         '5|180900413',
+                         'Incorrect record key')
+        self.assertEqual(test_record.chrom,
+                         '5',
+                         'Incorrect Vcf content at "CHROM" column')
+        self.assertEqual(test_record.pos,
+                         '180900413',
+                         'Incorrect Vcf content at "POS" column')
+        self.assertEqual(test_record.vcf_id,
+                         '.',
+                         'Incorrect Vcf content at "ID" column')
+        self.assertEqual(test_record.ref,
+                         'A',
+                         'Incorrect Vcf content at "REF" column')
+        self.assertEqual(test_record.alt,
+                         'C',
+                         'Incorrect Vcf content at "ALT" column')
+        self.assertEqual(test_record.qual,
+                         '47.41',
+                         'Incorrect Vcf content at "QUAL" column')
+        self.assertEqual(test_record.vcf_filter,
+                         'HARD_TO_VALIDATE;LowQual',
+                         'Incorrect Vcf content at "FILTER" column')
+        genotype_fields = test_record.genotype_fields
+        self.assertEqual(len(genotype_fields),
+                         4,
+                         'Incorrect number of patient contents being read')
+        self.assertEqual(genotype_fields[2].raw_content,
+                         '0/0:2,0:2:6.01:0,6,62',
+                         'Incorrect patient raw content')
+        self.assertEqual(genotype_fields[3].raw_content,
+                         './.',
+                         'Incorrect patient raw content')
 
 
 class TestFamilyDB(SafeDBTester):

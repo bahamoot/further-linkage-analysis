@@ -6,6 +6,24 @@ import subprocess
 import inspect
 import gc
 import combivep.settings as cbv_const
+import datetime
+
+LOG_FMT = "{time_stamp} {class_name} - {msg}"
+DEBUG_FMT = "DEBUG\t{log}"
+INFO_FMT = "INFO\t{log}"
+WARNING_FMT = "WARNING: {msg}"
+THROW_FMT = "ERROR: {msg}"
+
+DEBUG_MODE = True
+
+def to_stderr(txt):
+    print >> sys.stderr, txt
+
+def log(msg, class_name):
+    return LOG_FMT.format(time_stamp=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                          class_name=class_name,
+                          msg=msg,
+                          )
 
 
 class LinkAnaBase(object):
@@ -13,6 +31,15 @@ class LinkAnaBase(object):
 
     def __init__(self):
         pass
+
+    def __str__(self):
+        return self.__repr__()
+
+    def __repr__(self):
+        return '<' + self.__class__.__name__ + ' Object> ' + str(self.get_raw_repr())
+
+    def get_raw_repr(self):
+        return "Not yet implemented"
 
     def remove_dir(self, dir_name):
         if os.path.exists(dir_name):
@@ -29,11 +56,22 @@ class LinkAnaBase(object):
     def copy_file(self, source, destination):
         shutil.copy2(source, destination)
 
+    def dbg(self, debug_msg):
+        if DEBUG_MODE:
+            to_stderr(DEBUG_FMT.format(log=log(debug_msg,
+                                       self.__class__.__name__,
+                                       )))
+
     def info(self, info_msg):
-        print >> sys.stderr, info_msg
+        to_stderr(INFO_FMT.format(log=log(info_msg,
+                                  self.__class__.__name__,
+                                  )))
+
+    def warn(self, warning_msg):
+        to_stderr(WARNING_FMT.format(msg=warning_msg))
 
     def throw(self, err_msg):
-        raise Exception(err_msg)
+        raise Exception(THROW_FMT.format(msg=err_msg))
 
     @property
     def current_func_name(self):

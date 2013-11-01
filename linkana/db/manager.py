@@ -1,4 +1,5 @@
 import linkana.settings as lka_const
+import gc
 from linkana.template import LinkAnaBase
 from linkana.db.connectors import SummarizeAnnovarDB
 from linkana.db.connectors import VcfDB
@@ -14,7 +15,7 @@ from linkana.settings import TYPE4_CAFAM
 from linkana.settings import TYPE4_NON_CAFAM
 
 
-class PatientRecord(object):
+class PatientRecord(LinkAnaBase):
     """ to automatically parse VCF data"""
 
     def __init__(self):
@@ -23,12 +24,6 @@ class PatientRecord(object):
         self.type2 = None
         self.type3 = None
         self.type4 = None
-
-    def __str__(self):
-        return self.__repr__()
-
-    def __repr__(self):
-        return str(self.get_raw_repr())
 
     def get_raw_repr(self):
         return {"patient code": self.patient_code}
@@ -48,10 +43,7 @@ class AbstractSummarizeAnnovarDB(LinkAnaBase):
         self.__connector = None
         self.__mutations = {}
 
-    def __str__(self):
-        return self.__repr__()
-
-    def __repr__(self):
+    def get_raw_repr(self):
         return str({'Connector': self.__get_connector(),
                     })
 
@@ -62,7 +54,7 @@ class AbstractSummarizeAnnovarDB(LinkAnaBase):
         self.__connector = summarize_annovar_db_connector
         self.__need_update = True
 
-    def __update_mutaitions_table(self):
+    def __update_mutations_table(self):
         self.__mutations = {}
         #create table
         for record in self.__connector.records:
@@ -72,7 +64,7 @@ class AbstractSummarizeAnnovarDB(LinkAnaBase):
     @property
     def mutations(self):
         if self.__need_update:
-            self.__update_mutaitions_table()
+            self.__update_mutations_table()
         return self.__mutations
 
 
@@ -80,8 +72,8 @@ class AbstractVcfDB(LinkAnaBase):
     """
 
     1. an abstract connection to VCF databases
-    2. able to handle many VcfDB connectors
-    3. build up 2D mutations table (mutation, patient)
+    XXXX 2. able to handle many VcfDB connectors
+    XXXX 3. build up 2D mutations table (mutation, patient)
     4. provide accesses to the content of VcfDB
         - using mutation key
         - using patient code
@@ -90,15 +82,13 @@ class AbstractVcfDB(LinkAnaBase):
 
     """
 
-    def __init__(self):
+    def __init__(self, patient_codes=None):
         LinkAnaBase.__init__(self)
         self.__connectors = []
         self.__mutations = {}
+        self.__patient_codes = patient_codes
 
-    def __str__(self):
-        return self.__repr__()
-
-    def __repr__(self):
+    def get_raw_repr(self):
         return str({'Connectors': self.__get_connectors(),
                     })
 
@@ -109,18 +99,28 @@ class AbstractVcfDB(LinkAnaBase):
         self.__connectors.append(vcf_db_connector)
         self.__need_update = True
 
-    def __update_mutaitions_table(self):
+    def __update_mutations_table(self):
         """
 
-        assume that all overlapped records from different VcfDBs
+        - It will ssume that all overlapped records from different VcfDBs
         have the same content
+        - The table should have only mutations from the target patients,
+        and should filter out the blank (.\.) ones
 
         """
 
-        self.info("build VCF mutations table")
+        self.info("building VCF mutations table")
         self.__mutations = {}
         self.__patients = {}
         for connector in self.__connectors:
+#            if self.patient_codes is not None:
+#                #please add test to validate the patient codes
+#                patient_codes = self.patient_codes
+#            else:
+#                header = connector.header
+#                patient_codes = header.patient_codes
+#                patient_codes_idx = range(patient_codes)
+#            print "[debugging] target patient codes :", self.__patient_codes
             header = connector.header
             #init patients content
             for patient_code in header.patient_codes:
@@ -128,21 +128,36 @@ class AbstractVcfDB(LinkAnaBase):
                     self.__patients[patient_code] = PatientRecord()
                     self.__patients[patient_code].patient_code = patient_code
             #create table
+            record_count = 0
+#            self.debug(header.patient_codes)
             for record in connector.records:
+                #check if there are mutations
+                has_genotype = False
+                for i in xrange(len(header.patient_codes)):
+                    if record.genotype_fields[i].raw_gt != './.':
+                        has_genotype = True
+                if not has_genotype:
+                    continue
+                #add record to the table
                 mutation_genotype_fields = {}
                 for i in xrange(len(header.patient_codes)):
                     patient_code = header.patient_codes[i]
                     genotype_fields = record.genotype_fields[i]
                     #add pointer to patient record(column)
-                    genotype_fields.patient = self.__patients[patient_code]
+        #            genotype_fields.patient = self.__patients[patient_code]
                     #add pointer to mutation record(row)
-                    genotype_fields.mutation = record
+        #            genotype_fields.mutation = record
                     #give mutation an access to genotype field using patient code as a key
                     mutation_genotype_fields[patient_code] = genotype_fields
                     #give patient an access to genotype field using mutaion key as a key
-                    self.__patients[patient_code].genotype_fields[record.key] = genotype_fields
+        #            self.__patients[patient_code].genotype_fields[record.key] = genotype_fields
                 record.genotype_fields = mutation_genotype_fields
+                del genotype_fields
+                gc.collect()
                 self.__mutations[record.key] = record
+                record_count += 1
+                if (record_count % 1000) == 0:
+                    self.info("record count: " + str(record_count))
         self.__need_update = False
 
     def common_mutations(self, patient_codes, exom_only=False):
@@ -154,13 +169,13 @@ class AbstractVcfDB(LinkAnaBase):
         """
 
         common_mutations = {}
+        #iterate through all patients in all mutations and pick
+        #only the common ones
         for mutation_key in self.mutations:
             mutation = self.mutations[mutation_key]
             common_mutation = True
-            print mutation_key
             for patient_code in patient_codes:
                 zygosity = mutation.genotype_fields[patient_code].zygosity
-                print mutation.genotype_fields[patient_code]
                 if zygosity == ZYGOSITY_UNKNOWN:
                     common_mutation = False
                     break
@@ -171,18 +186,21 @@ class AbstractVcfDB(LinkAnaBase):
                 common_mutations[mutation_key] = mutation
         return common_mutations
 
-
     @property
     def patients(self):
         if self.__need_update:
-            self.__update_mutaitions_table()
+            self.__update_mutations_table()
         return self.__patients
 
     @property
     def mutations(self):
         if self.__need_update:
-            self.__update_mutaitions_table()
+            self.__update_mutations_table()
         return self.__mutations
+
+    @property
+    def patient_codes(self):
+        return self.__patient_codes
 
 
 class AbstractFamilyDB(LinkAnaBase):
@@ -200,10 +218,7 @@ class AbstractFamilyDB(LinkAnaBase):
         self.__families = {}
         self.__group_members_count = {}
 
-    def __str__(self):
-        return self.__repr__()
-
-    def __repr__(self):
+    def get_raw_repr(self):
         return str({'Connectors': self.__get_connector(),
                     })
 
@@ -265,22 +280,25 @@ class AbstractFamilyDB(LinkAnaBase):
 class DBManager(LinkAnaBase):
     """
 
-    1. to handle all the connection to all databases
+    1. to handle all the connection to all related databases
     2. to provide the simplest interface to downstream classes
         - provide abstract connection for each db type
+    3. The algorithm is basically
+        - Prior to getting the content, all connections are just lazy
+          connected.
+        - Once the content is requested, the actual connection parameter is
+          computed, and the actual connection is linked. So the actual content
+          is produced.
 
     """
 
-    def __init__(self):
+    def __init__(self, patient_codes=None):
         LinkAnaBase.__init__(self)
         self.__abs_sa_db = AbstractSummarizeAnnovarDB()
-        self.__abs_vcf_db = AbstractVcfDB()
+        self.__abs_vcf_db = AbstractVcfDB(patient_codes)
         self.__abs_fam_db = AbstractFamilyDB()
 
-    def __str__(self):
-        return self.__repr__()
-
-    def __repr__(self):
+    def get_raw_repr(self):
         return str({'SummarizeAnnovarDB': self.__get_summarize_annovar_db_connection(),
                     'VcfDB': self.__get_vcf_db_connection(),
                     'FamilyDB': self.__get_family_db_connection(),
@@ -296,7 +314,7 @@ class DBManager(LinkAnaBase):
         return self.__abs_fam_db
 
     def __connect_summarize_annovar_db(self, csv_file, delimiter='\t'):
-        self.info("create summarize-annovar db connection to " + csv_file)
+        self.info("creating summarize-annovar db connection to " + csv_file)
         sa_db = SummarizeAnnovarDB()
         sa_db.open_db(csv_file, delimiter)
         self.__abs_sa_db.add_connector(sa_db)
@@ -304,17 +322,46 @@ class DBManager(LinkAnaBase):
     def connect_summarize_annovar_db(self, csv_file, delimiter='\t'):
         return self.__connect_summarize_annovar_db(csv_file, delimiter)
 
-    def __connect_vcf_db(self, vcf_db_gz_file, chrom, begin_pos, end_pos):
-        self.info("create vcf db connection to " + vcf_db_gz_file)
+    def __connect_vcf_db(self,
+                         vcf_db_gz_file,
+                         chrom,
+                         begin_pos,
+                         end_pos,
+                         patient_codes=None,
+                         ):
+        info = []
+        self.info("creating vcf db connection to " + vcf_db_gz_file)
+        info.append("chrom: " + str(chrom))
+        info.append("begin pos: " + str(begin_pos))
+        info.append("end pos: " + str(end_pos))
+        info.append("\t\tpatient codes: " + str(patient_codes))
+        self.info("[Params] " + "\t".join(info))
+        #self.info("\t\tchrom: " + str(chrom) + "\tbegin pos: " + str(begin_pos) + "\tend_pos:" + str(end_pos))
         vcf_db = VcfDB()
-        vcf_db.open_db(vcf_db_gz_file, chrom, begin_pos, end_pos)
+        vcf_db.open_db(vcf_db_gz_file,
+                       chrom,
+                       begin_pos,
+                       end_pos,
+                       patient_codes=patient_codes,
+                       )
         self.__abs_vcf_db.add_connector(vcf_db)
 
-    def connect_vcf_db(self, vcf_db_gz_file, chrom, begin_pos, end_pos):
-        return self.__connect_vcf_db(vcf_db_gz_file, chrom, begin_pos, end_pos)
+    def connect_vcf_db(self,
+                       vcf_db_gz_file,
+                       chrom,
+                       begin_pos,
+                       end_pos,
+                       patient_codes=None,
+                       ):
+        return self.__connect_vcf_db(vcf_db_gz_file,
+                                     chrom,
+                                     begin_pos,
+                                     end_pos,
+                                     patient_codes=patient_codes,
+                                     )
 
     def __connect_family_db(self, family_db_file):
-        self.info("create family db connection to " + family_db_file)
+        self.info("creating family db connection to " + family_db_file)
         fam_db = FamilyDB()
         fam_db.open_db(family_db_file)
         self.__abs_fam_db.add_connector(fam_db)
