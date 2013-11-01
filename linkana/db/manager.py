@@ -1,11 +1,11 @@
 import linkana.settings as lka_const
 import gc
 from linkana.template import LinkAnaBase
-from linkana.db.connectors import SummarizeAnnovarDB
-from linkana.db.connection.vcfdb import VcfDB
-from linkana.db.connectors import FamilyDB
-from linkana.db.connection.vcfdb import ZYGOSITY_UNKNOWN
-from linkana.db.connection.vcfdb import ZYGOSITY_NONE
+from linkana.db.connectors.sadb import SummarizeAnnovarDB
+from linkana.db.connectors.vcfdb import VcfDB
+from linkana.db.connectors.familydb import FamilyDB
+from linkana.db.connectors.vcfdb import ZYGOSITY_UNKNOWN
+from linkana.db.connectors.vcfdb import ZYGOSITY_NONE
 from linkana.settings import TYPE1_ALL
 from linkana.settings import TYPE2_RECTAL
 from linkana.settings import TYPE2_NON_RECTAL

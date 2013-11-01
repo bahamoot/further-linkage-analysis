@@ -1,12 +1,12 @@
 import os
-from linkana.db.connection.test.template import SafeDBTester
-from linkana.db.connection.vcfdb import VcfDB
+from linkana.db.connectors.test.template import SafeConnectorsTester
+from linkana.db.connectors.vcfdb import VcfDB
 
 
-class TestVcfDB(SafeDBTester):
+class TestVcfDB(SafeConnectorsTester):
 
     def __init__(self, test_name):
-        SafeDBTester.__init__(self, test_name)
+        SafeConnectorsTester.__init__(self, test_name)
 
     def setUp(self):
         self.test_class = 'VcfDB'

@@ -5,8 +5,8 @@ from linkana.template import RiskyTester
 import linkana.settings as lka_settings
 
 
-class SafeDBTester(SafeTester):
-    """ General template for safe "DB" modules testing """
+class SafeConnectorsTester(SafeTester):
+    """ General template for safe "Connectors" modules testing """
 
     def __init__(self, test_name):
         SafeTester.__init__(self, test_name)
@@ -21,8 +21,8 @@ class SafeDBTester(SafeTester):
                                      self.test_class)
 
 
-class RiskyDBTester(RiskyTester):
-    """ General template for risky "DB" modules testing """
+class RiskyConnectorsTester(RiskyTester):
+    """ General template for risky "Connectors" modules testing """
 
     def __init__(self, test_name):
         RiskyTester.__init__(self, test_name)
