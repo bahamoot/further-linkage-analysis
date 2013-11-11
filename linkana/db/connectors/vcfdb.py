@@ -363,6 +363,8 @@ class VcfDB(LinkAnaBase):
 
     @property
     def tabix_params(self):
+        # generate params for tabix
+        # gradually add params to the dict coz it can displayed as INFO nicely
         params = OrderedDict()
         params["reference"]=self.__chrom
         if self.__begin_pos is not None:
