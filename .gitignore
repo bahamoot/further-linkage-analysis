@@ -8,4 +8,4 @@ build/
 dist/
 LinkAna.egg-info/
 xls_out/
-submit/20130711/*.png
+*/submit/20130711/*.png
