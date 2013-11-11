@@ -43,6 +43,7 @@ echo "## execute $convert2annovar" 1>&2
 eval $convert2annovar
 #---------- vcf2avdb --------------
 
+
 #---------- summarize --------------
 summarize_out=$working_dir/$out_prefix
 summarize_annovar="$SUMMARIZE_ANNOVAR -out $summarize_out -buildver hg19 -verdbsnp 137 -ver1000g 1000g2012apr -veresp 6500 -remove -alltranscript $avdb_out $ANNOVAR_HUMAN_DB_DIR"
@@ -57,5 +58,3 @@ comma2tab="perl -pe 'while (s/(,\"[^\"]+),/\1<COMMA>/g) {1}; s/\"//g; s/,/\t/g; 
 echo "## execute $comma2tab" 1>&2
 eval $comma2tab
 #---------- comma2tab --------------
-
-
