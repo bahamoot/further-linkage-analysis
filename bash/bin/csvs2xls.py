@@ -100,9 +100,9 @@ def add_csv_sheet(wb, sheet_name, csv_file, st):
 #                continue
             csv_record = split_last_extra_info(explain_annotation(csv_record), sheet_name)
             for col in xrange(len(csv_record)):
-                if (isFloat(csv_record[7]) and (float(csv_record[7])<=0.1)) or (csv_record[7]=='') :
-                    ws.write(csv_row, col, csv_record[col])
-#                    ws.write(csv_row, col, csv_record[col], st)
+                if (((isFloat(csv_record[4]) and (float(csv_record[4])<=0.1)) or (csv_record[4]=='')) and ((isFloat(csv_record[5]) and (float(csv_record[5])<=0.1)) or (csv_record[5]==''))) and (csv_record[2] != 'nonsynonymous SNV'):
+#                    ws.write(csv_row, col, csv_record[col])
+                    ws.write(csv_row, col, csv_record[col], st)
                 else:
                     ws.write(csv_row, col, csv_record[col])
             csv_row += 1
