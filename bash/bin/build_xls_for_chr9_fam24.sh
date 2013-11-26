@@ -26,7 +26,7 @@ out_individual_mutations_csv2=$out_dir/"$project_name"_"$patient_code2".tab.csv
 out_individual_mutations_csv3=$out_dir/"$project_name"_"$patient_code3".tab.csv
 out_file=$out_dir/"$project_name".xls
 
-echo "## building the xls file family 242 exome" 1>&2
+echo "## building the xls file chr9 fam24" 1>&2
 echo "## parameters" 1>&2
 echo "## summarize_annovar_file: $sa_db_file" 1>&2
 echo "## vcf gz file:            $vcf_gz_file" 1>&2
@@ -51,9 +51,9 @@ function get_vcf_col {
 col1=`get_vcf_col $vcf_gz_file $patient_code1`
 col2=`get_vcf_col $vcf_gz_file $patient_code2`
 col3=`get_vcf_col $vcf_gz_file $patient_code3`
-#col1=23
-#col2=27
-#col3=36
+#col1=14
+#col2=21
+#col3=42
 #---------- get vcf columns from patient codes --------------
 
 
@@ -74,11 +74,9 @@ function join_sa_vcf_n_filter {
 
     tmp_join_sa_vcf=$tmp_dir/tmp_join_sa_vcf
 
-    join_sa_vcf_cmd="join -t $'\t' -1 1 -2 1 -o 2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11,2.12,2.13,2.14,2.15,2.16,2.17,2.18,2.19,2.20,2.21,2.22,2.23,2.24,2.25,2.26,2.27,2.28,2.29,2.30,2.31,2.32,2.33,2.34 <( awk -F'\t' '{ if (\$1 !~ /X/ && \$1 !~ /Y/ && \$1 !~ /MT/) print \$0 }' $vcf_keys_file | sort -k1) <( awk -F '\t' '{ printf \"%s\t%s\n\", \$32, \$0 }' $filtered_sa_file | awk -F'\t' '{ if (\$1 !~ /X/ && \$1 !~ /Y/ && \$1 !~ /MT/) print \$0 }' | sort -k1) | sort -n -k32 -t\$'\t' > $tmp_join_sa_vcf"
     echo "" 1>&2
-    echo "## executing $join_sa_vcf_cmd" 1>&2
-    eval $join_sa_vcf_cmd
-    join_sa_vcf_cmd="join -t $'\t' -1 1 -2 1 -o 2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11,2.12,2.13,2.14,2.15,2.16,2.17,2.18,2.19,2.20,2.21,2.22,2.23,2.24,2.25,2.26,2.27,2.28,2.29,2.30,2.31,2.32,2.33,2.34 <( awk -F'\t' '{ if (\$1 ~ /X/ || \$1 ~ /Y/ || \$1 ~ /MT/) print \$0 }' $vcf_keys_file | sort -k1) <( awk -F '\t' '{ printf \"%s\t%s\n\", \$32, \$0 }' $filtered_sa_file | awk -F'\t' '{ if (\$1 ~ /X/ || \$1 ~ /Y/ || \$1 ~ /MT/) print \$0 }' | sort -k1) | sort -n -k32 -t\$'\t' >> $tmp_join_sa_vcf"
+    join_sa_vcf_clause="join -t $'\t' -1 1 -2 1 -o 2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11,2.12,2.13,2.14,2.15,2.16,2.17,2.18,2.19,2.20,2.21,2.22,2.23,2.24,2.25,2.26,2.27,2.28,2.29,2.30,2.31,2.32,2.33,2.34"
+    join_sa_vcf_cmd="$join_sa_vcf_clause <( sort -t\$'\t' -k1 $vcf_keys_file ) <( awk -F '\t' '{ printf \"%s\t%s\n\", \$32, \$0 }' $filtered_sa_file | sort -t\$'\t' -k1 | grep -v \"Func\") | sort -t\$'\t' -n -k32 > $tmp_join_sa_vcf"
     echo "## executing $join_sa_vcf_cmd" 1>&2
     eval $join_sa_vcf_cmd
 
@@ -93,11 +91,15 @@ function build_common_mutations_csv {
     col2=$5
     col3=$6
 
-    tmp_vcf_keys=$tmp_dir/tmp_vcf_keys_for_fam24_exome
+    tmp_vcf_keys=$tmp_dir/tmp_vcf_keys_for_"$project_name"
 
     echo "## ************************** Build commmon mutations *******************************" 1>&2
-    generate_vcf_keys_cmd="zcat $gz_file | grep -v \"^#\" | awk -F'\t' '{ if ((\$$col1 != \".\" && \$$col1 != \"./.\" && \$$col1 !~ \"0/0\") && (\$$col2 != \".\" && \$$col2 != \"./.\" && \$$col2 !~ \"0/0\") && (\$$col3 != \".\" && \$$col3 != \"./.\" && \$$col3 !~ \"0/0\")) printf \"%s|%012d\t%s\t%s\t%s\n\", \$1, \$2, \$$col1, \$$col2, \$$col3 }' > $tmp_vcf_keys"
     echo "## generate vcf keys for all mutations that there are mutations in any members of family 242" 1>&2
+    get_vcf_records_clause="zcat $gz_file | grep -v \"^#\" | awk -F'\t' '{ if ((\$$col1 != \".\" && \$$col1 != \"./.\" && \$$col1 !~ \"0/0\") && (\$$col2 != \".\" && \$$col2 != \"./.\" && \$$col2 !~ \"0/0\") && (\$$col3 != \".\" && \$$col3 != \"./.\" && \$$col3 !~ \"0/0\")) print \$0 }'"
+    generate_vcf_keys_cmd="$get_vcf_records_clause | grep -P \"^[0-9]\" | awk -F'\t' '{ printf \"%02d|%012d\t%s\t%s\t%s\n\", \$1, \$2, \$$col1, \$$col2, \$$col3 }' > $tmp_vcf_keys"
+    echo "## executing $generate_vcf_keys_cmd" 1>&2
+    eval $generate_vcf_keys_cmd
+    generate_vcf_keys_cmd="$get_vcf_records_clause | grep -vP \"^[0-9]\" | awk -F'\t' '{ printf \"%s|%012d\t%s\t%s\t%s\n\", \$1, \$2, \$$col1, \$$col2, \$$col3 }' >> $tmp_vcf_keys"
     echo "## executing $generate_vcf_keys_cmd" 1>&2
     eval $generate_vcf_keys_cmd
 
@@ -112,9 +114,13 @@ function build_individual_mutations_csv {
 
     tmp_vcf_keys=$tmp_dir/tmp_vcf_keys_for_"$project_name"_"$col"
 
-    generate_vcf_keys_cmd="zcat $gz_file | grep -v \"^#\" | awk -F'\t' '{ if (\$$col != \".\" && \$$col != \"./.\" && \$$col !~ \"0/0\") printf \"%s|%012d\t%s\n\", \$1, \$2, \$$col }' > $tmp_vcf_keys"
     echo "## ************************** Build individual mutations (col $col)*******************************" 1>&2
     echo "## generate vcf keys for individual mutations" 1>&2
+    get_vcf_records_clause="zcat $gz_file | grep -v \"^#\" | awk -F'\t' '{ if (\$$col != \".\" && \$$col != \"./.\" && \$$col !~ \"0/0\") print \$0 }'"
+    generate_vcf_keys_cmd="$get_vcf_records_clause | grep -P \"^[0-9]\" | awk -F'\t' '{ printf \"%02d|%012d\t%s\n\", \$1, \$2, \$$col }' > $tmp_vcf_keys"
+    echo "## executing $generate_vcf_keys_cmd" 1>&2
+    eval $generate_vcf_keys_cmd
+    generate_vcf_keys_cmd="$get_vcf_records_clause | grep -vP \"^[0-9]\" | awk -F'\t' '{ printf \"%s|%012d\t%s\n\", \$1, \$2, \$$col }' >> $tmp_vcf_keys"
     echo "## executing $generate_vcf_keys_cmd" 1>&2
     eval $generate_vcf_keys_cmd
 
@@ -139,9 +145,13 @@ sed -n 1p $sa_db_file > $tmp_individual_mutations_csv3
 build_individual_mutations_csv $vcf_gz_file $tmp_sa_filtered $working_dir $col3 >> $tmp_individual_mutations_csv3
 echo "" 1>&2
 
-$sort_n_awk_csv $tmp_common_mutations_csv > $out_common_mutations_csv
-$sort_n_awk_csv $tmp_individual_mutations_csv1 > $out_individual_mutations_csv1
-$sort_n_awk_csv $tmp_individual_mutations_csv2 > $out_individual_mutations_csv2
-$sort_n_awk_csv $tmp_individual_mutations_csv3 > $out_individual_mutations_csv3
+cmd="$sort_n_awk_csv $tmp_common_mutations_csv > $out_common_mutations_csv"
+eval $cmd
+cmd="$sort_n_awk_csv $tmp_individual_mutations_csv1  > $out_individual_mutations_csv1"
+eval $cmd
+cmd="$sort_n_awk_csv $tmp_individual_mutations_csv2  > $out_individual_mutations_csv2"
+eval $cmd
+cmd="$sort_n_awk_csv $tmp_individual_mutations_csv3  > $out_individual_mutations_csv3"
+eval $cmd
 
 python $csvs2xls $out_individual_mutations_csv1 $patient_code1 $out_individual_mutations_csv2 $patient_code2 $out_individual_mutations_csv3 $patient_code3 $out_common_mutations_csv $out_file
