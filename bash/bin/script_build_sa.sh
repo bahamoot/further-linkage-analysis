@@ -38,26 +38,29 @@ else
     cut_region="tabix $tabix_file $chr:$begin_pos-$end_pos"
 fi
 create_tmp_avdb="$cut_region | cut -f1-10 | awk -F'\t' '{printf \"%s\t%s\t%s\t%s\t%s\t%s|%s\t%s\t%s\t%s\t%s\n\", \$1, \$2, \$3, \$4, \$5, \$6, \$2, \$7, \$8, \$9, \$10}' > $tmp_avdb"
-echo "## execute $create_tmp_avdb" 1>&2
+echo "## executing $create_tmp_avdb" 1>&2
 eval $create_tmp_avdb
 
 convert2annovar="$CONVERT2ANNOVAR -format vcf4old $tmp_avdb --allallele > $avdb_out"
-echo "## execute $convert2annovar" 1>&2
+echo "## executing $convert2annovar" 1>&2
 eval $convert2annovar
 #---------- vcf2avdb --------------
 
 
 #---------- add oaf to avdb --------------
-add_key_to_avdb="awk -F'|' '{ printf \"%s\t%s\n\", \$1, \$2 }' $avdb_out | awk -F'\t' '{ printf \"%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s|%012d\n\", \$1, \$2, \$3, \$4, \$5, \$6, \$7, \$9, \$10, \$11, \$1, \$8 }' > $avdb_key"
-echo "## execute $add_key_to_avdb" 1>&2
+add_key_to_avdb="grep -P \"^[0-9]\" $avdb_out | awk -F'|' '{ printf \"%s\t%s\n\", \$1, \$2 }' | awk -F'\t' '{ printf \"%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%02d|%012d\n\", \$1, \$2, \$3, \$4, \$5, \$6, \$7, \$9, \$10, \$11, \$1, \$8 }' > $avdb_key"
+echo "## executing $add_key_to_avdb" 1>&2
+eval $add_key_to_avdb
+add_key_to_avdb="grep -vP \"^[0-9]\" $avdb_out | awk -F'|' '{ printf \"%s\t%s\n\", \$1, \$2 }' | awk -F'\t' '{ printf \"%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s|%012d\n\", \$1, \$2, \$3, \$4, \$5, \$6, \$7, \$9, \$10, \$11, \$1, \$8 }' >> $avdb_key"
+echo "## executing $add_key_to_avdb" 1>&2
 eval $add_key_to_avdb
 
 
-join_cmd="join -t $'\t' -a 1 -a 2 -1 11 -2 1 -e NULL -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,2.2 <( grep -v \"^X\" $avdb_key | grep -v \"^Y\" | grep -v \"^M\" ) <(awk -F'\t' '{ printf \"%s|%012d\t%s\n\", \$1, \$2, \$6}' $oaf_file | grep -v \"^X\" | grep -v \"^Y\" | grep -v \"^M\") > $avdb_oaf"
-echo "## execute $join_cmd" 1>&2
+join_cmd="join -t $'\t' -a 1 -1 11 -2 1 -e NULL -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,2.2 <( grep -P \"^[0-9]\" $avdb_key | sort -t\$'\t' -k 11) <(grep -P \"^[0-9]\" $oaf_file | awk -F'\t' '{ printf \"%02d|%012d\t%s\n\", \$1, \$2, \$6}') > $avdb_oaf"
+echo "## executing $join_cmd" 1>&2
 eval $join_cmd
-join_cmd="join -t $'\t' -a 1 -a 2 -1 11 -2 1 -e NULL -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,2.2 <( awk -F'\t' '{ if (\$1 == \"X\" || \$1 == \"Y\" || \$1 == \"MT\") print \$0 }' $avdb_key | sort -k11) <(awk -F'\t' '{ printf \"%s|%012d\t%s\n\", \$1, \$2, \$6}' $oaf_file | awk -F'\t' '{ if (\$1 ~ /X/ || \$1 ~ /Y/ || \$1 ~ /MT/) print \$0 }' | sort -k1) >> $avdb_oaf"
-echo "## execute $join_cmd" 1>&2
+join_cmd="join -t $'\t' -a 1 -1 11 -2 1 -e NULL -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,2.2 <( grep -vP \"^[0-9]\" $avdb_key | sort -t\$'\t' -k 11) <(grep -vP \"^[0-9]\" $oaf_file | awk -F'\t' '{ printf \"%s|%012d\t%s\n\", \$1, \$2, \$6}') >> $avdb_oaf"
+echo "## executing $join_cmd" 1>&2
 eval $join_cmd
 #---------- add oaf to avdb --------------
 
@@ -65,7 +68,7 @@ eval $join_cmd
 #---------- summarize --------------
 summarize_out=$working_dir/$out_prefix
 summarize_annovar="$SUMMARIZE_ANNOVAR -out $summarize_out -buildver hg19 -verdbsnp 137 -ver1000g 1000g2012apr -veresp 6500 -remove -alltranscript $avdb_oaf $ANNOVAR_HUMAN_DB_DIR"
-echo "## execute $summarize_annovar" 1>&2
+echo "## executing $summarize_annovar" 1>&2
 eval $summarize_annovar
 #---------- summarize --------------
 
@@ -73,6 +76,6 @@ eval $summarize_annovar
 #---------- comma2tab --------------
 csv_file=$summarize_out".genome_summary.csv"
 comma2tab="perl -pe 'while (s/(,\"[^\"]+),/\1<COMMA>/g) {1}; s/\"//g; s/,/\t/g; s/<COMMA>/,/g' < $csv_file > $out_file"
-echo "## execute $comma2tab" 1>&2
+echo "## executing $comma2tab" 1>&2
 eval $comma2tab
 #---------- comma2tab --------------

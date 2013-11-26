@@ -44,15 +44,15 @@ csv=$1
 #echo "## csv file:    $csv" 1>&2
 #echo "## working dir: $working_dir" 1>&2
 
-cmd="head -1 $csv | awk -F'\t' '{ printf \"%s\t%s\t%s\t%s\tOAF\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tPhyloP\tPhyloP prediction\tSIFT\tSIFT prediction\tPolyPhen2\tPolyPhen2 prediction\tLRT\tLRT prediction\tMT\tMT prediction\n\", \$$COL_FUNC, \$$COL_GENE, \$$COL_EXONICFUNC, \$$COL_AACHANGE, \$$COL_1000G, \$$COL_DBSNP, \$$COL_CHR, \$$COL_STARTPOS, \$$COL_ENDPOS, \$$COL_REF, \$$COL_OBS}' > $tmp_sort_awk"
-eval $cmd
 
 cmd="grep -v \"Func\" $csv | awk -F'\t' '{ printf \"%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n\", \$$COL_VCF_KEYS, \$$COL_FUNC, \$$COL_GENE, \$$COL_EXONICFUNC, \$$COL_AACHANGE, \$$COL_OAF, \$$COL_1000G, \$$COL_DBSNP, \$$COL_CHR, \$$COL_STARTPOS, \$$COL_ENDPOS, \$$COL_REF, \$$COL_OBS, \$$COL_PHYLOP, \$$COL_PHYLOPPRED, \$$COL_SIFT, \$$COL_SIFTPRED, \$$COL_POLYPHEN, \$$COL_POLYPHENPRED, \$$COL_LRT, \$$COL_LRTPRED, \$$COL_MT, \$$COL_MTPRED, \$$COL_VCF_KEYS}' > $tmp_awk1"
 eval $cmd
 
-awk -F'\t' '{ if ($1 !~ /X/ && $1 !~ /Y/ && $1 !~ /MT/) print $0 }' $tmp_awk1 | sort -t$'\t' -n -k1 | cut -f2-30 > $tmp_awk2
-awk -F'\t' '{ if ($1 ~ /X/ || $1 ~ /Y/ || $1 ~ /MT/) print $0 }' $tmp_awk1 | sort -t$'\t' -n -k1 | cut -f2-30 >> $tmp_awk2
+grep -P "^[0-9]" $tmp_awk1 | sort -t$'\t' -n -k1 | cut -f2-30 > $tmp_awk2
+grep -vP "^[0-9]" $tmp_awk1 | sort -t$'\t' -n -k1 | cut -f2-30 >> $tmp_awk2
 
+cmd="head -1 $csv | awk -F'\t' '{ printf \"%s\t%s\t%s\t%s\tOAF\t%s\t%s\t%s\t%s\t%s\t%s\t%s\tPhyloP\tPhyloP prediction\tSIFT\tSIFT prediction\tPolyPhen2\tPolyPhen2 prediction\tLRT\tLRT prediction\tMT\tMT prediction\n\", \$$COL_FUNC, \$$COL_GENE, \$$COL_EXONICFUNC, \$$COL_AACHANGE, \$$COL_1000G, \$$COL_DBSNP, \$$COL_CHR, \$$COL_STARTPOS, \$$COL_ENDPOS, \$$COL_REF, \$$COL_OBS}' > $tmp_sort_awk"
+eval $cmd
 cmd="grep -v \"nonsynonymous SNV\" $tmp_awk2 | awk -F'\t' '{ if (\$6 < $maf_filter && \$5 < $oaf_filter) print \$0 }'  >> $tmp_sort_awk"
 eval $cmd
 cmd="grep \"nonsynonymous SNV\" $tmp_awk2 | awk -F'\t' '{ if (\$6 < $maf_filter && \$5 < $oaf_filter) print \$0 }' >> $tmp_sort_awk"
