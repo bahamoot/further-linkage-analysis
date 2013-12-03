@@ -13,6 +13,7 @@ patient_code3=Co666
 working_dir=$script_dir/tmp
 sa_db_file=$CMM_SCILIFE_ILLUMINA_MANS_SA_DB
 vcf_gz_file=$CMM_SCILIFE_ILLUMINA_ALL_PATIENTS_MANS_GZ
+vcf_header_file=$CMM_SCILIFE_ILLUMINA_ALL_PATIENTS_MANS_HEADER
 tmp_sa_filtered=$working_dir/tmp_sa_filtered_for_"$project_name"
 tmp_common_mutations_csv=$working_dir/"$project_name"_common_mutations_tmp.tab.csv
 tmp_individual_mutations_csv1=$working_dir/"$project_name"_"$patient_code1"_tmp.tab.csv
@@ -32,12 +33,10 @@ echo "## summarize_annovar_file: $sa_db_file" 1>&2
 echo "## vcf gz file:            $vcf_gz_file" 1>&2
 echo "## working dir:            $working_dir" 1>&2
 echo "## out file:               $out_file" 1>&2
-echo "## maf ratio:              $maf_filter" 1>&2
-echo "## oaf ratio:              $oaf_filter" 1>&2
 
 #---------- get vcf columns from patient codes --------------
 function get_vcf_col {
-    zcat $1 | grep "^#C" | grep -i $2 | awk -va="$2" 'BEGIN{}
+    grep "^#C" $1 | grep -i $2 | awk -va="$2" 'BEGIN{}
     END{}
     {
         for(i=1;i<=NF;i++){
@@ -48,9 +47,10 @@ function get_vcf_col {
     }'
 }
 
-col1=`get_vcf_col $vcf_gz_file $patient_code1`
-col2=`get_vcf_col $vcf_gz_file $patient_code2`
-col3=`get_vcf_col $vcf_gz_file $patient_code3`
+
+col1=`get_vcf_col $vcf_header_file $patient_code1`
+col2=`get_vcf_col $vcf_header_file $patient_code2`
+col3=`get_vcf_col $vcf_header_file $patient_code3`
 #col1=14
 #col2=21
 #col3=42
@@ -95,7 +95,7 @@ function build_common_mutations_csv {
 
     echo "## ************************** Build commmon mutations *******************************" 1>&2
     echo "## generate vcf keys for all mutations that there are mutations in any members of family 242" 1>&2
-    get_vcf_records_clause="zcat $gz_file | grep -v \"^#\" | awk -F'\t' '{ if ((\$$col1 != \"./.\" && \$$col1 !~ \"0/0\") && (\$$col2 != \"./.\" && \$$col2 !~ \"0/0\") && (\$$col3 != \"./.\" && \$$col3 !~ \"0/0\")) print \$0 }'"
+    get_vcf_records_clause="zcat $gz_file | grep -v \"^#\" | awk -F'\t' '{ if ((\$$col1 !~ \"\\./\\.\" && \$$col1 !~ \"0/0\") && (\$$col2 !~ \"\\./\\.\" && \$$col2 !~ \"0/0\") && (\$$col3 !~ \"\\./\\.\" && \$$col3 !~ \"0/0\")) print \$0 }'"
     generate_vcf_keys_cmd="$get_vcf_records_clause | grep -P \"^[0-9]\" | awk -F'\t' '{ printf \"%02d|%012d\t%s\t%s\t%s\n\", \$1, \$2, \$$col1, \$$col2, \$$col3 }' > $tmp_vcf_keys"
     echo "## executing $generate_vcf_keys_cmd" 1>&2
     eval $generate_vcf_keys_cmd
@@ -116,7 +116,7 @@ function build_individual_mutations_csv {
 
     echo "## ************************** Build individual mutations (col $col)*******************************" 1>&2
     echo "## generate vcf keys for individual mutations" 1>&2
-    get_vcf_records_clause="zcat $gz_file | grep -v \"^#\" | awk -F'\t' '{ if (\$$col != \"./.\" && \$$col !~ \"0/0\") print \$0 }'"
+    get_vcf_records_clause="zcat $gz_file | grep -v \"^#\" | awk -F'\t' '{ if (\$$col !~ \"\\./\\.\" && \$$col !~ \"0/0\") print \$0 }'"
     generate_vcf_keys_cmd="$get_vcf_records_clause | grep -P \"^[0-9]\" | awk -F'\t' '{ printf \"%02d|%012d\t%s\n\", \$1, \$2, \$$col }' > $tmp_vcf_keys"
     echo "## executing $generate_vcf_keys_cmd" 1>&2
     eval $generate_vcf_keys_cmd
@@ -127,23 +127,23 @@ function build_individual_mutations_csv {
     join_sa_vcf_n_filter $tmp_vcf_keys $sa_file $tmp_dir
 }
 
-echo "" 1>&2
-echo "## gerating csv for common mutation of family 242" 1>&2
-sed -n 1p $sa_db_file > $tmp_common_mutations_csv
-build_common_mutations_csv $vcf_gz_file $tmp_sa_filtered $working_dir $col1 $col2 $col3 >> $tmp_common_mutations_csv
-echo "" 1>&2
-echo "## gerating csv for individual mutation of patient $patient_code1" 1>&2
-sed -n 1p $sa_db_file > $tmp_individual_mutations_csv1
-build_individual_mutations_csv $vcf_gz_file $tmp_sa_filtered $working_dir $col1 >> $tmp_individual_mutations_csv1
-echo "" 1>&2
-echo "## gerating csv for individual mutation of patient $patient_code2" 1>&2
-sed -n 1p $sa_db_file > $tmp_individual_mutations_csv2
-build_individual_mutations_csv $vcf_gz_file $tmp_sa_filtered $working_dir $col2 >> $tmp_individual_mutations_csv2
-echo "" 1>&2
-echo "## gerating csv for individual mutation of patient $patient_code3" 1>&2
-sed -n 1p $sa_db_file > $tmp_individual_mutations_csv3
-build_individual_mutations_csv $vcf_gz_file $tmp_sa_filtered $working_dir $col3 >> $tmp_individual_mutations_csv3
-echo "" 1>&2
+#echo "" 1>&2
+#echo "## gerating csv for common mutation of family 242" 1>&2
+#sed -n 1p $sa_db_file > $tmp_common_mutations_csv
+#build_common_mutations_csv $vcf_gz_file $tmp_sa_filtered $working_dir $col1 $col2 $col3 >> $tmp_common_mutations_csv
+#echo "" 1>&2
+#echo "## gerating csv for individual mutation of patient $patient_code1" 1>&2
+#sed -n 1p $sa_db_file > $tmp_individual_mutations_csv1
+#build_individual_mutations_csv $vcf_gz_file $tmp_sa_filtered $working_dir $col1 >> $tmp_individual_mutations_csv1
+#echo "" 1>&2
+#echo "## gerating csv for individual mutation of patient $patient_code2" 1>&2
+#sed -n 1p $sa_db_file > $tmp_individual_mutations_csv2
+#build_individual_mutations_csv $vcf_gz_file $tmp_sa_filtered $working_dir $col2 >> $tmp_individual_mutations_csv2
+#echo "" 1>&2
+#echo "## gerating csv for individual mutation of patient $patient_code3" 1>&2
+#sed -n 1p $sa_db_file > $tmp_individual_mutations_csv3
+#build_individual_mutations_csv $vcf_gz_file $tmp_sa_filtered $working_dir $col3 >> $tmp_individual_mutations_csv3
+#echo "" 1>&2
 
 cmd="$sort_n_awk_csv $tmp_common_mutations_csv > $out_common_mutations_csv"
 eval $cmd

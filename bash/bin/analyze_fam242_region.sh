@@ -27,7 +27,7 @@ out_dir=$script_dir/../out/"$project_name"
 #out_individual_mutations_csv3=$out_dir/"$project_name"_"$patient_code3".tab.csv
 out_file=$out_dir/"$project_name"_analyze.csv
 
-echo "## building the xls file chr9 linkage family $family_code" 1>&2
+echo "## analyze result from family 242 region" 1>&2
 echo "## parameters" 1>&2
 echo "## summarize_annovar_file: $sa_db_file" 1>&2
 echo "## vcf gz file:            $vcf_gz_file" 1>&2
