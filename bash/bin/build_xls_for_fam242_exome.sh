@@ -127,23 +127,23 @@ function build_individual_mutations_csv {
     join_sa_vcf_n_filter $tmp_vcf_keys $sa_file $tmp_dir
 }
 
-#echo "" 1>&2
-#echo "## gerating csv for common mutation of family 242" 1>&2
-#sed -n 1p $sa_db_file > $tmp_common_mutations_csv
-#build_common_mutations_csv $vcf_gz_file $tmp_sa_filtered $working_dir $col1 $col2 $col3 >> $tmp_common_mutations_csv
-#echo "" 1>&2
-#echo "## gerating csv for individual mutation of patient $patient_code1" 1>&2
-#sed -n 1p $sa_db_file > $tmp_individual_mutations_csv1
-#build_individual_mutations_csv $vcf_gz_file $tmp_sa_filtered $working_dir $col1 >> $tmp_individual_mutations_csv1
-#echo "" 1>&2
-#echo "## gerating csv for individual mutation of patient $patient_code2" 1>&2
-#sed -n 1p $sa_db_file > $tmp_individual_mutations_csv2
-#build_individual_mutations_csv $vcf_gz_file $tmp_sa_filtered $working_dir $col2 >> $tmp_individual_mutations_csv2
-#echo "" 1>&2
-#echo "## gerating csv for individual mutation of patient $patient_code3" 1>&2
-#sed -n 1p $sa_db_file > $tmp_individual_mutations_csv3
-#build_individual_mutations_csv $vcf_gz_file $tmp_sa_filtered $working_dir $col3 >> $tmp_individual_mutations_csv3
-#echo "" 1>&2
+echo "" 1>&2
+echo "## generating csv for common mutation of family 242" 1>&2
+sed -n 1p $sa_db_file > $tmp_common_mutations_csv
+build_common_mutations_csv $vcf_gz_file $tmp_sa_filtered $working_dir $col1 $col2 $col3 >> $tmp_common_mutations_csv
+echo "" 1>&2
+echo "## generating csv for individual mutation of patient $patient_code1" 1>&2
+sed -n 1p $sa_db_file > $tmp_individual_mutations_csv1
+build_individual_mutations_csv $vcf_gz_file $tmp_sa_filtered $working_dir $col1 >> $tmp_individual_mutations_csv1
+echo "" 1>&2
+echo "## generating csv for individual mutation of patient $patient_code2" 1>&2
+sed -n 1p $sa_db_file > $tmp_individual_mutations_csv2
+build_individual_mutations_csv $vcf_gz_file $tmp_sa_filtered $working_dir $col2 >> $tmp_individual_mutations_csv2
+echo "" 1>&2
+echo "## generating csv for individual mutation of patient $patient_code3" 1>&2
+sed -n 1p $sa_db_file > $tmp_individual_mutations_csv3
+build_individual_mutations_csv $vcf_gz_file $tmp_sa_filtered $working_dir $col3 >> $tmp_individual_mutations_csv3
+echo "" 1>&2
 
 cmd="$sort_n_awk_csv $tmp_common_mutations_csv > $out_common_mutations_csv"
 eval $cmd
