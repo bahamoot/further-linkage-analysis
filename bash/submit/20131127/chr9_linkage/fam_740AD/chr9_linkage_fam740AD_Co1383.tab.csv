@@ -1,2 +1,0 @@
-Func	Gene	ExonicFunc	AAChange	OAF	1000g2012apr_ALL	dbSNP137	Chr	Start	End	Ref	Obs	PhyloP	PhyloP prediction	SIFT	SIFT prediction	PolyPhen2	PolyPhen2 prediction	LRT	LRT prediction	MT	MT prediction
-exonic	ANKS6	nonsynonymous SNV	ANKS6:NM_173551:exon10:c.G1930A:p.V644I	0.9545	0.87	rs6415847	9	101533220	101533220	C	T	0.93317	N	0.77	T	0.0	B	0.897327	N	1.0E-6	P	09|000101533220
