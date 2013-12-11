@@ -40,6 +40,8 @@ def explain_annotation(csv_record):
     mutationtaster_explanation = {'A': 'disease causing automatic', 'D': 'disease causing', 'N': 'polymorphism', 'P': 'polymorphism automatic'}
 
 #    print csv_record[col_ljb_phylop_pred], csv_record[col_ljb_sift_pred], csv_record[col_ljb_lrt_pred]
+    if len(csv_record) < col_ljb_phylop_pred :
+        return csv_record
     if csv_record[col_ljb_phylop_pred] in phylop_explanation:
         csv_record[col_ljb_phylop_pred]         = phylop_explanation[csv_record[col_ljb_phylop_pred]]
     if csv_record[col_ljb_sift_pred] in sift_explanation:
@@ -100,7 +102,7 @@ def add_csv_sheet(wb, sheet_name, csv_file, st):
 #                continue
             csv_record = split_last_extra_info(explain_annotation(csv_record), sheet_name)
             for col in xrange(len(csv_record)):
-                if (((isFloat(csv_record[4]) and (float(csv_record[4])<=0.1)) or (csv_record[4]=='')) and ((isFloat(csv_record[5]) and (float(csv_record[5])<=0.1)) or (csv_record[5]==''))) and (csv_record[2] != 'nonsynonymous SNV'):
+                if (len(csv_record) > 4) and ((((isFloat(csv_record[4]) and (float(csv_record[4])<=0.1)) or (csv_record[4]=='')) and ((isFloat(csv_record[5]) and (float(csv_record[5])<=0.1)) or (csv_record[5]==''))) and (csv_record[2] != 'nonsynonymous SNV')):
 #                    ws.write(csv_row, col, csv_record[col])
                     ws.write(csv_row, col, csv_record[col], st)
                 else:

@@ -1,0 +1,34 @@
+Func	Count
+downstream	   3779
+exonic	  23190
+exonic;splicing	      9
+intergenic	 161300
+intronic	 218468
+ncRNA_exonic	   3704
+ncRNA_intronic	  14743
+ncRNA_splicing	     16
+ncRNA_UTR3	    172
+ncRNA_UTR5	     45
+splicing	    153
+upstream	   5311
+upstream;downstream	    253
+UTR3	   9096
+UTR5	   2796
+UTR5;UTR3	      5
+
+Total	443040
+
+
+
+ExonicFunc	Count
+frameshift deletion	    125
+frameshift insertion	    152
+nonframeshift deletion	    169
+nonframeshift insertion	    143
+nonsynonymous SNV	  10494
+stopgain SNV	     94
+stoploss SNV	     14
+synonymous SNV	  11426
+unknown	    582
+
+Total	23199
