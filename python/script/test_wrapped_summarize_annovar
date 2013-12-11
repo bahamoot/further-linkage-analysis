@@ -1,0 +1,21 @@
+#!/bin/bash
+
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+#---------- input --------------
+chr=18
+beginning=rs146647843
+ending=rs117978838
+#header_file="/home/jessada/development/CMM/master_data/CRC_screen4/bwa_GATK_header.vcf"
+tabix_file="/home/jessada/development/CMM/assignments/20130502_further_linkage_analysis/linkana/misc/test/data/script/test_summarize_annovar.vcf.gz"
+working_dir=$script_dir/tmp
+out_prefix=test_wrapped
+
+#---------- script location --------------
+script=$script_dir/wrapped_summarize_annovar
+
+#---------- run --------------
+$script $chr $beginning $ending $header_file $tabix_file $working_dir $out_prefix
+
+
+

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+echo "export xls chromosome 6 bwa variants" 1>&2
+linkana_export_xls_chr6_bwa
+echo "export xls chromosome 18 bwa variants" 1>&2
+linkana_export_xls_chr18_bwa
+echo "export xls chromosome 19 bwa variants" 1>&2
+linkana_export_xls_chr19_bwa
+echo "export xls chromosome 6 mosaik variants" 1>&2
+linkana_export_xls_chr6_mosaik
+echo "export xls chromosome 18 mosaik variants" 1>&2
+linkana_export_xls_chr18_mosaik
+echo "export xls chromosome 19 mosaik variants" 1>&2
+linkana_export_xls_chr19_mosaik
+
+
+

@@ -1,6 +1,0 @@
-from linkana.app import export_xls_chr19_mosaik
-
-export_xls_chr19_mosaik()
-
-
-

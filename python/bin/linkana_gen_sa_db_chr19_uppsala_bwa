@@ -1,0 +1,6 @@
+from linkana.app import generate_summarize_annovar_db_chr19_bwa
+
+generate_summarize_annovar_db_chr19_bwa()
+
+
+

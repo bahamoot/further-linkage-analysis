@@ -1,0 +1,20 @@
+#!/bin/bash
+
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+tmp_dir="$script_dir/tmp"
+tmp_tab="$tmp_dir/tmp_tab"
+#---------- input --------------
+csv_file=$1
+out=$2
+
+#---------- convert --------------
+perl -pe 'while (s/(,"[^"]+),/\1<COMMA>/g) {1}; s/"//g; s/,/\t/g; s/<COMMA>/,/g' < $csv_file > $tmp_tab
+grep "AAChange" $tmp_tab > $out
+awk -F'\t' '$8>0 { print $0}' $tmp_tab | grep -v "AAChange" | sort -t$'\t' -k8 -r >> $out
+awk -F'\t' '$8<=0 { print $0}' $tmp_tab | sort -t$'\t' -k27 >> $out
+
+#perl -pe 'while (s/(,"[^"]+),/\1<COMMA>/g) {1}; s/"//g; s/,/\t/g; s/<COMMA>/,/g' < $csv_file | sort -t$'\t' -k8 -n > $out
+
+
+

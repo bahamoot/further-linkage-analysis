@@ -1,6 +1,0 @@
-from linkana.app import export_xls_chr9_axeq
-
-export_xls_chr9_axeq()
-
-
-

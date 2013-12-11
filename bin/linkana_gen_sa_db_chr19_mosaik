@@ -1,6 +1,0 @@
-from linkana.app import generate_summarize_annovar_db_chr19_mosaik
-
-generate_summarize_annovar_db_chr19_mosaik()
-
-
-

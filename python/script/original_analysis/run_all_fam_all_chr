@@ -1,0 +1,15 @@
+#!/bin/bash
+
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+#---------- script location --------------
+run_all_fam_chr6_script=$script_dir/run_all_fam_chr6
+run_all_fam_chr18_script=$script_dir/run_all_fam_chr18
+run_all_fam_chr19_script=$script_dir/run_all_fam_chr19
+
+#---------- run --------------
+$run_all_fam_chr6_script
+$run_all_fam_chr18_script
+$run_all_fam_chr19_script
+
+
