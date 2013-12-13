@@ -2,6 +2,9 @@ import sys
 import csv
 import xlwt
 
+IDX_COL_END_POS = 9
+IDX_VERT_SPLIT_POS = 12
+
 member1_csv  = sys.argv[1]
 member1_code = sys.argv[2]
 
@@ -39,7 +42,6 @@ def explain_annotation(csv_record):
     lrt_explanation            = {'D': 'tolerated', 'N': 'neutral'}
     mutationtaster_explanation = {'A': 'disease causing automatic', 'D': 'disease causing', 'N': 'polymorphism', 'P': 'polymorphism automatic'}
 
-#    print csv_record[col_ljb_phylop_pred], csv_record[col_ljb_sift_pred], csv_record[col_ljb_lrt_pred]
     if len(csv_record) < col_ljb_phylop_pred :
         return csv_record
     if csv_record[col_ljb_phylop_pred] in phylop_explanation:
@@ -54,43 +56,7 @@ def explain_annotation(csv_record):
         csv_record[col_ljb_mutationtaster_pred] = mutationtaster_explanation[csv_record[col_ljb_mutationtaster_pred]]
     return csv_record
 
-def split_last_extra_info(csv_record, sheet_name):
-#    tmp_len   = len(csv_record)
-#    if sheet_name != "In common":
-#        if csv_record[tmp_len-1] == 'Otherinfo':
-#            csv_record.append('QUAL')
-#            csv_record.append('FILTER')
-#        else:
-#            tmp_split = csv_record[tmp_len-1].split('|')
-#            csv_record[tmp_len-1] = tmp_split[0]
-#            csv_record.append(tmp_split[1])
-#            csv_record.append(tmp_split[2])
-#    else:
-#        csv_record[tmp_len-3] = csv_record[tmp_len-3].split('|')[0]
-#        csv_record[tmp_len-2] = csv_record[tmp_len-2].split('|')[0]
-#        csv_record[tmp_len-1] = csv_record[tmp_len-1].split('|')[0]
-    return csv_record
 
-
-#def add_csv_sheet(wb, sheet_name, csv_file, st):
-#    ws = wb.add_sheet(sheet_name)
-#    with open(csv_file, 'rb') as csvfile:
-#        csv_records = list(csv.reader(csvfile, delimiter='\t'))
-#        for row in xrange(len(csv_records)):
-#            csv_record = csv_records[row]
-#            csv_record = split_last_extra_info(explain_annotation(csv_record), sheet_name)
-#            for col in xrange(len(csv_record)):
-#                if (isFloat(csv_record[7]) and (float(csv_record[7])<=0.1)) or (csv_record[7]=='') :
-#                    if (csv_record[2] != 'synonymous SNV'):
-#                        ws.write(row, col, csv_record[col], st)
-#                    else:
-#                        ws.write(row, col, csv_record[col])
-#                else:
-#                    ws.write(row, col, csv_record[col])
-#    ws.set_panes_frozen(True)
-#    ws.set_horz_split_pos(1)
-#    ws.set_remove_splits(True)
-#
 def add_csv_sheet(wb, sheet_name, csv_file, st):
     ws = wb.add_sheet(sheet_name)
     with open(csv_file, 'rb') as csvfile:
@@ -98,9 +64,6 @@ def add_csv_sheet(wb, sheet_name, csv_file, st):
         csv_row = 0
         for xls_row in xrange(len(csv_records)):
             csv_record = csv_records[xls_row]
-#            if (isFloat(csv_record[7]) and (float(csv_record[7]) > 0.49)):
-#                continue
-            csv_record = split_last_extra_info(explain_annotation(csv_record), sheet_name)
             for col in xrange(len(csv_record)):
                 if (len(csv_record) > 4) and ((((isFloat(csv_record[4]) and (float(csv_record[4])<=0.1)) or (csv_record[4]=='')) and ((isFloat(csv_record[5]) and (float(csv_record[5])<=0.1)) or (csv_record[5]==''))) and (csv_record[2] != 'nonsynonymous SNV')):
 #                    ws.write(csv_row, col, csv_record[col])
@@ -108,9 +71,12 @@ def add_csv_sheet(wb, sheet_name, csv_file, st):
                 else:
                     ws.write(csv_row, col, csv_record[col])
             csv_row += 1
+    ws.col(IDX_COL_END_POS).hidden = True
     ws.set_panes_frozen(True)
     ws.set_horz_split_pos(1)
+    ws.set_vert_split_pos(IDX_VERT_SPLIT_POS)
     ws.set_remove_splits(True)
+
 
 wb = xlwt.Workbook()
 yellow_st = xlwt.easyxf('pattern: pattern solid, fore_colour yellow;')
