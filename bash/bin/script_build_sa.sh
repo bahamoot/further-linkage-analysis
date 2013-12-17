@@ -26,7 +26,9 @@ echo "## out_file:    $out_file" 1>&2
 
 #---------- vcf2avdb --------------
 tmp_avdb=$working_dir/$out_prefix"_tmp_avdb"
-avdb_out=$working_dir/$out_prefix".avdb"
+avdb_individual_prefix=$working_dir/$out_prefix"_individual"
+tmp_avdb_uniq=$working_dir/$out_prefix".tmp_uniq.avdb"
+avdb_uniq=$working_dir/$out_prefix".uniq.avdb"
 avdb_key=$working_dir/$out_prefix".key.avdb"
 avdb_oaf=$working_dir/$out_prefix".oaf.avdb"
 
@@ -37,32 +39,53 @@ then
 else
     cut_region="tabix $tabix_file $chr:$begin_pos-$end_pos"
 fi
-create_tmp_avdb="$cut_region | cut -f1-10 | awk -F'\t' '{printf \"%s\t%s\t%s\t%s\t%s\t%s|%s\t%s\t%s\t%s\t%s\n\", \$1, \$2, \$3, \$4, \$5, \$6, \$2, \$7, \$8, \$9, \$10}' > $tmp_avdb"
+create_tmp_avdb="zcat $tabix_file > $tmp_avdb"
+#create_tmp_avdb="zcat $tabix_file | head -43000  > $tmp_avdb"
+#create_tmp_avdb="zcat $tabix_file | head -43000 | cut -f1-9 | awk -F'\t' '{printf \"%s\t1/1:2,5:7:3:45,3,0\n\", \$0 }' > $tmp_avdb"
+#create_tmp_avdb="zcat $tabix_file | head -23000 | awk -F'\t' '{printf \"%s\t%s\t%s\t%s\t%s\t%s|%s|%s|%s\t%s\t%s\t%s\t1/1:2,5:7:3:45,3,0\n\", \$1, \$2, \$3, \$4, \$5, \$6, \$2, \$4, \$5, \$7, \$8, \$9, \$10}' > $tmp_avdb"
+#create_tmp_avdb="$cut_region | cut -f1-10 | sed -n 91,100p | awk -F'\t' '{printf \"%s\t%s\t%s\t%s\t%s\t%s|%s|%s|%s\t%s\t%s\t%s\t%s\n\", \$1, \$2, \$3, \$4, \$5, \$6, \$2, \$4, \$5, \$7, \$8, \$9, \$10}' > $tmp_avdb"
 echo "## executing $create_tmp_avdb" 1>&2
 eval $create_tmp_avdb
 
-convert2annovar="$CONVERT2ANNOVAR -format vcf4old $tmp_avdb --allallele > $avdb_out"
+convert2annovar="$CONVERT2ANNOVAR -format vcf4 $tmp_avdb -include --allsample --outfile $avdb_individual_prefix"
+#convert2annovar="$CONVERT2ANNOVAR -format vcf4 $tmp_avdb -include > $avdb_out"
+#convert2annovar="$CONVERT2ANNOVAR -format vcf4old $tmp_avdb --allallele > $avdb_out"
 echo "## executing $convert2annovar" 1>&2
 eval $convert2annovar
+
+if [ -f "$tmp_avdb_uniq" ]; then
+    rm $tmp_avdb_uniq
+fi
+for f in $avdb_individual_prefix*
+do
+    cut -f1-11 "$f" >> $tmp_avdb_uniq
+done
+
+sort $tmp_avdb_uniq | uniq > $avdb_uniq
+
 #---------- vcf2avdb --------------
 
 
-#---------- add oaf to avdb --------------
-add_key_to_avdb="grep -P \"^[0-9]\" $avdb_out | awk -F'|' '{ printf \"%s\t%s\n\", \$1, \$2 }' | awk -F'\t' '{ printf \"%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%02d|%012d\n\", \$1, \$2, \$3, \$4, \$5, \$6, \$7, \$9, \$10, \$11, \$1, \$8 }' > $avdb_key"
+#---------- rearrange avdb and add key --------------
+echo "##" 1>&2
+add_key_to_avdb="grep -P \"^[0-9]\" $avdb_uniq | awk -F'\t' '{ printf \"%s\t%s\t%s\t%s\t%s\t%s\t%02d|%012d|%s|%s\n\", \$1, \$2, \$3, \$4, \$5, \$11, \$6, \$7, \$9, \$10 }' > $avdb_key"
 echo "## executing $add_key_to_avdb" 1>&2
 eval $add_key_to_avdb
-add_key_to_avdb="grep -vP \"^[0-9]\" $avdb_out | awk -F'|' '{ printf \"%s\t%s\n\", \$1, \$2 }' | awk -F'\t' '{ printf \"%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s|%012d\n\", \$1, \$2, \$3, \$4, \$5, \$6, \$7, \$9, \$10, \$11, \$1, \$8 }' >> $avdb_key"
+add_key_to_avdb="grep -vP \"^[0-9]\" $avdb_uniq | awk -F'\t' '{ printf \"%s\t%s\t%s\t%s\t%s\t%s\t%s|%012d|%s|%s\n\", \$1, \$2, \$3, \$4, \$5, \$11, \$6, \$7, \$9, \$10 }' >> $avdb_key"
 echo "## executing $add_key_to_avdb" 1>&2
 eval $add_key_to_avdb
+#---------- rearrange avdb and add key --------------
 
 
-join_cmd="join -t $'\t' -a 1 -1 11 -2 1 -e NULL -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,2.2 <( grep -P \"^[0-9]\" $avdb_key | sort -t\$'\t' -k 11) <(grep -P \"^[0-9]\" $oaf_file | awk -F'\t' '{ printf \"%02d|%012d\t%s\n\", \$1, \$2, \$6}') > $avdb_oaf"
+##---------- add oaf to avdb --------------
+echo "##" 1>&2
+join_cmd="join -t $'\t' -a 1 -1 7 -2 1 -e NULL -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,2.2 <( grep -P \"^[0-9]\" $avdb_key | sort -t\$'\t' -k7 ) <(grep -P \"^[0-9]\" $oaf_file ) > $avdb_oaf"
 echo "## executing $join_cmd" 1>&2
 eval $join_cmd
-join_cmd="join -t $'\t' -a 1 -1 11 -2 1 -e NULL -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,2.2 <( grep -vP \"^[0-9]\" $avdb_key | sort -t\$'\t' -k 11) <(grep -vP \"^[0-9]\" $oaf_file | awk -F'\t' '{ printf \"%s|%012d\t%s\n\", \$1, \$2, \$6}') >> $avdb_oaf"
+join_cmd="join -t $'\t' -a 1 -1 7 -2 1 -e NULL -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,2.2 <( grep -vP \"^[0-9]\" $avdb_key | sort -t\$'\t' -k 7) <(grep -vP \"^[0-9]\" $oaf_file ) >> $avdb_oaf"
 echo "## executing $join_cmd" 1>&2
 eval $join_cmd
-#---------- add oaf to avdb --------------
+#---------- add oaf --------------
 
 
 #---------- summarize --------------
