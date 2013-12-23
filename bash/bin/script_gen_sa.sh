@@ -40,16 +40,10 @@ else
     cut_region="tabix $tabix_file $chr:$begin_pos-$end_pos"
 fi
 create_tmp_avdb="zcat $tabix_file > $tmp_avdb"
-#create_tmp_avdb="zcat $tabix_file | head -43000  > $tmp_avdb"
-#create_tmp_avdb="zcat $tabix_file | head -43000 | cut -f1-9 | awk -F'\t' '{printf \"%s\t1/1:2,5:7:3:45,3,0\n\", \$0 }' > $tmp_avdb"
-#create_tmp_avdb="zcat $tabix_file | head -23000 | awk -F'\t' '{printf \"%s\t%s\t%s\t%s\t%s\t%s|%s|%s|%s\t%s\t%s\t%s\t1/1:2,5:7:3:45,3,0\n\", \$1, \$2, \$3, \$4, \$5, \$6, \$2, \$4, \$5, \$7, \$8, \$9, \$10}' > $tmp_avdb"
-#create_tmp_avdb="$cut_region | cut -f1-10 | sed -n 91,100p | awk -F'\t' '{printf \"%s\t%s\t%s\t%s\t%s\t%s|%s|%s|%s\t%s\t%s\t%s\t%s\n\", \$1, \$2, \$3, \$4, \$5, \$6, \$2, \$4, \$5, \$7, \$8, \$9, \$10}' > $tmp_avdb"
 echo "## executing $create_tmp_avdb" 1>&2
 eval $create_tmp_avdb
 
 convert2annovar="$CONVERT2ANNOVAR -format vcf4 $tmp_avdb -include --allsample --outfile $avdb_individual_prefix"
-#convert2annovar="$CONVERT2ANNOVAR -format vcf4 $tmp_avdb -include > $avdb_out"
-#convert2annovar="$CONVERT2ANNOVAR -format vcf4old $tmp_avdb --allallele > $avdb_out"
 echo "## executing $convert2annovar" 1>&2
 eval $convert2annovar
 
